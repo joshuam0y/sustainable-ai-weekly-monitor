@@ -122,7 +122,7 @@ def render():
         cards = "".join(article_card(r, r["link"] in new_links, dt) for dt, r in dated)
         active_cls = " active" if active else ""
         display = "block" if active else "none"
-        tabs.append(f'<button class="tab-btn{active_cls}" onclick="showTab(\'{tab_id}\', this)">{escape(label)} ({len(tab_rows)})</button>')
+        tabs.append(f'<button class="tab-btn{active_cls}" data-tab="{tab_id}" onclick="showTab(\'{tab_id}\', this)">{escape(label)} ({len(tab_rows)})</button>')
         panels.append(f"""
         <div class="tab-panel" id="tab-{tab_id}" style="display:{display}">
           <ul class="card-list">{cards or '<li class="empty">Nothing here yet.</li>'}<li class="empty filter-empty" style="display:none">No articles match this filter.</li></ul>
@@ -148,13 +148,19 @@ def render():
     filter_html = f"""
     <div class="filter-row">
       <label for="dateFilter">Filter by date:</label>
-      <select id="dateFilter" onchange="applyDateFilter()">
+      <select id="dateFilter" onchange="applyFilters()">
         <option value="">All time</option>
         <option value="{today_str}">Today</option>
         <option value="{d3_str}">Last 3 days</option>
         <option value="{d7_str}">Last 7 days</option>
         <option value="{d30_str}">Last 30 days</option>
       </select>
+    </div>"""
+
+    search_html = """
+    <div class="search-row">
+      <input type="text" id="searchBox" placeholder="Search titles, sources, and summaries (e.g. water usage, Northeastern, Scope 3)..." oninput="applyFilters()">
+      <div id="searchStatus" class="search-status"></div>
     </div>"""
 
     html = f"""<!DOCTYPE html>
@@ -174,6 +180,10 @@ def render():
   .chip {{ display: inline-block; background: #e4efe8; color: #1b4332; padding: 3px 9px; border-radius: 16px; margin: 2px 4px; font-size: 0.85em; }}
   .filter-row {{ margin-bottom: 12px; font-size: 0.9em; }}
   .filter-row select {{ margin-left: 6px; padding: 5px 8px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b4332; }}
+  .search-row {{ margin-bottom: 12px; }}
+  .search-row input {{ width: 100%; padding: 9px 12px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b1f1c; font-size: 0.9em; }}
+  .search-row input:focus {{ outline: 2px solid #2e7d55; }}
+  .search-status {{ font-size: 0.8em; color: #6b7a70; margin-top: 6px; }}
   .tabs {{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }}
   .tab-btn {{ background: #fff; border: 1px solid #cfe0d6; color: #1b4332; padding: 8px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; }}
   .tab-btn.active {{ background: #2e7d55; color: #fff; border-color: #2e7d55; }}
@@ -197,33 +207,65 @@ def render():
 </header>
 <main>
 {trending_html}
+{search_html}
 {filter_html}
 <div class="tabs">{''.join(tabs)}</div>
 {''.join(panels)}
 </main>
 <footer>Automatically refreshed on a schedule via GitHub Actions. Sources: Google News RSS, summarized with Gemini.</footer>
 <script>
+function activeTabId() {{
+  var btn = document.querySelector('.tab-btn.active');
+  return btn ? btn.getAttribute('data-tab') : 'new';
+}}
+
 function showTab(id, btn) {{
-  document.querySelectorAll('.tab-panel').forEach(function(el) {{ el.style.display = 'none'; }});
-  document.getElementById('tab-' + id).style.display = 'block';
   document.querySelectorAll('.tab-btn').forEach(function(b) {{ b.classList.remove('active'); }});
   btn.classList.add('active');
+  applyFilters();
 }}
-function applyDateFilter() {{
+
+function applyFilters() {{
   var cutoff = document.getElementById('dateFilter').value;
+  var query = document.getElementById('searchBox').value.trim().toLowerCase();
+  var tokens = query.split(/\\s+/).filter(Boolean);
+  var searching = tokens.length > 0;
+  var active = activeTabId();
+
+  document.querySelector('.tabs').style.display = searching ? 'none' : 'flex';
+
+  var totalMatches = 0;
   document.querySelectorAll('.tab-panel').forEach(function(panel) {{
+    var isNewTab = panel.id === 'tab-new';
+
+    if (searching) {{
+      panel.style.display = isNewTab ? 'none' : 'block';
+    }} else {{
+      panel.style.display = (panel.id === 'tab-' + active) ? 'block' : 'none';
+    }}
+    if (searching && isNewTab) return;
+
     var cards = panel.querySelectorAll('.card');
     var visible = 0;
     cards.forEach(function(card) {{
-      var show = !cutoff || (card.dataset.date && card.dataset.date >= cutoff);
+      var dateOK = !cutoff || (card.dataset.date && card.dataset.date >= cutoff);
+      var text = searching ? card.textContent.toLowerCase() : '';
+      var searchOK = !searching || tokens.every(function(t) {{ return text.indexOf(t) !== -1; }});
+      var show = dateOK && searchOK;
       card.style.display = show ? '' : 'none';
-      if (show) visible++;
+      if (show) {{ visible++; if (searching) totalMatches++; }}
     }});
+
     var emptyMsg = panel.querySelector('.filter-empty');
     if (emptyMsg) {{
       emptyMsg.style.display = (cards.length > 0 && visible === 0) ? 'block' : 'none';
     }}
   }});
+
+  var status = document.getElementById('searchStatus');
+  status.textContent = searching
+    ? 'Showing ' + totalMatches + ' result' + (totalMatches === 1 ? '' : 's') + ' for "' + query + '" across all topics'
+    : '';
 }}
 </script>
 </body>
