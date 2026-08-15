@@ -15,6 +15,10 @@
   .chip { display: inline-block; background: #e4efe8; color: #1b4332; padding: 3px 9px; border-radius: 16px; margin: 2px 4px; font-size: 0.85em; }
   .filter-row { margin-bottom: 12px; font-size: 0.9em; }
   .filter-row select { margin-left: 6px; padding: 5px 8px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b4332; }
+  .search-row { margin-bottom: 12px; }
+  .search-row input { width: 100%; padding: 9px 12px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b1f1c; font-size: 0.9em; }
+  .search-row input:focus { outline: 2px solid #2e7d55; }
+  .search-status { font-size: 0.8em; color: #6b7a70; margin-top: 6px; }
   .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
   .tab-btn { background: #fff; border: 1px solid #cfe0d6; color: #1b4332; padding: 8px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; }
   .tab-btn.active { background: #2e7d55; color: #fff; border-color: #2e7d55; }
@@ -34,7 +38,7 @@
 <body>
 <header>
   <h1>Sustainable AI Weekly Monitor</h1>
-  <p>AI &amp; sustainability news, Scope 3 emissions audits, and cloud computing carbon reporting &middot; last updated 2026-08-15T01:11:47.778921+00:00 UTC</p>
+  <p>AI &amp; sustainability news, Scope 3 emissions audits, and cloud computing carbon reporting &middot; last updated 2026-08-15T01:17:49.040332+00:00 UTC</p>
 </header>
 <main>
 
@@ -42,9 +46,14 @@
           <strong>Trending:</strong> <span class="chip">MIT &middot; 7</span><span class="chip">Amazon &middot; 5</span><span class="chip">Nvidia &middot; 4</span><span class="chip">AWS &middot; 2</span><span class="chip">Anthropic &middot; 2</span><span class="chip">Northeastern &middot; 2</span><span class="chip">Stanford &middot; 1</span><span class="chip">Meta &middot; 1</span>
         </div>
 
+    <div class="search-row">
+      <input type="text" id="searchBox" placeholder="Search titles, sources, and summaries (e.g. water usage, Northeastern, Scope 3)..." oninput="applyFilters()">
+      <div id="searchStatus" class="search-status"></div>
+    </div>
+
     <div class="filter-row">
       <label for="dateFilter">Filter by date:</label>
-      <select id="dateFilter" onchange="applyDateFilter()">
+      <select id="dateFilter" onchange="applyFilters()">
         <option value="">All time</option>
         <option value="2026-08-14">Today</option>
         <option value="2026-08-11">Last 3 days</option>
@@ -52,7 +61,7 @@
         <option value="2026-07-15">Last 30 days</option>
       </select>
     </div>
-<div class="tabs"><button class="tab-btn active" onclick="showTab('new', this)">New Since Last Check (215)</button><button class="tab-btn" onclick="showTab('northeastern', this)">Northeastern Mentions (4)</button><button class="tab-btn" onclick="showTab('scope3_ai_audit', this)">Scope 3 AI Audits (25)</button><button class="tab-btn" onclick="showTab('scope3_cloud', this)">Scope 3 Cloud Emissions (16)</button><button class="tab-btn" onclick="showTab('conversation', this)">General Conversation (170)</button></div>
+<div class="tabs"><button class="tab-btn active" data-tab="new" onclick="showTab('new', this)">New Since Last Check (216)</button><button class="tab-btn" data-tab="northeastern" onclick="showTab('northeastern', this)">Northeastern Mentions (4)</button><button class="tab-btn" data-tab="scope3_ai_audit" onclick="showTab('scope3_ai_audit', this)">Scope 3 AI Audits (25)</button><button class="tab-btn" data-tab="scope3_cloud" onclick="showTab('scope3_cloud', this)">Scope 3 Cloud Emissions (16)</button><button class="tab-btn" data-tab="conversation" onclick="showTab('conversation', this)">General Conversation (171)</button></div>
 
         <div class="tab-panel" id="tab-new" style="display:block">
           <ul class="card-list">
@@ -134,7 +143,7 @@
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxPUUNqVHFiNzI2SEFxR2RmOHRfVG5iQlFBLXN5TU8tV3J4WklTMm1IWmMxTEZhZ2o3ZDdQemhsbVlmUk5VbzBsUWttNExTaWZOWk9pZVdIbzBidUJYR1ZXZXRTZ2FXa21HZURPWmhRNUVoa2s0NjJSN0RJNmttYU9HUF9DTUF5NFVkZ2cwQ1JYOGl5NmRiOVJkRWJ0MEx1bXZmMkJ5SUlJR3JmOXBLUnNGNWlJUXo4N0MxR296RFRzRnBTcmc5M1hWSg?oc=5" target="_blank" rel="noopener">What does it take to achieve &#x27;Sustainable Intelligence&#x27;? Limiting environmental impacts of AI in healthcare - Croakey Health Media</a></div>
       <div class="card-meta">Croakey Health Media &middot; Aug 14, 2026</div>
-      
+      <div class="card-summary">This article likely covers strategies for limiting the environmental impacts of artificial intelligence in the healthcare sector.</div>
     </li>
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxNMERRaTBFWFRYdmpYeUljUmpIbkhSYXdnZjdVd3ZhZHNXSlViZ3BnN3d0WUo1S3NCdU0tVVJyYVU0SjNwZlZkX19qOWtvZmNhUzFnWURtV3JHU1l2YWZGSVpzX3dqMjN0bTFMbEFmdENHN3NJWndWcEtiRFZqandua1ZRYUdoU3pXa0Jvc1BIVkUxdmg3Rnhxdm5SU2NvbEd6WmdnQVJkR3p5RU91a1oxZ2pFakpkYV9XUVRnTUFTWTdEY0Y5SGc?oc=5" target="_blank" rel="noopener">How Artificial Intelligence Is Quietly Powering Hospitality&#x27;s Sustainable Revolution - TravelPulse</a></div>
@@ -154,7 +163,7 @@
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiZEFVX3lxTE5CUE1SZ2wzSS1RQWVLV0dhQTJWSGU0ZVpsQmZiOVFBNHBiUEZCN1g4d2s0akE4TEZkVS1PZnlSc1FLYlM5WDNhYnBadjZadF81WWdWMDRCMjlfMjRlZWJQM1dqWEw?oc=5" target="_blank" rel="noopener">Digitalisation, AI and sustainability take Focus at IFCO Istanbul 2026 - Just Style</a></div>
       <div class="card-meta">Just Style &middot; Aug 14, 2026</div>
-      
+      <div class="card-summary">The IFCO Istanbul 2026 event will highlight the intersection of digitalisation, artificial intelligence, and sustainability.</div>
     </li>
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxOd3NRU1ZuM0dlY3BfNGJTNlJrODF4VGg3Q25JOF9IOEVMM29MRktEWnV6UWQ4NkVYNGowV2JVbWV4YnpRaXFrVXd5NjFTRk9ENDVWMGl6RGRzM2E4eHVNRGc5dmFaT3lLZThtUFRTa2xxaFJzSXhpSnpqaFJUZS13QUF2eUFZUmRqT0gtYTNtTWJTUWMtR1HSAZYBQVVfeXFMTndzUVNWbjNHZWNwXzRiUzZSazgxeFRoN0NuSThfSDhFTDNvTEZLRFp1elFkODZFWDRqMFdiVW1leGJ6UWlxa1V3eTYxU0ZPRDQ1VjBpekRkczNhOHh1TURnOXZhWk95S2U4bVBUU2tscWhSc0l4aUp6amhSVGUtd0FBdnlBWVJkak9ILWEzbU1iU1FjLUdR?oc=5" target="_blank" rel="noopener">Artificial Intelligence and Smart Technologies in Energy Management: Global Practice and the Emerging Case of Ghana and Africa - Modern Ghana</a></div>
@@ -184,7 +193,7 @@
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxNQ2lGWktxOHRvVmh2bDcxUnlJeDdzdmpGZ180cUhfalptYmJPcXB1MUQ4X0ZzNW9JZURoMElGdXdmVURRMXlMazhjSkxWYjJTTjVadGlkaWhnYTBKdXZnQ0xGdms3RGh4aUVKbzE2dm5rMkVkRV9OQjZaWS1TM19TZy04VmpZNlVqR0ZFaXpiRlE5S1NRSmpqeElrakV2elBvRWp0TlhGMNIBpwFBVV95cUxNQ2lGWktxOHRvVmh2bDcxUnlJeDdzdmpGZ180cUhfalptYmJPcXB1MUQ4X0ZzNW9JZURoMElGdXdmVURRMXlMazhjSkxWYjJTTjVadGlkaWhnYTBKdXZnQ0xGdms3RGh4aUVKbzE2dm5rMkVkRV9OQjZaWS1TM19TZy04VmpZNlVqR0ZFaXpiRlE5S1NRSmpqeElrakV2elBvRWp0TlhGMA?oc=5" target="_blank" rel="noopener">Addressing AI’s growing environmental impact - InfotechLead</a></div>
       <div class="card-meta">InfotechLead &middot; Aug 14, 2026</div>
-      
+      <div class="card-summary">This article likely covers the increasing environmental impact of artificial intelligence and potential ways to address it.</div>
     </li>
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxPWlNxNjZxWTNOX2s1LUlzTEhuRC1vaU9Fb05wbEV4bHItUTMyYXFkX1JiV1YwbWtNZUxVOGxZakZieTBzQl8xUHdRckh5dko2THZ4NHlBWjkyMmVmdVZGYjg1dFl1V0xIY0VwZlhEUl9BYUtXN1Jib1VCa2ROZTV2dEJLVDFub1dvWHdjSW5oYm9mbFNoUVE?oc=5" target="_blank" rel="noopener">Genesys Targets 30% Emissions Cut Using Procurement Strategy - Procurement Magazine</a></div>
@@ -194,7 +203,7 @@
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiS0FVX3lxTE9KVXZkRFNEbkxKczA4TDU3Q1hhWE82WE44N2xaWl8tMmdvdTJsNURXMEo5R204Q291MWJEZ2VId2xBUzZGcHZTN1Nncw?oc=5" target="_blank" rel="noopener">OptiCloud: Turning Digital Waste into AI Efficiency - CIOReview</a></div>
       <div class="card-meta">CIOReview &middot; Aug 14, 2026</div>
-      
+      <div class="card-summary">OptiCloud&#x27;s approach to repurposing digital waste to improve artificial intelligence efficiency.</div>
     </li>
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMi3AFBVV95cUxQeHdQN3RsTVl5aU9iQm12ajludW9OZEo5ZEJsTlFBNDJQdVlaSzRoQTlBeDhQR05SZi1kLTRtYVM3MzlVckFucjBINy0yUjRvcTBhVkJjUXJiUXlTWGE5RGhRMUd5OGE5OUNKU19RUzlNSzJ5b0p4TEtHeTZkRXZidjktVmIzNzRTdnhEd1JvUktJLTM1ZFFWU0lsUGQ5Y3p6SFFMZDhXaEpFWUV4OHIwTXFzOXRHcTlxRWFpRTlmUGhCbnFpQzhoNloxNnhSb3pVUWNUSnFSNzRCQnhU?oc=5" target="_blank" rel="noopener">Orge Enerji Publishes TSRS-Compliant 2025 Sustainability Report With Verified Emissions Data - TipRanks</a></div>
@@ -300,6 +309,11 @@
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxPbFVwNkJDZzdhVlRiRG9DVi1LV1h6YWl3eGxVV090aWFIa056OEFwdWZNNVdyckpBeUtJY3NNVVZsRWNxMUlPNzZmRVU5VWF1aWpyZ2o0LVhkOU9ZblNmVlJiNThNM1hMcUVwVjNXRy1Id0l1OWlNVDZxcXd3WjNIclVROWE3eEw5Qkw5QTMydWp0dDQ0T002ZnA1THZPejc1ZG9XaXVn?oc=5" target="_blank" rel="noopener">What Mandatory Emissions Disclosure Looks Like in Practice: Lessons from Japan - esgtoday.com</a></div>
       <div class="card-meta">esgtoday.com &middot; Aug 13, 2026</div>
       
+    </li>
+    <li class="card" data-date="2026-08-13">
+      <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxOWDB0WHFLVm1WV1VIbTVsYU5NRl9hQlJyaTNwaXB4UTlRYUZMcERKc0t5TzZCOGpBdndUelZ3aUFtLUZPVWZKSm9lRmxZeVdUN1hZMGQ0Q1BVSFM5Mmo4VTg5bDVBN0FyVzROZEpoc0FKcmJNZFFiOG9vR3huR1hHQzNHYUhRa3dxejZ2a3hvVkZhXzhaWW1KMmd4ei1sM0dRc0UwalpMekZtZkd5TzlrSWZsbW9CUTlfNkhscA?oc=5" target="_blank" rel="noopener">AI’s Biggest Energy Impact Might Be in the Oil Patch, Not the Data Center - WSJ</a></div>
+      <div class="card-meta">WSJ &middot; Aug 13, 2026</div>
+      <div class="card-summary">The article likely explores how artificial intelligence&#x27;s greatest energy impact may occur in the oil industry rather than in data centers.</div>
     </li>
     <li class="card" data-date="2026-08-13">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxQN0lTc05icEJEUlFyNnYyYUJjNjJDRnk2MG1jY3FkMXRnRFd1dFZIbHlCWklJcTJqS21uWFlMdWpuWEJHbS1GQ0tubnBvRGZCdmF3OFJlSWdrNFViWDlZTzVhc2V6ZFpUbEFuWXotN3dub3pKZmg2SW9ncGUyOFFZdHVnbVFGVmhjQ2xDWU5CS2dwQ19SOWJQd2pNODF3QnowVUF0Mm9KaVZoWVFMVEFfbjBfVHhPSjg?oc=5" target="_blank" rel="noopener">Public Invited To Join Discussion On AI At Derry Forum - Business Eye</a></div>
@@ -409,7 +423,7 @@
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxPUm5RVkNVTWl3LWdDTk4xVlQwUkZEU3d4Qlg2VkpxclpUOUE5SnpvNWN2a1poQ05ISkMtQ084RWtMWnFDVEpLbE16bl9DNzRLdXVESzNrVTZENm1nMlZlbkM4N0dXbUVoOTUzN3RJUVRnNWZqLV9vYTVpT3ZhV29qZGNHYzB3WTdNNDNtZEFlZURqTkFXeGc?oc=5" target="_blank" rel="noopener">Generative AI Boosts Corporate ESG Performance: Evidence from China - Bioengineer.org</a></div>
       <div class="card-meta">Bioengineer.org &middot; Aug 12, 2026</div>
-      
+      <div class="card-summary">A new study examines empirical evidence from China suggesting that generative AI adoption improves corporate environmental, social, and governance (ESG) performance.</div>
     </li>
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMikgFBVV95cUxPZnRXS1JqTWN1X05Qd3pwcjFmd3M1NFJaakNwUlM5M1pyMTUtbHR6dHNqZnlyTDJZMlRQN1BzeWQ3V29lWW02YXdGbGxLTEpKdU80WUNLWlRwbzNMTV9EVDNNT2dzeHAySzQzQ3dWbXd2WFBsMVBRbGFmUUV2eXFKdXBDNkdoeVpoVnp0eWo1ZzVTUQ?oc=5" target="_blank" rel="noopener">Nagaland University seminar explores AI for green sustenance - MorungExpress</a></div>
@@ -449,7 +463,7 @@
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiywFBVV95cUxPbHd4dUI2bjdma0hfRGhCXzBJMHE3SllhT180NEtSakhGTmVIOF95alN6QXd2azR5TDFaUjlmS1BIT1Q1NFRFdTRyNERKTWJ2c0V5TE5qM19lM2lZWDUtTkVIS24yZGVhTGVaYW1VMW9CODJuUXpFZ2FDXzhPNWhPX2U5WTdvczVObUMxRE9ialRRQVlCUnZzMS1vWElJMHRoQXZEUTdVUkFCelhSUWFpWU01NTJmcnU4VFJNQ19SYlltMUt0dU12VzR4TdIBywFBVV95cUxPbHd4dUI2bjdma0hfRGhCXzBJMHE3SllhT180NEtSakhGTmVIOF95alN6QXd2azR5TDFaUjlmS1BIT1Q1NFRFdTRyNERKTWJ2c0V5TE5qM19lM2lZWDUtTkVIS24yZGVhTGVaYW1VMW9CODJuUXpFZ2FDXzhPNWhPX2U5WTdvczVObUMxRE9ialRRQVlCUnZzMS1vWElJMHRoQXZEUTdVUkFCelhSUWFpWU01NTJmcnU4VFJNQ19SYlltMUt0dU12VzR4TQ?oc=5" target="_blank" rel="noopener">How Sustainable Business Has Changed in the Last Five Years: An Interview with Noa Shtang - Blue and Green Tomorrow</a></div>
       <div class="card-meta">Blue and Green Tomorrow &middot; Aug 12, 2026</div>
-      
+      <div class="card-summary">An interview with Noa Shtang explores how sustainable business practices have evolved over the past five years.</div>
     </li>
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxPcC1RWUpYcURwMG5lYXhXVVA2ckRoSWpwTndncW9LTG05SnZlV0lPeDY3WktlX1JaV1VFSHVHYUJzZ3RIS3plaDlMeDRCR0dDS0owWndvYi1TOGlxMjRsNEpqQTNsQnFPcXRIMjMzN2NHWnBmaFdrRmYxQVUwS05Qckt0dmVyb2pMckhEWUdIaG9IM21kQ0FmS1VCQXZpakxfZENzT3dhMlM4VmJvenhkLQ?oc=5" target="_blank" rel="noopener">Waterloo region in Ontario to look into implications of data centres on local economy and environment - CBC</a></div>
@@ -539,7 +553,7 @@
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiW0FVX3lxTE1Cc2RNOTZQNUFEWUFoRElwaS1kM1I5aFBhUjk4dlYyLUNDNEN4RkxraWtPdnhvbkVWUVJUQmE2QWhyM1otRS1UbDdyR0dITEE4MHhDNE9obGJzQjQ?oc=5" target="_blank" rel="noopener">Aspen AI Conference 2021 - Day 2 - Burden Or Benefit? Environmental Sustainability In The Age Of AI Amitabh Bachchan (XnPdEELVWq) - Mshale</a></div>
       <div class="card-meta">Mshale &middot; Aug 12, 2026</div>
-      
+      <div class="card-summary">This article likely covers discussions from the Aspen AI Conference 2021 regarding whether artificial intelligence is an environmental burden or benefit.</div>
     </li>
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMifkFVX3lxTFB0NVBFQmxLQ0tDUDZCeWhVbHg3WGVMSkJHV05PMnhTRkVKR01Vc1g2ckpTUGRXUU9vN3k1akRoOHlmTTl3c0xjMmE1VVNNSWRzWktvQlBqVlV0MlFTTndGbmRUU1U1ZjdDVVZ3ZWEzbjcyeExGakFkbHJUMEhFdw?oc=5" target="_blank" rel="noopener">AI’s Volatile Power Demand Is Damaging Its Own Data Centers - Insurance Journal</a></div>
@@ -759,7 +773,7 @@
     <li class="card" data-date="2026-08-11">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE1lbU4yNzZxamlURWY3bUhrLUFrcXJ2U21XcktzaEFIMlNiVlJSUGYwazdlclRTbXprS29pYURMdHVYdnhhVklXNHhXQ2pkZmlmRU5ZZEI0UVNhbmh4LUIwYy1YQnFLdFJNakE?oc=5" target="_blank" rel="noopener">28+ AI Water Usage and Environmental Impact Stats (2026) - Exploding Topics</a></div>
       <div class="card-meta">Exploding Topics &middot; Aug 11, 2026</div>
-      
+      <div class="card-summary">This article likely covers statistics regarding the water usage and environmental impacts of artificial intelligence.</div>
     </li>
     <li class="card" data-date="2026-08-11">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNNi1kTTZwa3lHUERNYUtvSUpsME5obDdUdEM2SVU0Uk4zRkVEc3ZyMEpvZzg4UklvUXA1WUxWd3NMZmdCWThYYkMxaURFUDBNUUdtdG15OU9JTnRGV1hRVW5SWDZaXzRmelRZUjlEMHJZQnZ3VFJST0Z0SlBBVTFYamdXZGhpbWVraXRaeQ?oc=5" target="_blank" rel="noopener">The AI data center backlash is costing Big Tech billions - Telecoms</a></div>
@@ -819,7 +833,7 @@
     <li class="card" data-date="2026-08-11">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMimwJBVV95cUxQUUZXNW5YdldyNzIzcmNPeHd4R3RqbnBWR1d4b1RkUEVHMlFIeGFQdVpkcHpCT1VEb0Q2YjJPVWtGWU9MbTZoMU1nNXI1Q1dzQkRkRkg5VFdkV2I2T0E3eVFlTTRyUmFnOVZrY1NJQ29JYzYtZUVoUzUwTDk3SUhOS2xySllWaGVHdWNPX3hKbVlUMkJMSGplQXVpdU1vaXZGRU52NU5GZTRZMWZtLXZjalJhYW5MZGNwcmNTZDNNejdQTUhmMGhoUVJwZDNfbnBoSVVxcUhtV2hkY3RpRERnMGRmS282QTlJTzFZOVNEY0Y5VmNBVmJQMXYyaXBULWY4RENmeFJNQVBkSWtUdzJESnNUV0ZOb010dVNB0gHnAUFVX3lxTE9OVk9nWWs3RTlLbmsyX2ZZdmJLTkx2WjFVUXR0cVRGTzdHNG1VU3FPUXZBUXZ4TDNiaDdSTngwbTB0X0R2QkhnWm5iRDhTNjJMZGllb1J1NG40QW1ZdzNyWmlVRkJxT2p0SXdXclZqNmh4N0p3WDVaRjBVcGtjdmpVYzZLYnB3dDZsSTRsSjdneDlhbGxjdXc2RnVqM29HcWx4UnhXN3MtWW9UUU5Sc0hUcm5qd01hUWdhemY2LTdRdm1FX1RDdHpkRmRRWjlaaWVLdmk2eEZva0NsdHlhRGI4X3ZfUWJrcw?oc=5" target="_blank" rel="noopener">Honeywell to skill 3 lakh students in AI, cybersecurity, sustainability by 2030 - ET Education</a></div>
       <div class="card-meta">ET Education &middot; Aug 11, 2026</div>
-      
+      <div class="card-summary">Honeywell plans to skill 300,000 students in AI, cybersecurity, and sustainability by 2030.</div>
     </li>
     <li class="card" data-date="2026-08-11">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPT1FJR2JEel9LWW5tYm55UWRGb05ZVjhHbklvWnRGVXNBbVBJSm05VURPMlZzenREMXVBLXJCdkU2Z1RSZGkzd0RoV1VJVmhieEMyV1VlOHFPQ3U1ODRmcUZadk1mU214MGFHTm0wT2xYWkpwSGlnMkMxeTdxUWJ6VU9WT3BCZ3FFeENqU0dJeDZEX2piTnNIM2VIMWNqSktjWmNRLV81ZGl4YmxQSlE?oc=5" target="_blank" rel="noopener">One Iowa farm is guarding 20,000 food varieties as seed giants dominate the market - The Cool Down</a></div>
@@ -849,12 +863,12 @@
     <li class="card" data-date="2026-08-10">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxPdTNPMVdOMFdIOW5kTmRfUFlqLWIzdGlrTWh6cXJ6WGRPMk1DcTlBYjM3bng0aFh4eC1KNzl0V2RkdXlsSVE2WFNmVDg2MGdFZ2NTeDJCOVluX216emFLenU3d0ZhRnlRTmZNTkYwdG8wUlIxdXR3Szd2RG9sTjVSRzVubW93X3o0RmFGZUNaVFg?oc=5" target="_blank" rel="noopener">Blue Yonder unveils AI tools &amp; sustainability findings - ecommercenews.com.au</a></div>
       <div class="card-meta">ecommercenews.com.au &middot; Aug 10, 2026</div>
-      
+      <div class="card-summary">Blue Yonder has announced new artificial intelligence tools alongside recent findings related to sustainability.</div>
     </li>
     <li class="card" data-date="2026-08-10">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMid0FVX3lxTE00YVNoMU11bFZjYjJuaXpnMmVyOTVKSHFuaWNnOTBHUjFoUllsVUxON2xmaktaMU05MEJLVWd6Sm1ZeFFNRFlDVTItQW1qQ3VrbFIxODhyamNMLW15ajQ1MXp4eVhuLTVlbjNySU16dDF6TW94ZGpn?oc=5" target="_blank" rel="noopener">How Much Water Does AI Really Consume? - Greener Ideal</a></div>
       <div class="card-meta">Greener Ideal &middot; Aug 10, 2026</div>
-      
+      <div class="card-summary">This article likely explores the environmental impact of artificial intelligence by examining its actual water consumption.</div>
     </li>
     <li class="card" data-date="2026-08-10">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiywFBVV95cUxNQ3B5ai1oR3p3SGMwUlVBcXA1V0dERUh5aEM1WkJ4azFlRXFUSHBDeEdmWThYTkJUd3Z2SkI1MVZYMDJjdzBOZUJhTnBIanBMdUtvd3phNld1V2hmQ1NDeFNpdndBMjNQXzhGMXBBX0twWWlNbHh6QXVVc1FJMEtTdXJRNy1Xa1JwNzAtSWg3aUNuS3pER25XNThmZ2FoY1Z2VnB2NW9PRFl1eE4wQWd6Mi1nV1cyMWRydmFIQVRDakhES0hLMEoxenJqSQ?oc=5" target="_blank" rel="noopener">Over 500 jurisdictions ban data center construction, threatening US’ pole position in AI race - New York Post</a></div>
@@ -1431,7 +1445,7 @@
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxPUUNqVHFiNzI2SEFxR2RmOHRfVG5iQlFBLXN5TU8tV3J4WklTMm1IWmMxTEZhZ2o3ZDdQemhsbVlmUk5VbzBsUWttNExTaWZOWk9pZVdIbzBidUJYR1ZXZXRTZ2FXa21HZURPWmhRNUVoa2s0NjJSN0RJNmttYU9HUF9DTUF5NFVkZ2cwQ1JYOGl5NmRiOVJkRWJ0MEx1bXZmMkJ5SUlJR3JmOXBLUnNGNWlJUXo4N0MxR296RFRzRnBTcmc5M1hWSg?oc=5" target="_blank" rel="noopener">What does it take to achieve &#x27;Sustainable Intelligence&#x27;? Limiting environmental impacts of AI in healthcare - Croakey Health Media</a></div>
       <div class="card-meta">Croakey Health Media &middot; Aug 14, 2026</div>
-      
+      <div class="card-summary">This article likely covers strategies for limiting the environmental impacts of artificial intelligence in the healthcare sector.</div>
     </li>
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxNMERRaTBFWFRYdmpYeUljUmpIbkhSYXdnZjdVd3ZhZHNXSlViZ3BnN3d0WUo1S3NCdU0tVVJyYVU0SjNwZlZkX19qOWtvZmNhUzFnWURtV3JHU1l2YWZGSVpzX3dqMjN0bTFMbEFmdENHN3NJWndWcEtiRFZqandua1ZRYUdoU3pXa0Jvc1BIVkUxdmg3Rnhxdm5SU2NvbEd6WmdnQVJkR3p5RU91a1oxZ2pFakpkYV9XUVRnTUFTWTdEY0Y5SGc?oc=5" target="_blank" rel="noopener">How Artificial Intelligence Is Quietly Powering Hospitality&#x27;s Sustainable Revolution - TravelPulse</a></div>
@@ -1451,7 +1465,7 @@
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiZEFVX3lxTE5CUE1SZ2wzSS1RQWVLV0dhQTJWSGU0ZVpsQmZiOVFBNHBiUEZCN1g4d2s0akE4TEZkVS1PZnlSc1FLYlM5WDNhYnBadjZadF81WWdWMDRCMjlfMjRlZWJQM1dqWEw?oc=5" target="_blank" rel="noopener">Digitalisation, AI and sustainability take Focus at IFCO Istanbul 2026 - Just Style</a></div>
       <div class="card-meta">Just Style &middot; Aug 14, 2026</div>
-      
+      <div class="card-summary">The IFCO Istanbul 2026 event will highlight the intersection of digitalisation, artificial intelligence, and sustainability.</div>
     </li>
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxOd3NRU1ZuM0dlY3BfNGJTNlJrODF4VGg3Q25JOF9IOEVMM29MRktEWnV6UWQ4NkVYNGowV2JVbWV4YnpRaXFrVXd5NjFTRk9ENDVWMGl6RGRzM2E4eHVNRGc5dmFaT3lLZThtUFRTa2xxaFJzSXhpSnpqaFJUZS13QUF2eUFZUmRqT0gtYTNtTWJTUWMtR1HSAZYBQVVfeXFMTndzUVNWbjNHZWNwXzRiUzZSazgxeFRoN0NuSThfSDhFTDNvTEZLRFp1elFkODZFWDRqMFdiVW1leGJ6UWlxa1V3eTYxU0ZPRDQ1VjBpekRkczNhOHh1TURnOXZhWk95S2U4bVBUU2tscWhSc0l4aUp6amhSVGUtd0FBdnlBWVJkak9ILWEzbU1iU1FjLUdR?oc=5" target="_blank" rel="noopener">Artificial Intelligence and Smart Technologies in Energy Management: Global Practice and the Emerging Case of Ghana and Africa - Modern Ghana</a></div>
@@ -1471,7 +1485,7 @@
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxNQ2lGWktxOHRvVmh2bDcxUnlJeDdzdmpGZ180cUhfalptYmJPcXB1MUQ4X0ZzNW9JZURoMElGdXdmVURRMXlMazhjSkxWYjJTTjVadGlkaWhnYTBKdXZnQ0xGdms3RGh4aUVKbzE2dm5rMkVkRV9OQjZaWS1TM19TZy04VmpZNlVqR0ZFaXpiRlE5S1NRSmpqeElrakV2elBvRWp0TlhGMNIBpwFBVV95cUxNQ2lGWktxOHRvVmh2bDcxUnlJeDdzdmpGZ180cUhfalptYmJPcXB1MUQ4X0ZzNW9JZURoMElGdXdmVURRMXlMazhjSkxWYjJTTjVadGlkaWhnYTBKdXZnQ0xGdms3RGh4aUVKbzE2dm5rMkVkRV9OQjZaWS1TM19TZy04VmpZNlVqR0ZFaXpiRlE5S1NRSmpqeElrakV2elBvRWp0TlhGMA?oc=5" target="_blank" rel="noopener">Addressing AI’s growing environmental impact - InfotechLead</a></div>
       <div class="card-meta">InfotechLead &middot; Aug 14, 2026</div>
-      
+      <div class="card-summary">This article likely covers the increasing environmental impact of artificial intelligence and potential ways to address it.</div>
     </li>
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxPWlNxNjZxWTNOX2s1LUlzTEhuRC1vaU9Fb05wbEV4bHItUTMyYXFkX1JiV1YwbWtNZUxVOGxZakZieTBzQl8xUHdRckh5dko2THZ4NHlBWjkyMmVmdVZGYjg1dFl1V0xIY0VwZlhEUl9BYUtXN1Jib1VCa2ROZTV2dEJLVDFub1dvWHdjSW5oYm9mbFNoUVE?oc=5" target="_blank" rel="noopener">Genesys Targets 30% Emissions Cut Using Procurement Strategy - Procurement Magazine</a></div>
@@ -1481,7 +1495,7 @@
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiS0FVX3lxTE9KVXZkRFNEbkxKczA4TDU3Q1hhWE82WE44N2xaWl8tMmdvdTJsNURXMEo5R204Q291MWJEZ2VId2xBUzZGcHZTN1Nncw?oc=5" target="_blank" rel="noopener">OptiCloud: Turning Digital Waste into AI Efficiency - CIOReview</a></div>
       <div class="card-meta">CIOReview &middot; Aug 14, 2026</div>
-      
+      <div class="card-summary">OptiCloud&#x27;s approach to repurposing digital waste to improve artificial intelligence efficiency.</div>
     </li>
     <li class="card" data-date="2026-08-14">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMixwFBVV95cUxOUThQUkZ5dXFzSVBZc1dnYzdFVFhoNlJNZnd6cFpqMUpDX2ZRME13T0tUU3ctLVcwZVFFWnRhQ1ozY0F1M3RYazVvcFhpSklLMXJCUlhfWTRiZ0RSVEJDTFI1R3BNVS1IRVV3ZjduUlF1LXhGMkVnbHRCanJGMmgtZ0diTG5GbElDSUNWQV9kWUlYdWlLdXdVeTVsVGZNd0xVT2NIUndubTFYWGxRa2toNjFnbldabXYwd0JLOUtvVXpTZXpTOXJZ?oc=5" target="_blank" rel="noopener">Chadian environmental activist Hindou Oumarou: ‘AI governance must respect Indigenous peoples’ - Global Voices</a></div>
@@ -1537,6 +1551,11 @@
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiigFBVV95cUxORXFRLWVUbklZaFNWcFlIQkNPRlRHTVYtb2hLRjZjWmZWTUkzYjdiRUdQN2M2a1h2dndYZW1tOG10cmY4N0pWcjdUOThwQ0diVUtUNE1OQTFfTFRheFhRdS1HdWlJUjBsUkk0dTFVRm16NzlmSFlNY0dqdGc0Nng0NE1zajBlQk1rdnfSAY8BQVVfeXFMT1JuMXRiN3pNcGZNQjNFaGhZaHhVUHNWTW8tR201cnJzR0otWENCdTJyZDFSM2lGSnB1ZUFPLTdNYzlBVW1HeUdzYjY2NWJNZGFxd1JUN3pxaWs3SGwxbExkTDlra1E4Qy03V0JaQndlN1VUOVYtemJfX0hlZGxtYU1sVkl6dzNuUXhaSktPd0U?oc=5" target="_blank" rel="noopener">Nvidia Claims It Has Eliminated AI’s Thirst for Water - tovima.com</a></div>
       <div class="card-meta">tovima.com &middot; Aug 13, 2026</div>
       
+    </li>
+    <li class="card" data-date="2026-08-13">
+      <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxOWDB0WHFLVm1WV1VIbTVsYU5NRl9hQlJyaTNwaXB4UTlRYUZMcERKc0t5TzZCOGpBdndUelZ3aUFtLUZPVWZKSm9lRmxZeVdUN1hZMGQ0Q1BVSFM5Mmo4VTg5bDVBN0FyVzROZEpoc0FKcmJNZFFiOG9vR3huR1hHQzNHYUhRa3dxejZ2a3hvVkZhXzhaWW1KMmd4ei1sM0dRc0UwalpMekZtZkd5TzlrSWZsbW9CUTlfNkhscA?oc=5" target="_blank" rel="noopener">AI’s Biggest Energy Impact Might Be in the Oil Patch, Not the Data Center - WSJ</a></div>
+      <div class="card-meta">WSJ &middot; Aug 13, 2026</div>
+      <div class="card-summary">The article likely explores how artificial intelligence&#x27;s greatest energy impact may occur in the oil industry rather than in data centers.</div>
     </li>
     <li class="card" data-date="2026-08-13">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxQN0lTc05icEJEUlFyNnYyYUJjNjJDRnk2MG1jY3FkMXRnRFd1dFZIbHlCWklJcTJqS21uWFlMdWpuWEJHbS1GQ0tubnBvRGZCdmF3OFJlSWdrNFViWDlZTzVhc2V6ZFpUbEFuWXotN3dub3pKZmg2SW9ncGUyOFFZdHVnbVFGVmhjQ2xDWU5CS2dwQ19SOWJQd2pNODF3QnowVUF0Mm9KaVZoWVFMVEFfbjBfVHhPSjg?oc=5" target="_blank" rel="noopener">Public Invited To Join Discussion On AI At Derry Forum - Business Eye</a></div>
@@ -1626,7 +1645,7 @@
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxPUm5RVkNVTWl3LWdDTk4xVlQwUkZEU3d4Qlg2VkpxclpUOUE5SnpvNWN2a1poQ05ISkMtQ084RWtMWnFDVEpLbE16bl9DNzRLdXVESzNrVTZENm1nMlZlbkM4N0dXbUVoOTUzN3RJUVRnNWZqLV9vYTVpT3ZhV29qZGNHYzB3WTdNNDNtZEFlZURqTkFXeGc?oc=5" target="_blank" rel="noopener">Generative AI Boosts Corporate ESG Performance: Evidence from China - Bioengineer.org</a></div>
       <div class="card-meta">Bioengineer.org &middot; Aug 12, 2026</div>
-      
+      <div class="card-summary">A new study examines empirical evidence from China suggesting that generative AI adoption improves corporate environmental, social, and governance (ESG) performance.</div>
     </li>
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMikgFBVV95cUxPZnRXS1JqTWN1X05Qd3pwcjFmd3M1NFJaakNwUlM5M1pyMTUtbHR6dHNqZnlyTDJZMlRQN1BzeWQ3V29lWW02YXdGbGxLTEpKdU80WUNLWlRwbzNMTV9EVDNNT2dzeHAySzQzQ3dWbXd2WFBsMVBRbGFmUUV2eXFKdXBDNkdoeVpoVnp0eWo1ZzVTUQ?oc=5" target="_blank" rel="noopener">Nagaland University seminar explores AI for green sustenance - MorungExpress</a></div>
@@ -1666,7 +1685,7 @@
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiywFBVV95cUxPbHd4dUI2bjdma0hfRGhCXzBJMHE3SllhT180NEtSakhGTmVIOF95alN6QXd2azR5TDFaUjlmS1BIT1Q1NFRFdTRyNERKTWJ2c0V5TE5qM19lM2lZWDUtTkVIS24yZGVhTGVaYW1VMW9CODJuUXpFZ2FDXzhPNWhPX2U5WTdvczVObUMxRE9ialRRQVlCUnZzMS1vWElJMHRoQXZEUTdVUkFCelhSUWFpWU01NTJmcnU4VFJNQ19SYlltMUt0dU12VzR4TdIBywFBVV95cUxPbHd4dUI2bjdma0hfRGhCXzBJMHE3SllhT180NEtSakhGTmVIOF95alN6QXd2azR5TDFaUjlmS1BIT1Q1NFRFdTRyNERKTWJ2c0V5TE5qM19lM2lZWDUtTkVIS24yZGVhTGVaYW1VMW9CODJuUXpFZ2FDXzhPNWhPX2U5WTdvczVObUMxRE9ialRRQVlCUnZzMS1vWElJMHRoQXZEUTdVUkFCelhSUWFpWU01NTJmcnU4VFJNQ19SYlltMUt0dU12VzR4TQ?oc=5" target="_blank" rel="noopener">How Sustainable Business Has Changed in the Last Five Years: An Interview with Noa Shtang - Blue and Green Tomorrow</a></div>
       <div class="card-meta">Blue and Green Tomorrow &middot; Aug 12, 2026</div>
-      
+      <div class="card-summary">An interview with Noa Shtang explores how sustainable business practices have evolved over the past five years.</div>
     </li>
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxPcC1RWUpYcURwMG5lYXhXVVA2ckRoSWpwTndncW9LTG05SnZlV0lPeDY3WktlX1JaV1VFSHVHYUJzZ3RIS3plaDlMeDRCR0dDS0owWndvYi1TOGlxMjRsNEpqQTNsQnFPcXRIMjMzN2NHWnBmaFdrRmYxQVUwS05Qckt0dmVyb2pMckhEWUdIaG9IM21kQ0FmS1VCQXZpakxfZENzT3dhMlM4VmJvenhkLQ?oc=5" target="_blank" rel="noopener">Waterloo region in Ontario to look into implications of data centres on local economy and environment - CBC</a></div>
@@ -1741,7 +1760,7 @@
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiW0FVX3lxTE1Cc2RNOTZQNUFEWUFoRElwaS1kM1I5aFBhUjk4dlYyLUNDNEN4RkxraWtPdnhvbkVWUVJUQmE2QWhyM1otRS1UbDdyR0dITEE4MHhDNE9obGJzQjQ?oc=5" target="_blank" rel="noopener">Aspen AI Conference 2021 - Day 2 - Burden Or Benefit? Environmental Sustainability In The Age Of AI Amitabh Bachchan (XnPdEELVWq) - Mshale</a></div>
       <div class="card-meta">Mshale &middot; Aug 12, 2026</div>
-      
+      <div class="card-summary">This article likely covers discussions from the Aspen AI Conference 2021 regarding whether artificial intelligence is an environmental burden or benefit.</div>
     </li>
     <li class="card" data-date="2026-08-12">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMifkFVX3lxTFB0NVBFQmxLQ0tDUDZCeWhVbHg3WGVMSkJHV05PMnhTRkVKR01Vc1g2ckpTUGRXUU9vN3k1akRoOHlmTTl3c0xjMmE1VVNNSWRzWktvQlBqVlV0MlFTTndGbmRUU1U1ZjdDVVZ3ZWEzbjcyeExGakFkbHJUMEhFdw?oc=5" target="_blank" rel="noopener">AI’s Volatile Power Demand Is Damaging Its Own Data Centers - Insurance Journal</a></div>
@@ -1901,7 +1920,7 @@
     <li class="card" data-date="2026-08-11">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE1lbU4yNzZxamlURWY3bUhrLUFrcXJ2U21XcktzaEFIMlNiVlJSUGYwazdlclRTbXprS29pYURMdHVYdnhhVklXNHhXQ2pkZmlmRU5ZZEI0UVNhbmh4LUIwYy1YQnFLdFJNakE?oc=5" target="_blank" rel="noopener">28+ AI Water Usage and Environmental Impact Stats (2026) - Exploding Topics</a></div>
       <div class="card-meta">Exploding Topics &middot; Aug 11, 2026</div>
-      
+      <div class="card-summary">This article likely covers statistics regarding the water usage and environmental impacts of artificial intelligence.</div>
     </li>
     <li class="card" data-date="2026-08-11">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMikgFBVV95cUxPWGlwMXdQc014cDZkeDVoQ1c5QkxzUjVGeGM1UHNqMXFEZXBlYVRxcUVzNG11ZGplUnZpTE5JMHhSaW1UV0puR3VjejBJSzNibFRBV3ZwOHpQZHNULVJSaWUxWF9RZEktNzhxVTR0LVhkeUdrYldIMWpreXRQUGU5WE90QWg0cExqQnNOVldZM1dlUQ?oc=5" target="_blank" rel="noopener">Genesys’ Impact: Sustainable Procurement &amp; Responsible AI - Sustainability Magazine</a></div>
@@ -1956,7 +1975,7 @@
     <li class="card" data-date="2026-08-11">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMimwJBVV95cUxQUUZXNW5YdldyNzIzcmNPeHd4R3RqbnBWR1d4b1RkUEVHMlFIeGFQdVpkcHpCT1VEb0Q2YjJPVWtGWU9MbTZoMU1nNXI1Q1dzQkRkRkg5VFdkV2I2T0E3eVFlTTRyUmFnOVZrY1NJQ29JYzYtZUVoUzUwTDk3SUhOS2xySllWaGVHdWNPX3hKbVlUMkJMSGplQXVpdU1vaXZGRU52NU5GZTRZMWZtLXZjalJhYW5MZGNwcmNTZDNNejdQTUhmMGhoUVJwZDNfbnBoSVVxcUhtV2hkY3RpRERnMGRmS282QTlJTzFZOVNEY0Y5VmNBVmJQMXYyaXBULWY4RENmeFJNQVBkSWtUdzJESnNUV0ZOb010dVNB0gHnAUFVX3lxTE9OVk9nWWs3RTlLbmsyX2ZZdmJLTkx2WjFVUXR0cVRGTzdHNG1VU3FPUXZBUXZ4TDNiaDdSTngwbTB0X0R2QkhnWm5iRDhTNjJMZGllb1J1NG40QW1ZdzNyWmlVRkJxT2p0SXdXclZqNmh4N0p3WDVaRjBVcGtjdmpVYzZLYnB3dDZsSTRsSjdneDlhbGxjdXc2RnVqM29HcWx4UnhXN3MtWW9UUU5Sc0hUcm5qd01hUWdhemY2LTdRdm1FX1RDdHpkRmRRWjlaaWVLdmk2eEZva0NsdHlhRGI4X3ZfUWJrcw?oc=5" target="_blank" rel="noopener">Honeywell to skill 3 lakh students in AI, cybersecurity, sustainability by 2030 - ET Education</a></div>
       <div class="card-meta">ET Education &middot; Aug 11, 2026</div>
-      
+      <div class="card-summary">Honeywell plans to skill 300,000 students in AI, cybersecurity, and sustainability by 2030.</div>
     </li>
     <li class="card" data-date="2026-08-10">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxPWWQzaUFZMDJIcUc5T0hPVXNTV0dKQTNnZk5rQmJudThwRTNvdnQwZ21iX2lwLXlJc3RISzdLX0c4aTUtUHdzaGZCLUk1RzVPSDdTUVhrZVQwYVdGSkpfdEZTaTVFQTNkSU5VV2pmYk9YUHRmT3ZjTFdONV9PeE9qU1dFa1J1alFfeUtMQjdnZVZWdjY4ZkJVTnFtd3JWNl9fMFBSRQ?oc=5" target="_blank" rel="noopener">Water and energy policies will ‘make or break’ UK’s AI future - Water Magazine</a></div>
@@ -1981,12 +2000,12 @@
     <li class="card" data-date="2026-08-10">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxPdTNPMVdOMFdIOW5kTmRfUFlqLWIzdGlrTWh6cXJ6WGRPMk1DcTlBYjM3bng0aFh4eC1KNzl0V2RkdXlsSVE2WFNmVDg2MGdFZ2NTeDJCOVluX216emFLenU3d0ZhRnlRTmZNTkYwdG8wUlIxdXR3Szd2RG9sTjVSRzVubW93X3o0RmFGZUNaVFg?oc=5" target="_blank" rel="noopener">Blue Yonder unveils AI tools &amp; sustainability findings - ecommercenews.com.au</a></div>
       <div class="card-meta">ecommercenews.com.au &middot; Aug 10, 2026</div>
-      
+      <div class="card-summary">Blue Yonder has announced new artificial intelligence tools alongside recent findings related to sustainability.</div>
     </li>
     <li class="card" data-date="2026-08-10">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMid0FVX3lxTE00YVNoMU11bFZjYjJuaXpnMmVyOTVKSHFuaWNnOTBHUjFoUllsVUxON2xmaktaMU05MEJLVWd6Sm1ZeFFNRFlDVTItQW1qQ3VrbFIxODhyamNMLW15ajQ1MXp4eVhuLTVlbjNySU16dDF6TW94ZGpn?oc=5" target="_blank" rel="noopener">How Much Water Does AI Really Consume? - Greener Ideal</a></div>
       <div class="card-meta">Greener Ideal &middot; Aug 10, 2026</div>
-      
+      <div class="card-summary">This article likely explores the environmental impact of artificial intelligence by examining its actual water consumption.</div>
     </li>
     <li class="card" data-date="2026-08-10">
       <div class="card-title"><span class="badge">NEW</span> <a href="https://news.google.com/rss/articles/CBMiywFBVV95cUxNQ3B5ai1oR3p3SGMwUlVBcXA1V0dERUh5aEM1WkJ4azFlRXFUSHBDeEdmWThYTkJUd3Z2SkI1MVZYMDJjdzBOZUJhTnBIanBMdUtvd3phNld1V2hmQ1NDeFNpdndBMjNQXzhGMXBBX0twWWlNbHh6QXVVc1FJMEtTdXJRNy1Xa1JwNzAtSWg3aUNuS3pER25XNThmZ2FoY1Z2VnB2NW9PRFl1eE4wQWd6Mi1nV1cyMWRydmFIQVRDakhES0hLMEoxenJqSQ?oc=5" target="_blank" rel="noopener">Over 500 jurisdictions ban data center construction, threatening US’ pole position in AI race - New York Post</a></div>
@@ -2222,27 +2241,58 @@
 </main>
 <footer>Automatically refreshed on a schedule via GitHub Actions. Sources: Google News RSS, summarized with Gemini.</footer>
 <script>
+function activeTabId() {
+  var btn = document.querySelector('.tab-btn.active');
+  return btn ? btn.getAttribute('data-tab') : 'new';
+}
+
 function showTab(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(el) { el.style.display = 'none'; });
-  document.getElementById('tab-' + id).style.display = 'block';
   document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
+  applyFilters();
 }
-function applyDateFilter() {
+
+function applyFilters() {
   var cutoff = document.getElementById('dateFilter').value;
+  var query = document.getElementById('searchBox').value.trim().toLowerCase();
+  var tokens = query.split(/\s+/).filter(Boolean);
+  var searching = tokens.length > 0;
+  var active = activeTabId();
+
+  document.querySelector('.tabs').style.display = searching ? 'none' : 'flex';
+
+  var totalMatches = 0;
   document.querySelectorAll('.tab-panel').forEach(function(panel) {
+    var isNewTab = panel.id === 'tab-new';
+
+    if (searching) {
+      panel.style.display = isNewTab ? 'none' : 'block';
+    } else {
+      panel.style.display = (panel.id === 'tab-' + active) ? 'block' : 'none';
+    }
+    if (searching && isNewTab) return;
+
     var cards = panel.querySelectorAll('.card');
     var visible = 0;
     cards.forEach(function(card) {
-      var show = !cutoff || (card.dataset.date && card.dataset.date >= cutoff);
+      var dateOK = !cutoff || (card.dataset.date && card.dataset.date >= cutoff);
+      var text = searching ? card.textContent.toLowerCase() : '';
+      var searchOK = !searching || tokens.every(function(t) { return text.indexOf(t) !== -1; });
+      var show = dateOK && searchOK;
       card.style.display = show ? '' : 'none';
-      if (show) visible++;
+      if (show) { visible++; if (searching) totalMatches++; }
     });
+
     var emptyMsg = panel.querySelector('.filter-empty');
     if (emptyMsg) {
       emptyMsg.style.display = (cards.length > 0 && visible === 0) ? 'block' : 'none';
     }
   });
+
+  var status = document.getElementById('searchStatus');
+  status.textContent = searching
+    ? 'Showing ' + totalMatches + ' result' + (totalMatches === 1 ? '' : 's') + ' for "' + query + '" across all topics'
+    : '';
 }
 </script>
 </body>
