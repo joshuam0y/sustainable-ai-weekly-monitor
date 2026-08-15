@@ -238,12 +238,10 @@ function applyFilters() {{
   document.querySelectorAll('.tab-panel').forEach(function(panel) {{
     var isNewTab = panel.id === 'tab-new';
 
-    if (searching) {{
-      panel.style.display = isNewTab ? 'none' : 'block';
-    }} else {{
-      panel.style.display = (panel.id === 'tab-' + active) ? 'block' : 'none';
+    if (searching && isNewTab) {{
+      panel.style.display = 'none';
+      return;
     }}
-    if (searching && isNewTab) return;
 
     var cards = panel.querySelectorAll('.card');
     var visible = 0;
@@ -257,15 +255,25 @@ function applyFilters() {{
     }});
 
     var emptyMsg = panel.querySelector('.filter-empty');
-    if (emptyMsg) {{
-      emptyMsg.style.display = (cards.length > 0 && visible === 0) ? 'block' : 'none';
+    if (searching) {{
+      // Hide categories with zero matches entirely -- an empty box next to
+      // real results reads as broken, not as "nothing here."
+      panel.style.display = visible > 0 ? 'block' : 'none';
+      if (emptyMsg) emptyMsg.style.display = 'none';
+    }} else {{
+      panel.style.display = (panel.id === 'tab-' + active) ? 'block' : 'none';
+      if (emptyMsg) emptyMsg.style.display = (cards.length > 0 && visible === 0) ? 'block' : 'none';
     }}
   }});
 
   var status = document.getElementById('searchStatus');
-  status.textContent = searching
-    ? 'Showing ' + totalMatches + ' result' + (totalMatches === 1 ? '' : 's') + ' for "' + query + '" across all topics'
-    : '';
+  if (searching) {{
+    status.textContent = totalMatches > 0
+      ? 'Showing ' + totalMatches + ' result' + (totalMatches === 1 ? '' : 's') + ' for "' + query + '" across all topics'
+      : 'No articles match "' + query + '"';
+  }} else {{
+    status.textContent = '';
+  }}
 }}
 </script>
 </body>
