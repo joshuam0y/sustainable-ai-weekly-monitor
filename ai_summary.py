@@ -1,6 +1,6 @@
 import os
 
-MODEL = "claude-haiku-4-5-20251001"
+MODEL = "gemini-2.0-flash"
 
 
 def summarize_article(client, title, source):
@@ -11,24 +11,20 @@ def summarize_article(client, title, source):
         "and don't claim certainty about details not implied by the headline."
     )
     try:
-        resp = client.messages.create(
-            model=MODEL,
-            max_tokens=80,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return resp.content[0].text.strip()
+        resp = client.models.generate_content(model=MODEL, contents=prompt)
+        return resp.text.strip()
     except Exception:
         return None
 
 
 def backfill_summaries(conn, limit=None):
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        print("ANTHROPIC_API_KEY not set -- skipping AI summaries")
+        print("GEMINI_API_KEY not set -- skipping AI summaries")
         return 0
 
-    import anthropic
-    client = anthropic.Anthropic(api_key=api_key)
+    from google import genai
+    client = genai.Client(api_key=api_key)
 
     query = "SELECT link, title, source FROM articles WHERE ai_summary IS NULL ORDER BY first_seen DESC"
     rows = conn.execute(query).fetchall()

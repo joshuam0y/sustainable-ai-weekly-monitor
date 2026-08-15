@@ -19,7 +19,7 @@ Every hour, a GitHub Actions workflow:
 2. Stores every article it finds in a local SQLite database (`monitor.db`),
    deduplicated by URL, so nothing already seen is lost or reprocessed.
 3. Generates a one-sentence, headline-based AI summary for each new article
-   (via the Claude API) so the report is skimmable without opening every link.
+   (via the free Gemini API) so the report is skimmable without opening every link.
 4. Renders a static report (`docs/index.html`) with a "New Since Last Check"
    tab plus one tab per topic, each independently scrollable so the page
    itself never turns into an endless scroll.
@@ -35,13 +35,14 @@ python3 -m venv .venv
 .venv/bin/python render_report.py   # rebuilds docs/index.html
 ```
 
-Set `ANTHROPIC_API_KEY` in the environment to enable AI summaries; without it,
+Set `GEMINI_API_KEY` in the environment to enable AI summaries; without it,
 the scraper still runs, it just skips the summary step.
 
 ## One-time setup
 
-- Add `ANTHROPIC_API_KEY` as a repo secret (Settings → Secrets and variables →
-  Actions) so the hourly workflow can generate summaries.
+- Get a free Gemini API key at https://aistudio.google.com/apikey (no credit
+  card required) and add it as a repo secret named `GEMINI_API_KEY`
+  (Settings → Secrets and variables → Actions).
 - Enable GitHub Pages (Settings → Pages → Source: GitHub Actions).
 
 ## Files
@@ -50,6 +51,6 @@ the scraper still runs, it just skips the summary step.
 |---|---|
 | `db.py` | SQLite schema + connection helper |
 | `scraper.py` | Pulls Google News RSS results, dedupes, categorizes |
-| `ai_summary.py` | Headline-based AI summaries via Claude |
+| `ai_summary.py` | Headline-based AI summaries via Gemini |
 | `render_report.py` | Builds the static HTML report in `docs/` |
 | `.github/workflows/hourly.yml` | Scheduled scrape + render + publish |
