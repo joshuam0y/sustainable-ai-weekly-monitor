@@ -37,14 +37,22 @@ def parse_dt(value, fallback):
         return fallback
 
 
-def format_published(value):
-    if not value:
-        return "Unknown date"
-    try:
-        dt = parsedate_to_datetime(value)
-        return dt.strftime("%b %d, %Y")
-    except (TypeError, ValueError):
-        return value
+def resolve_dt(row):
+    """The article's real publish date when available, else when we first saw it."""
+    dt = None
+    if row["published"]:
+        try:
+            dt = parsedate_to_datetime(row["published"])
+        except (TypeError, ValueError):
+            dt = None
+    if dt is None and row["first_seen"]:
+        try:
+            dt = datetime.fromisoformat(row["first_seen"])
+        except ValueError:
+            dt = None
+    if dt is not None and dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
 
 
 def load_articles(conn, since):
@@ -59,14 +67,15 @@ def last_run_at(conn):
     return row["run_at"] if row else None
 
 
-def article_card(row, is_new):
+def article_card(row, is_new, dt):
     badge = '<span class="badge">NEW</span> ' if is_new else ""
     src = escape(row["source"] or "Unknown source")
-    date_txt = escape(format_published(row["published"]))
+    date_txt = escape(dt.strftime("%b %d, %Y")) if dt else "Unknown date"
+    date_attr = dt.strftime("%Y-%m-%d") if dt else ""
     ai_summary = row["ai_summary"]
     summary_html = f'<div class="card-summary">{escape(ai_summary)}</div>' if ai_summary else ""
     return f"""
-    <li class="card">
+    <li class="card" data-date="{date_attr}">
       <div class="card-title">{badge}<a href="{escape(row['link'])}" target="_blank" rel="noopener">{escape(row['title'])}</a></div>
       <div class="card-meta">{src} &middot; {date_txt}</div>
       {summary_html}
@@ -104,13 +113,15 @@ def render():
     panels = []
 
     def add_tab(tab_id, label, tab_rows, active=False):
-        cards = "".join(article_card(r, r["link"] in new_links) for r in tab_rows)
+        dated = [(resolve_dt(r), r) for r in tab_rows]
+        dated.sort(key=lambda pair: pair[0] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+        cards = "".join(article_card(r, r["link"] in new_links, dt) for dt, r in dated)
         active_cls = " active" if active else ""
         display = "block" if active else "none"
         tabs.append(f'<button class="tab-btn{active_cls}" onclick="showTab(\'{tab_id}\', this)">{escape(label)} ({len(tab_rows)})</button>')
         panels.append(f"""
         <div class="tab-panel" id="tab-{tab_id}" style="display:{display}">
-          <ul class="card-list">{cards or '<li class="empty">Nothing here yet.</li>'}</ul>
+          <ul class="card-list">{cards or '<li class="empty">Nothing here yet.</li>'}<li class="empty filter-empty" style="display:none">No articles match this filter.</li></ul>
         </div>""")
 
     add_tab("new", "New Since Last Check", new_rows, active=True)
@@ -124,6 +135,22 @@ def render():
         <div class="trending">
           <strong>Trending:</strong> {chips}
         </div>"""
+
+    today_str = now.strftime("%Y-%m-%d")
+    d3_str = (now - timedelta(days=3)).strftime("%Y-%m-%d")
+    d7_str = (now - timedelta(days=7)).strftime("%Y-%m-%d")
+    d30_str = (now - timedelta(days=30)).strftime("%Y-%m-%d")
+    filter_html = f"""
+    <div class="filter-row">
+      <label for="dateFilter">Filter by date:</label>
+      <select id="dateFilter" onchange="applyDateFilter()">
+        <option value="">All time</option>
+        <option value="{today_str}">Today</option>
+        <option value="{d3_str}">Last 3 days</option>
+        <option value="{d7_str}">Last 7 days</option>
+        <option value="{d30_str}">Last 30 days</option>
+      </select>
+    </div>"""
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -140,6 +167,8 @@ def render():
   main {{ max-width: 900px; margin: 0 auto; padding: 18px 20px 30px; }}
   .trending {{ background: #fff; border: 1px solid #e0e6e2; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.9em; }}
   .chip {{ display: inline-block; background: #e4efe8; color: #1b4332; padding: 3px 9px; border-radius: 16px; margin: 2px 4px; font-size: 0.85em; }}
+  .filter-row {{ margin-bottom: 12px; font-size: 0.9em; }}
+  .filter-row select {{ margin-left: 6px; padding: 5px 8px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b4332; }}
   .tabs {{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }}
   .tab-btn {{ background: #fff; border: 1px solid #cfe0d6; color: #1b4332; padding: 8px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; }}
   .tab-btn.active {{ background: #2e7d55; color: #fff; border-color: #2e7d55; }}
@@ -163,16 +192,33 @@ def render():
 </header>
 <main>
 {trending_html}
+{filter_html}
 <div class="tabs">{''.join(tabs)}</div>
 {''.join(panels)}
 </main>
-<footer>Automatically refreshed on a schedule via GitHub Actions. Sources: Google News RSS, summarized with Claude.</footer>
+<footer>Automatically refreshed on a schedule via GitHub Actions. Sources: Google News RSS, summarized with Gemini.</footer>
 <script>
 function showTab(id, btn) {{
   document.querySelectorAll('.tab-panel').forEach(function(el) {{ el.style.display = 'none'; }});
   document.getElementById('tab-' + id).style.display = 'block';
   document.querySelectorAll('.tab-btn').forEach(function(b) {{ b.classList.remove('active'); }});
   btn.classList.add('active');
+}}
+function applyDateFilter() {{
+  var cutoff = document.getElementById('dateFilter').value;
+  document.querySelectorAll('.tab-panel').forEach(function(panel) {{
+    var cards = panel.querySelectorAll('.card');
+    var visible = 0;
+    cards.forEach(function(card) {{
+      var show = !cutoff || (card.dataset.date && card.dataset.date >= cutoff);
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    }});
+    var emptyMsg = panel.querySelector('.filter-empty');
+    if (emptyMsg) {{
+      emptyMsg.style.display = (cards.length > 0 && visible === 0) ? 'block' : 'none';
+    }}
+  }});
 }}
 </script>
 </body>
