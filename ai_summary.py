@@ -13,7 +13,8 @@ def summarize_article(client, title, source):
     try:
         resp = client.models.generate_content(model=MODEL, contents=prompt)
         return resp.text.strip()
-    except Exception:
+    except Exception as e:
+        print(f"Gemini summarize failed for '{title[:60]}': {e!r}")
         return None
 
 
