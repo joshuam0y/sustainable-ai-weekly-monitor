@@ -1,6 +1,6 @@
 import os
 
-MODEL = "gemini-2.0-flash"
+MODEL = "gemini-3.5-flash-lite"
 
 
 def summarize_article(client, title, source):

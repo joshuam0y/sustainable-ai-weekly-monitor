@@ -3,8 +3,11 @@ from collections import Counter
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from html import escape
+from zoneinfo import ZoneInfo
 
 from db import get_conn
+
+EASTERN = ZoneInfo("America/New_York")
 
 CATEGORY_LABELS = {
     "conversation": "General Conversation",
@@ -70,8 +73,9 @@ def last_run_at(conn):
 def article_card(row, is_new, dt):
     badge = '<span class="badge">NEW</span> ' if is_new else ""
     src = escape(row["source"] or "Unknown source")
-    date_txt = escape(dt.strftime("%b %d, %Y")) if dt else "Unknown date"
-    date_attr = dt.strftime("%Y-%m-%d") if dt else ""
+    local_dt = dt.astimezone(EASTERN) if dt else None
+    date_txt = escape(local_dt.strftime("%b %d, %Y")) if local_dt else "Unknown date"
+    date_attr = local_dt.strftime("%Y-%m-%d") if local_dt else ""
     ai_summary = row["ai_summary"]
     summary_html = f'<div class="card-summary">{escape(ai_summary)}</div>' if ai_summary else ""
     return f"""
@@ -136,10 +140,11 @@ def render():
           <strong>Trending:</strong> {chips}
         </div>"""
 
-    today_str = now.strftime("%Y-%m-%d")
-    d3_str = (now - timedelta(days=3)).strftime("%Y-%m-%d")
-    d7_str = (now - timedelta(days=7)).strftime("%Y-%m-%d")
-    d30_str = (now - timedelta(days=30)).strftime("%Y-%m-%d")
+    now_eastern = now.astimezone(EASTERN)
+    today_str = now_eastern.strftime("%Y-%m-%d")
+    d3_str = (now_eastern - timedelta(days=3)).strftime("%Y-%m-%d")
+    d7_str = (now_eastern - timedelta(days=7)).strftime("%Y-%m-%d")
+    d30_str = (now_eastern - timedelta(days=30)).strftime("%Y-%m-%d")
     filter_html = f"""
     <div class="filter-row">
       <label for="dateFilter">Filter by date:</label>
