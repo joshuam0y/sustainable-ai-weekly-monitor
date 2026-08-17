@@ -54,5 +54,28 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
+      # GitHub's own Pages deployment backend has occasional transient
+      # issues unrelated to this pipeline -- confirmed in production on
+      # 2026-08-17, twice in one afternoon (a 503 "no server available"
+      # outage, and a 429-rate-limited download of the deploy-pages action
+      # itself). The scan job's commit above already succeeded by this
+      # point, so no data is ever lost either way. continue-on-error means
+      # even an exhausted retry doesn't get reported as a failed run --
+      # this repo only runs hourly with no faster fallback (unlike the
+      # sibling mlb-player-props project's 15-minute Quick refresh), so
+      # the one retry below meaningfully shrinks the window the live site
+      # would otherwise sit stale on a previous deploy.
+      - name: Deploy to Pages
+        id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before retry
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 20
+
+      - name: Deploy to Pages (retry)
+        id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
+        continue-on-error: true
         uses: actions/deploy-pages@v4
