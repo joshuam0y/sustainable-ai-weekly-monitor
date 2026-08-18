@@ -40,8 +40,35 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add monitor.db docs/index.html
-          git diff --cached --quiet || git commit -m "Automated scan update"
-          git push
+          git diff --cached --quiet && exit 0
+          git commit -m "Automated scan update"
+          # Confirmed in production: a manually-triggered run landing 19s
+          # after a scheduled one raced this exact push and failed outright
+          # ("! [rejected] main -> main (fetch first)") with no retry. This
+          # mirrors the proven fix already used by the sibling
+          # mlb-player-props project for the identical race. monitor.db and
+          # docs/index.html are pure generated output, not hand-edited
+          # content, so a rebase conflict here just means another run's own
+          # regeneration landed first -- -X theirs keeps THIS run's freshly
+          # built content on conflict (during a rebase "theirs" means the
+          # commit being replayed, i.e. ours; see git-rebase(1)). Each retry
+          # aborts any stuck rebase first so one bad attempt can't poison
+          # the rest.
+          success=false
+          for i in 1 2 3 4 5; do
+            git rebase --abort >/dev/null 2>&1 || true
+            if git pull --rebase -X theirs origin main && git push; then
+              success=true
+              break
+            fi
+            echo "Push attempt $i failed, retrying..."
+            sleep 5
+          done
+          git rebase --abort >/dev/null 2>&1 || true
+          if [ "$success" != true ]; then
+            echo "::error::Could not push after 5 attempts."
+            exit 1
+          fi
 
       - uses: actions/upload-pages-artifact@v3
         with:
