@@ -1,3 +1,4 @@
+import re
 import time
 from datetime import datetime, timezone
 from urllib.parse import quote
@@ -6,6 +7,29 @@ import feedparser
 
 from ai_summary import backfill_summaries
 from db import get_conn
+
+# Google News RSS does loose/fuzzy matching, not a strict AND of query terms --
+# a query like "Scope 3 audit artificial intelligence" still surfaces plain
+# financial/compliance-audit stories, and "Northeastern University AI
+# sustainability" surfaces "northeastern India" as a compass direction, not
+# the university. Confirmed in production: 28% of "conversation" articles,
+# 51% of "scope3_ai_audit", and literally 100% of "northeastern" had zero
+# environmental keyword in the title. This is the actual relevance gate the
+# query strings can't enforce on their own.
+ENVIRONMENTAL_KEYWORDS = re.compile(
+    r"energy|carbon|emission|water|footprint|electricit|grid|climate|sustainab|"
+    r"environment|scope ?3|cooling|data cent|circular|life.?cycle|net.?zero|"
+    r"renewable|greenhouse|\bghg\b|\besg\b",
+    re.IGNORECASE,
+)
+
+
+def is_relevant(title, category):
+    if not ENVIRONMENTAL_KEYWORDS.search(title):
+        return False
+    if category == "northeastern" and "northeastern university" not in title.lower():
+        return False
+    return True
 
 QUERIES = {
     "conversation": [
@@ -25,7 +49,9 @@ QUERIES = {
         "cloud computing carbon footprint disclosure",
     ],
     "northeastern": [
-        "Northeastern University AI sustainability",
+        '"Northeastern University" AI sustainability',
+        '"Northeastern University" carbon footprint',
+        '"Northeastern University" sustainability report',
     ],
 }
 
@@ -51,6 +77,8 @@ def run():
                 if not link:
                     continue
                 title = entry.get("title", "").strip()
+                if not is_relevant(title, category):
+                    continue
                 source = entry.get("source", {}).get("title", "") if entry.get("source") else ""
                 published = entry.get("published", "")
 
