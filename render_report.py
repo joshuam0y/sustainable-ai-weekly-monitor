@@ -86,14 +86,85 @@ def article_card(row, is_new, dt):
     </li>"""
 
 
-def trending_orgs(rows):
+SPIKE_CURRENT_DAYS = 7
+SPIKE_BASELINE_DAYS = 23  # the 23 days before the current window
+SPIKE_MIN_MENTIONS = 2
+SPIKE_RATIO_THRESHOLD = 1.75
+
+
+def _mention_counts(titles):
     counts = Counter()
-    for row in rows:
-        text = row["title"] or ""
+    for title in titles:
         for org in WATCHLIST:
-            if org.lower() in text.lower():
+            if org.lower() in title.lower():
                 counts[org] += 1
-    return counts.most_common(8)
+    return counts
+
+
+def spike_orgs(conn, now):
+    """
+    Flags organizations mentioned meaningfully more this week than their own
+    recent baseline rate. A flat all-time mention count (the old "Trending"
+    box) just rewards whichever org is talked about most overall -- it can't
+    tell you what actually *changed*, which is specifically what this
+    project's brief asks for ("recognizing anything new or unusual").
+    """
+    current_start = now - timedelta(days=SPIKE_CURRENT_DAYS)
+    baseline_start = current_start - timedelta(days=SPIKE_BASELINE_DAYS)
+
+    current_titles = [
+        r["title"] for r in conn.execute(
+            "SELECT title FROM articles WHERE first_seen >= ?", (current_start.isoformat(),)
+        ).fetchall()
+    ]
+    baseline_titles = [
+        r["title"] for r in conn.execute(
+            "SELECT title FROM articles WHERE first_seen >= ? AND first_seen < ?",
+            (baseline_start.isoformat(), current_start.isoformat()),
+        ).fetchall()
+    ]
+
+    current_counts = _mention_counts(current_titles)
+    baseline_counts = _mention_counts(baseline_titles)
+
+    results = []
+    for org, current in current_counts.items():
+        if current < SPIKE_MIN_MENTIONS:
+            continue
+        baseline = baseline_counts.get(org, 0)
+        if baseline == 0:
+            results.append({"org": org, "count": current, "ratio": None})  # brand new this week
+            continue
+        ratio = (current / SPIKE_CURRENT_DAYS) / (baseline / SPIKE_BASELINE_DAYS)
+        if ratio >= SPIKE_RATIO_THRESHOLD:
+            results.append({"org": org, "count": current, "ratio": ratio})
+
+    results.sort(key=lambda r: r["ratio"] if r["ratio"] is not None else float("inf"), reverse=True)
+    return results[:6]
+
+
+def spike_data_is_immature(conn, now):
+    """
+    True until this project has scraped for a full baseline+current window.
+    Before that, every org looks "NEW" simply because there's no older
+    first_seen data to compare against yet -- not because it's actually
+    novel. Worth flagging explicitly rather than silently overclaiming.
+    """
+    row = conn.execute("SELECT MIN(first_seen) m FROM articles").fetchone()
+    if not row or not row["m"]:
+        return True
+    earliest = parse_dt(row["m"], now)
+    return (now - earliest).days < (SPIKE_CURRENT_DAYS + SPIKE_BASELINE_DAYS)
+
+
+def summary_stats(rows):
+    sources = {r["source"] for r in rows if r["source"]}
+    dates = [d for d in (resolve_dt(r) for r in rows) if d]
+    return {
+        "total": len(rows),
+        "sources": len(sources),
+        "oldest": min(dates) if dates else None,
+    }
 
 
 def render():
@@ -111,7 +182,8 @@ def render():
     for row in rows:
         by_category.setdefault(row["category"], []).append(row)
 
-    trending = trending_orgs(rows)
+    spikes = spike_orgs(conn, now)
+    stats = summary_stats(rows)
 
     tabs = []
     panels = []
@@ -132,12 +204,33 @@ def render():
     for cat in CATEGORY_ORDER:
         add_tab(cat, CATEGORY_LABELS.get(cat, cat), by_category.get(cat, []))
 
-    trending_html = ""
-    if trending:
-        chips = "".join(f'<span class="chip">{escape(name)} &middot; {count}</span>' for name, count in trending)
-        trending_html = f"""
+    stats_html = ""
+    if stats["total"]:
+        span_days = (now - stats["oldest"]).days if stats["oldest"] else DISPLAY_WINDOW_DAYS
+        stats_html = f"""
+        <div class="stats-bar">
+          <div class="stat"><strong>{stats['total']}</strong><span>articles tracked</span></div>
+          <div class="stat"><strong>{stats['sources']}</strong><span>sources</span></div>
+          <div class="stat"><strong>{span_days}</strong><span>days covered</span></div>
+        </div>"""
+
+    spike_html = ""
+    if spikes:
+        chips = []
+        for s in spikes:
+            if s["ratio"] is None:
+                badge = '<span class="chip-badge chip-new">NEW</span>'
+            else:
+                badge = f'<span class="chip-badge chip-up">{s["ratio"]:.1f}x</span>'
+            chips.append(f'<span class="chip">{badge} {escape(s["org"])} &middot; {s["count"]}</span>')
+        if spike_data_is_immature(conn, now):
+            hint = "Still building up baseline history -- \"NEW\" here just means we don't have older data to compare against yet, not necessarily that it's novel in the real world."
+        else:
+            hint = "Organizations mentioned meaningfully more than their own recent baseline -- not just whoever's talked about most overall."
+        spike_html = f"""
         <div class="trending">
-          <strong>Trending:</strong> {chips}
+          <strong>Unusual this week:</strong> {"".join(chips)}
+          <div class="trending-hint">{hint}</div>
         </div>"""
 
     now_eastern = now.astimezone(EASTERN)
@@ -172,24 +265,34 @@ def render():
 <style>
   * {{ box-sizing: border-box; }}
   body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f7f5; color: #1b1f1c; margin: 0; padding: 0; }}
-  header {{ background: #1b4332; color: #fff; padding: 20px 20px; }}
+  header {{ background: linear-gradient(135deg, #1b4332, #234a3a); color: #fff; padding: 22px 20px; }}
   header h1 {{ margin: 0 0 4px 0; font-size: 1.5em; }}
   header p {{ margin: 0; color: #cde5d6; font-size: 0.9em; }}
   main {{ max-width: 900px; margin: 0 auto; padding: 18px 20px 30px; }}
-  .trending {{ background: #fff; border: 1px solid #e0e6e2; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.9em; }}
-  .chip {{ display: inline-block; background: #e4efe8; color: #1b4332; padding: 3px 9px; border-radius: 16px; margin: 2px 4px; font-size: 0.85em; }}
+  .stats-bar {{ display: flex; gap: 10px; margin-bottom: 14px; }}
+  .stat {{ flex: 1; background: #fff; border: 1px solid #e0e6e2; border-radius: 8px; padding: 10px 14px; text-align: center; box-shadow: 0 1px 2px rgba(27,67,50,0.05); }}
+  .stat strong {{ display: block; font-size: 1.3em; color: #1b4332; }}
+  .stat span {{ font-size: 0.75em; color: #6b7a70; }}
+  .trending {{ background: #fff; border: 1px solid #e0e6e2; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.9em; box-shadow: 0 1px 2px rgba(27,67,50,0.05); }}
+  .trending-hint {{ font-size: 0.75em; color: #8a958f; margin-top: 6px; }}
+  .chip {{ display: inline-flex; align-items: center; gap: 5px; background: #e4efe8; color: #1b4332; padding: 3px 9px 3px 3px; border-radius: 16px; margin: 2px 4px; font-size: 0.85em; }}
+  .chip-badge {{ font-size: 0.72em; font-weight: 700; padding: 2px 7px; border-radius: 12px; color: #fff; }}
+  .chip-new {{ background: #b3541e; }}
+  .chip-up {{ background: #2e7d55; }}
   .filter-row {{ margin-bottom: 12px; font-size: 0.9em; }}
   .filter-row select {{ margin-left: 6px; padding: 5px 8px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b4332; }}
   .search-row {{ margin-bottom: 12px; }}
-  .search-row input {{ width: 100%; padding: 9px 12px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b1f1c; font-size: 0.9em; }}
-  .search-row input:focus {{ outline: 2px solid #2e7d55; }}
+  .search-row input {{ width: 100%; padding: 9px 12px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b1f1c; font-size: 0.9em; transition: box-shadow 0.15s ease; }}
+  .search-row input:focus {{ outline: none; box-shadow: 0 0 0 3px rgba(46,125,85,0.25); border-color: #2e7d55; }}
   .search-status {{ font-size: 0.8em; color: #6b7a70; margin-top: 6px; }}
   .tabs {{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }}
-  .tab-btn {{ background: #fff; border: 1px solid #cfe0d6; color: #1b4332; padding: 8px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; }}
+  .tab-btn {{ background: #fff; border: 1px solid #cfe0d6; color: #1b4332; padding: 8px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; }}
+  .tab-btn:hover {{ background: #eef6f1; }}
   .tab-btn.active {{ background: #2e7d55; color: #fff; border-color: #2e7d55; }}
-  .tab-panel {{ max-height: 68vh; overflow-y: auto; border: 1px solid #e0e6e2; border-radius: 8px; background: #fff; padding: 4px 12px; }}
+  .tab-panel {{ max-height: 68vh; overflow-y: auto; border: 1px solid #e0e6e2; border-radius: 8px; background: #fff; padding: 4px 12px; box-shadow: 0 1px 3px rgba(27,67,50,0.06); }}
   .card-list {{ list-style: none; margin: 0; padding: 0; }}
-  .card {{ border-bottom: 1px solid #eef1ee; padding: 12px 2px; }}
+  .card {{ border-bottom: 1px solid #eef1ee; padding: 12px 8px; margin: 0 -8px; border-radius: 6px; transition: background 0.12s ease; }}
+  .card:hover {{ background: #f7faf8; }}
   .card:last-child {{ border-bottom: none; }}
   .card-title a {{ color: #14532d; text-decoration: none; font-weight: 600; }}
   .card-title a:hover {{ text-decoration: underline; }}
@@ -206,7 +309,8 @@ def render():
   <p>AI &amp; sustainability news, Scope 3 emissions audits, and cloud computing carbon reporting &middot; last updated {escape(run_at or "never")} UTC</p>
 </header>
 <main>
-{trending_html}
+{stats_html}
+{spike_html}
 {search_html}
 {filter_html}
 <div class="tabs">{''.join(tabs)}</div>
