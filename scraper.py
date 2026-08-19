@@ -18,14 +18,30 @@ from db import get_conn
 # query strings can't enforce on their own.
 ENVIRONMENTAL_KEYWORDS = re.compile(
     r"energy|carbon|emission|water|footprint|electricit|grid|climate|sustainab|"
-    r"environment|scope ?3|cooling|data cent|circular|life.?cycle|net.?zero|"
+    r"environment|scope ?3|cooling|data.?cent(?:er|re)|circular|life.?cycle|net.?zero|"
     r"renewable|greenhouse|\bghg\b|\besg\b",
+    re.IGNORECASE,
+)
+
+# The environmental filter alone still isn't enough -- confirmed in
+# production: 24% of articles that passed it (e.g. "The Kitchen as Climate
+# Lever: How Hotel Chefs Are Driving Sustainability", or a wire-service
+# stream of generic "TSRS-Aligned 2025 Sustainability Report" filler from
+# unrelated companies) have zero connection to AI at all. This project is
+# specifically about AI's environmental footprint (and the brief specifically
+# asks for Scope 3 audits *of AI/cloud usage*, not just any company's routine
+# ESG report), so both keyword groups have to be present.
+AI_KEYWORDS = re.compile(
+    r"\bAIs?\b|artificial intelligence|machine learning|\bLLMs?\b|generative|genai|"
+    r"\bGPTs?\b|chatgpt|chatbot|data.?cent(?:er|re)|\bGPUs?\b|\bcompute\b|neural|"
+    r"algorithm|gemini|copilot|\bclaude\b|\bllama\b|large language model|"
+    r"openai|anthropic|deepmind|\bxai\b|mistral ai|hyperscaler",
     re.IGNORECASE,
 )
 
 
 def is_relevant(title, category):
-    if not ENVIRONMENTAL_KEYWORDS.search(title):
+    if not ENVIRONMENTAL_KEYWORDS.search(title) or not AI_KEYWORDS.search(title):
         return False
     if category == "northeastern" and "northeastern university" not in title.lower():
         return False
