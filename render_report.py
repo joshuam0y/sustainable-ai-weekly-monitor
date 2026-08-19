@@ -301,6 +301,20 @@ def render():
   .badge {{ background: #2e7d55; color: #fff; font-size: 0.68em; padding: 2px 6px; border-radius: 4px; vertical-align: middle; }}
   .empty {{ color: #7c887f; padding: 14px 0; }}
   footer {{ text-align: center; font-size: 0.78em; color: #7c887f; padding: 16px; }}
+
+  @media (max-width: 520px) {{
+    header {{ padding: 16px 14px; }}
+    header h1 {{ font-size: 1.25em; }}
+    header p {{ font-size: 0.82em; }}
+    main {{ padding: 14px 12px 24px; }}
+    .stats-bar {{ gap: 6px; }}
+    .stat {{ padding: 8px 6px; }}
+    .stat strong {{ font-size: 1.1em; }}
+    .stat span {{ font-size: 0.68em; }}
+    .tab-btn {{ font-size: 0.78em; padding: 7px 10px; }}
+    .tab-panel {{ max-height: 60vh; padding: 4px 8px; }}
+    .card-title a {{ font-size: 0.95em; }}
+  }}
 </style>
 </head>
 <body>
