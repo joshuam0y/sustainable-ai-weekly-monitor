@@ -1,8 +1,8 @@
+import html as html_lib
 import os
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
-from html import escape
 from zoneinfo import ZoneInfo
 
 from db import get_conn
@@ -25,6 +25,11 @@ WATCHLIST = [
 OUT_DIR = "docs"
 DISPLAY_WINDOW_DAYS = 30
 NEW_WINDOW_HOURS = 26
+
+SPIKE_CURRENT_DAYS = 7
+SPIKE_BASELINE_DAYS = 23  # the 23 days before the current window
+SPIKE_MIN_MENTIONS = 2
+SPIKE_RATIO_THRESHOLD = 1.75
 
 
 def parse_dt(value, fallback):
@@ -68,28 +73,6 @@ def load_articles(conn, since):
 def last_run_at(conn):
     row = conn.execute("SELECT run_at FROM runs ORDER BY run_at DESC LIMIT 1").fetchone()
     return row["run_at"] if row else None
-
-
-def article_card(row, is_new, dt):
-    badge = '<span class="badge">NEW</span> ' if is_new else ""
-    src = escape(row["source"] or "Unknown source")
-    local_dt = dt.astimezone(EASTERN) if dt else None
-    date_txt = escape(local_dt.strftime("%b %d, %Y")) if local_dt else "Unknown date"
-    date_attr = local_dt.strftime("%Y-%m-%d") if local_dt else ""
-    ai_summary = row["ai_summary"]
-    summary_html = f'<div class="card-summary">{escape(ai_summary)}</div>' if ai_summary else ""
-    return f"""
-    <li class="card" data-date="{date_attr}">
-      <div class="card-title">{badge}<a href="{escape(row['link'])}" target="_blank" rel="noopener">{escape(row['title'])}</a></div>
-      <div class="card-meta">{src} &middot; {date_txt}</div>
-      {summary_html}
-    </li>"""
-
-
-SPIKE_CURRENT_DAYS = 7
-SPIKE_BASELINE_DAYS = 23  # the 23 days before the current window
-SPIKE_MIN_MENTIONS = 2
-SPIKE_RATIO_THRESHOLD = 1.75
 
 
 def _mention_counts(titles):
@@ -167,6 +150,206 @@ def summary_stats(rows):
     }
 
 
+def _article_row_html(row, is_new, dt):
+    cat = row["category"]
+    cat_label = CATEGORY_LABELS.get(cat, cat)
+    src = html_lib.escape(row["source"] or "Unknown source")
+    local_dt = dt.astimezone(EASTERN) if dt else None
+    date_txt = html_lib.escape(local_dt.strftime("%b %d, %Y")) if local_dt else "Unknown date"
+    date_attr = local_dt.strftime("%Y-%m-%d") if local_dt else ""
+    ai_summary = row["ai_summary"]
+    summary_html = f'<span class="row-summary">{html_lib.escape(ai_summary)}</span>' if ai_summary else ""
+    new_tag = '<span class="tag tag-new">New</span>' if is_new else ""
+    search_blob = html_lib.escape((row["title"] + " " + (row["source"] or "") + " " + (ai_summary or "")).lower())
+
+    return f"""
+    <a class="article-row" href="{html_lib.escape(row['link'])}" target="_blank" rel="noopener"
+       data-category="{cat}" data-date="{date_attr}" data-new="{'1' if is_new else '0'}" data-search="{search_blob}">
+      <span class="article-row-body">
+        <span class="article-row-title">{new_tag}{html_lib.escape(row['title'])}</span>
+        <span class="article-row-meta">{src} &middot; {date_txt} &middot; {html_lib.escape(cat_label)}</span>
+        {summary_html}
+      </span>
+    </a>
+    """
+
+
+STYLE = """
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #F7F6F1; --surface: #ffffff; --surface-2: #EFEDE4;
+    --ink: #20241E; --ink-dim: #565C50; --ink-muted: #8B9084;
+    --border: rgba(32,36,30,0.11); --shadow: 0 1px 2px rgba(32,36,30,.05), 0 8px 20px rgba(32,36,30,.05);
+    --accent: #21603F; --accent-bg: rgba(33,96,63,0.10);
+    --up: #b3541e; --up-bg: rgba(179,84,30,0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #14170F; --surface: #1B1F17; --surface-2: #23281E;
+      --ink: #EEF0E8; --ink-dim: #B7BEAC; --ink-muted: #7C8571;
+      --border: rgba(255,255,255,0.09); --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 20px rgba(0,0,0,.35);
+      --accent: #4FB287; --accent-bg: rgba(79,178,135,0.16);
+      --up: #e08a4c; --up-bg: rgba(224,138,76,0.16);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #14170F; --surface: #1B1F17; --surface-2: #23281E;
+    --ink: #EEF0E8; --ink-dim: #B7BEAC; --ink-muted: #7C8571;
+    --border: rgba(255,255,255,0.09); --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 20px rgba(0,0,0,.35);
+    --accent: #4FB287; --accent-bg: rgba(79,178,135,0.16);
+    --up: #e08a4c; --up-bg: rgba(224,138,76,0.16);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
+  h1, h2, .brand { font-family: Georgia, "Iowan Old Style", "Times New Roman", serif; }
+
+  header.site {
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap;
+    max-width: 1180px; margin: 0 auto; padding: 28px 24px 18px; border-bottom: 1px solid var(--border);
+  }
+  .brand { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+  .tagline { margin: 6px 0 0; color: var(--ink-dim); font-size: 13.5px; max-width: 62ch; line-height: 1.55; }
+  .header-meta { font-size: 12px; color: var(--ink-muted); margin-top: 6px; }
+  .theme-toggle {
+    background: var(--surface-2); color: var(--ink); border: 1px solid var(--border);
+    border-radius: 7px; padding: 7px 13px; font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .theme-toggle:hover { background: var(--surface); }
+
+  .layout { max-width: 1180px; margin: 0 auto; padding: 22px 24px 60px; display: flex; gap: 28px; align-items: flex-start; }
+
+  .sidebar { width: 270px; flex: none; position: sticky; top: 20px; }
+  .sidebar h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.02em; margin: 18px 0 8px; color: var(--ink-dim); }
+  .sidebar h2:first-child { margin-top: 0; }
+  .side-search {
+    width: 100%; padding: 8px 10px; border: none; border-bottom: 2px solid var(--border);
+    background: transparent; color: var(--ink); font-size: 13.5px; font-family: inherit;
+  }
+  .side-search:focus { outline: none; border-bottom-color: var(--accent); }
+  .side-select {
+    width: 100%; padding: 7px 9px; border-radius: 7px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink); font-size: 13px; font-family: inherit;
+  }
+  .side-toggle { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-dim); margin-top: 10px; }
+
+  .spike-box { font-size: 12.5px; }
+  .spike-chip { display: inline-flex; align-items: center; gap: 5px; margin: 3px 4px 3px 0; }
+  .spike-badge { font-size: 10px; font-weight: 700; border-radius: 5px; padding: 1px 6px; color: #fff; background: var(--up); }
+  .spike-badge.spike-new { background: var(--ink-muted); }
+  .spike-hint { font-size: 11px; color: var(--ink-muted); margin-top: 6px; line-height: 1.5; }
+
+  .stat-line { font-size: 12.5px; color: var(--ink-dim); display: flex; justify-content: space-between; padding: 3px 0; }
+  .stat-line b { color: var(--ink); }
+
+  .sidebar-footer { font-size: 11.5px; color: var(--ink-muted); margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); line-height: 1.6; }
+
+  .main { flex: 1; min-width: 0; }
+  .type-tabs {
+    display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--border);
+    overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%;
+  }
+  .type-tab {
+    background: none; border: none; border-bottom: 2px solid transparent; padding: 8px 4px; margin-right: 14px;
+    font-size: 13.5px; font-weight: 600; color: var(--ink-dim); cursor: pointer; font-family: inherit;
+    white-space: nowrap; flex: none;
+  }
+  .type-tab:hover { color: var(--ink); }
+  .type-tab.on { color: var(--ink); border-bottom-color: var(--accent); }
+  .type-tab .count { color: var(--ink-muted); font-weight: 700; margin-left: 4px; }
+  #resultCount { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 10px; }
+
+  .article-list { display: flex; flex-direction: column; }
+  .article-row {
+    display: flex; align-items: flex-start; gap: 12px; padding: 13px 4px; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+  }
+  .article-row:hover { background: var(--surface-2); }
+  .article-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .article-row-title { font-size: 14.5px; font-weight: 700; color: var(--ink); min-width: 0; overflow-wrap: break-word; }
+  .article-row-meta { font-size: 12.5px; color: var(--ink-dim); min-width: 0; }
+  .row-summary { font-size: 12.5px; color: var(--ink-dim); line-height: 1.5; min-width: 0; overflow-wrap: break-word; }
+  .tag { font-size: 10px; font-weight: 700; border-radius: 5px; padding: 1px 6px; margin-right: 6px; vertical-align: middle; }
+  .tag-new { background: var(--accent-bg); color: var(--accent); }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); }
+  footer.site-footer {
+    max-width: 1180px; margin: 10px auto 0; padding: 16px 24px 30px; font-size: 12px; color: var(--ink-muted); line-height: 1.6;
+  }
+  footer.site-footer a { color: var(--accent); }
+
+  @media (max-width: 760px) {
+    .layout { flex-direction: column; align-items: stretch; }
+    .main { min-width: 0; }
+    .sidebar { width: 100%; position: static; }
+  }
+</style>
+"""
+
+SCRIPT = """
+<script>
+function initTheme() {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  const btn = document.getElementById('themeToggle');
+  function label() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const dark = cur ? cur === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    btn.textContent = dark ? 'Switch to light' : 'Switch to dark';
+  }
+  btn.addEventListener('click', function () {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const dark = cur ? cur === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const next = dark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    label();
+  });
+  label();
+}
+
+let activeCategory = 'all';
+function applyFilters() {
+  const search = document.getElementById('searchBox').value.trim().toLowerCase();
+  const cutoff = document.getElementById('dateFilter').value;
+  const onlyNew = document.getElementById('onlyNew').checked;
+  let visible = 0;
+  document.querySelectorAll('.article-row').forEach(function (row) {
+    let show = true;
+    if (activeCategory !== 'all' && row.dataset.category !== activeCategory) show = false;
+    if (onlyNew && row.dataset.new !== '1') show = false;
+    if (cutoff && (!row.dataset.date || row.dataset.date < cutoff)) show = false;
+    if (search && row.dataset.search.indexOf(search) === -1) show = false;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('resultCount').textContent = visible + ' shown';
+  const empty = document.getElementById('emptyState');
+  if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  initTheme();
+  document.querySelectorAll('.type-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.type-tab').forEach(function (p) { p.classList.remove('on'); });
+      tab.classList.add('on');
+      activeCategory = tab.dataset.category;
+      applyFilters();
+    });
+  });
+  document.getElementById('searchBox').addEventListener('input', applyFilters);
+  document.getElementById('dateFilter').addEventListener('change', applyFilters);
+  document.getElementById('onlyNew').addEventListener('change', applyFilters);
+  applyFilters();
+});
+</script>
+"""
+
+
 def render():
     conn = get_conn()
     now = datetime.now(timezone.utc)
@@ -175,234 +358,136 @@ def render():
     run_at = last_run_at(conn)
 
     new_cutoff = now - timedelta(hours=NEW_WINDOW_HOURS)
-    new_rows = [r for r in rows if parse_dt(r["first_seen"], since) >= new_cutoff]
-    new_links = {r["link"] for r in new_rows}
 
-    by_category = {cat: [] for cat in CATEGORY_ORDER}
+    counts = {cat: 0 for cat in CATEGORY_ORDER}
+    dated_rows = []
+    new_count = 0
     for row in rows:
-        by_category.setdefault(row["category"], []).append(row)
+        counts[row["category"]] = counts.get(row["category"], 0) + 1
+        dt = resolve_dt(row)
+        is_new = parse_dt(row["first_seen"], since) >= new_cutoff
+        if is_new:
+            new_count += 1
+        dated_rows.append((dt, row, is_new))
+    dated_rows.sort(key=lambda triple: triple[0] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
 
     spikes = spike_orgs(conn, now)
     stats = summary_stats(rows)
 
-    tabs = []
-    panels = []
-
-    def add_tab(tab_id, label, tab_rows, active=False):
-        dated = [(resolve_dt(r), r) for r in tab_rows]
-        dated.sort(key=lambda pair: pair[0] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
-        cards = "".join(article_card(r, r["link"] in new_links, dt) for dt, r in dated)
-        active_cls = " active" if active else ""
-        display = "block" if active else "none"
-        tabs.append(f'<button class="tab-btn{active_cls}" data-tab="{tab_id}" onclick="showTab(\'{tab_id}\', this)">{escape(label)} ({len(tab_rows)})</button>')
-        panels.append(f"""
-        <div class="tab-panel" id="tab-{tab_id}" style="display:{display}">
-          <ul class="card-list">{cards or '<li class="empty">Nothing here yet.</li>'}<li class="empty filter-empty" style="display:none">No articles match this filter.</li></ul>
-        </div>""")
-
-    add_tab("new", "New Since Last Check", new_rows, active=True)
+    type_tabs = f'<button type="button" class="type-tab on" data-category="all">All<span class="count">{len(rows)}</span></button>'
     for cat in CATEGORY_ORDER:
-        add_tab(cat, CATEGORY_LABELS.get(cat, cat), by_category.get(cat, []))
+        label = CATEGORY_LABELS.get(cat, cat)
+        type_tabs += (
+            f'<button type="button" class="type-tab" data-category="{cat}">'
+            f'{html_lib.escape(label)}<span class="count">{counts.get(cat, 0)}</span></button>'
+        )
 
-    stats_html = ""
-    if stats["total"]:
-        span_days = (now - stats["oldest"]).days if stats["oldest"] else DISPLAY_WINDOW_DAYS
-        stats_html = f"""
-        <div class="stats-bar">
-          <div class="stat"><strong>{stats['total']}</strong><span>articles tracked</span></div>
-          <div class="stat"><strong>{stats['sources']}</strong><span>sources</span></div>
-          <div class="stat"><strong>{span_days}</strong><span>days covered</span></div>
-        </div>"""
+    rows_html = "".join(_article_row_html(row, is_new, dt) for dt, row, is_new in dated_rows)
+    empty_state = (
+        '<div class="empty-state" id="emptyState" style="display:none">'
+        "No articles match these filters right now &mdash; try clearing the search or picking a different category."
+        "</div>"
+    )
+    if not rows:
+        empty_state = '<div class="empty-state" id="emptyState">No articles tracked yet &mdash; check back after the next scheduled scan.</div>'
 
     spike_html = ""
     if spikes:
         chips = []
         for s in spikes:
             if s["ratio"] is None:
-                badge = '<span class="chip-badge chip-new">NEW</span>'
+                badge = '<span class="spike-badge spike-new">NEW</span>'
             else:
-                badge = f'<span class="chip-badge chip-up">{s["ratio"]:.1f}x</span>'
-            chips.append(f'<span class="chip">{badge} {escape(s["org"])} &middot; {s["count"]}</span>')
+                badge = f'<span class="spike-badge">{s["ratio"]:.1f}x</span>'
+            chips.append(f'<span class="spike-chip">{badge} {html_lib.escape(s["org"])} &middot; {s["count"]}</span>')
         if spike_data_is_immature(conn, now):
-            hint = "Still building up baseline history -- \"NEW\" here just means we don't have older data to compare against yet, not necessarily that it's novel in the real world."
+            hint = "Still building up baseline history &mdash; \"NEW\" just means no older data to compare against yet."
         else:
-            hint = "Organizations mentioned meaningfully more than their own recent baseline -- not just whoever's talked about most overall."
+            hint = "Mentioned meaningfully more than each org's own recent baseline, not just whoever's talked about most."
         spike_html = f"""
-        <div class="trending">
-          <strong>Unusual this week:</strong> {"".join(chips)}
-          <div class="trending-hint">{hint}</div>
-        </div>"""
+        <h2>Unusual this week</h2>
+        <div class="spike-box">{"".join(chips)}<div class="spike-hint">{hint}</div></div>
+        """
+
+    stats_html = ""
+    if stats["total"]:
+        span_days = (now - stats["oldest"]).days if stats["oldest"] else DISPLAY_WINDOW_DAYS
+        stats_html = f"""
+        <h2>At a glance</h2>
+        <div class="stat-line"><span>Articles tracked</span><b>{stats['total']}</b></div>
+        <div class="stat-line"><span>Sources</span><b>{stats['sources']}</b></div>
+        <div class="stat-line"><span>Days covered</span><b>{span_days}</b></div>
+        <div class="stat-line"><span>New since last check</span><b>{new_count}</b></div>
+        """
 
     now_eastern = now.astimezone(EASTERN)
     today_str = now_eastern.strftime("%Y-%m-%d")
     d3_str = (now_eastern - timedelta(days=3)).strftime("%Y-%m-%d")
     d7_str = (now_eastern - timedelta(days=7)).strftime("%Y-%m-%d")
-    d30_str = (now_eastern - timedelta(days=30)).strftime("%Y-%m-%d")
-    filter_html = f"""
-    <div class="filter-row">
-      <label for="dateFilter">Filter by date:</label>
-      <select id="dateFilter" onchange="applyFilters()">
+
+    generated_at = "never"
+    if run_at:
+        parsed = parse_dt(run_at, None)
+        generated_at = parsed.strftime("%B %-d, %Y at %-I:%M %p UTC") if parsed else run_at
+    generated_at = html_lib.escape(generated_at)
+
+    out_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Sustainable AI Weekly Monitor</title>
+{STYLE}
+</head>
+<body>
+  <header class="site">
+    <div>
+      <h1 class="brand">Sustainable AI Weekly Monitor</h1>
+      <p class="tagline">AI &amp; sustainability news, Scope 3 emissions audits, and cloud computing carbon
+         reporting, pulled automatically and refreshed on a schedule.</p>
+      <div class="header-meta">Last updated {generated_at}</div>
+    </div>
+    <button type="button" class="theme-toggle" id="themeToggle">Switch to dark</button>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>Search</h2>
+      <input type="text" id="searchBox" class="side-search" placeholder="Title, source, summary...">
+      <label class="side-toggle"><input type="checkbox" id="onlyNew"> Only new since last check</label>
+      <h2>Filter by date</h2>
+      <select id="dateFilter" class="side-select">
         <option value="">All time</option>
         <option value="{today_str}">Today</option>
         <option value="{d3_str}">Last 3 days</option>
         <option value="{d7_str}">Last 7 days</option>
-        <option value="{d30_str}">Last 30 days</option>
       </select>
-    </div>"""
-
-    search_html = """
-    <div class="search-row">
-      <input type="text" id="searchBox" placeholder="Search titles, sources, and summaries (e.g. water usage, Northeastern, Scope 3)..." oninput="applyFilters()">
-      <div id="searchStatus" class="search-status"></div>
-    </div>"""
-
-    html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sustainable AI Weekly Monitor</title>
-<style>
-  * {{ box-sizing: border-box; }}
-  body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f7f5; color: #1b1f1c; margin: 0; padding: 0; }}
-  header {{ background: linear-gradient(135deg, #1b4332, #234a3a); color: #fff; padding: 22px 20px; }}
-  header h1 {{ margin: 0 0 4px 0; font-size: 1.5em; }}
-  header p {{ margin: 0; color: #cde5d6; font-size: 0.9em; }}
-  main {{ max-width: 900px; margin: 0 auto; padding: 18px 20px 30px; }}
-  .stats-bar {{ display: flex; gap: 10px; margin-bottom: 14px; }}
-  .stat {{ flex: 1; background: #fff; border: 1px solid #e0e6e2; border-radius: 8px; padding: 10px 14px; text-align: center; box-shadow: 0 1px 2px rgba(27,67,50,0.05); }}
-  .stat strong {{ display: block; font-size: 1.3em; color: #1b4332; }}
-  .stat span {{ font-size: 0.75em; color: #6b7a70; }}
-  .trending {{ background: #fff; border: 1px solid #e0e6e2; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.9em; box-shadow: 0 1px 2px rgba(27,67,50,0.05); }}
-  .trending-hint {{ font-size: 0.75em; color: #8a958f; margin-top: 6px; }}
-  .chip {{ display: inline-flex; align-items: center; gap: 5px; background: #e4efe8; color: #1b4332; padding: 3px 9px 3px 3px; border-radius: 16px; margin: 2px 4px; font-size: 0.85em; }}
-  .chip-badge {{ font-size: 0.72em; font-weight: 700; padding: 2px 7px; border-radius: 12px; color: #fff; }}
-  .chip-new {{ background: #b3541e; }}
-  .chip-up {{ background: #2e7d55; }}
-  .filter-row {{ margin-bottom: 12px; font-size: 0.9em; }}
-  .filter-row select {{ margin-left: 6px; padding: 5px 8px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b4332; }}
-  .search-row {{ margin-bottom: 12px; }}
-  .search-row input {{ width: 100%; padding: 9px 12px; border-radius: 6px; border: 1px solid #cfe0d6; background: #fff; color: #1b1f1c; font-size: 0.9em; transition: box-shadow 0.15s ease; }}
-  .search-row input:focus {{ outline: none; box-shadow: 0 0 0 3px rgba(46,125,85,0.25); border-color: #2e7d55; }}
-  .search-status {{ font-size: 0.8em; color: #6b7a70; margin-top: 6px; }}
-  .tabs {{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }}
-  .tab-btn {{ background: #fff; border: 1px solid #cfe0d6; color: #1b4332; padding: 8px 12px; border-radius: 6px; font-size: 0.85em; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; }}
-  .tab-btn:hover {{ background: #eef6f1; }}
-  .tab-btn.active {{ background: #2e7d55; color: #fff; border-color: #2e7d55; }}
-  .tab-panel {{ max-height: 68vh; overflow-y: auto; border: 1px solid #e0e6e2; border-radius: 8px; background: #fff; padding: 4px 12px; box-shadow: 0 1px 3px rgba(27,67,50,0.06); }}
-  .card-list {{ list-style: none; margin: 0; padding: 0; }}
-  .card {{ border-bottom: 1px solid #eef1ee; padding: 12px 8px; margin: 0 -8px; border-radius: 6px; transition: background 0.12s ease; }}
-  .card:hover {{ background: #f7faf8; }}
-  .card:last-child {{ border-bottom: none; }}
-  .card-title a {{ color: #14532d; text-decoration: none; font-weight: 600; }}
-  .card-title a:hover {{ text-decoration: underline; }}
-  .card-meta {{ font-size: 0.78em; color: #6b7a70; margin-top: 3px; }}
-  .card-summary {{ font-size: 0.88em; color: #384038; margin-top: 5px; line-height: 1.4; }}
-  .badge {{ background: #2e7d55; color: #fff; font-size: 0.68em; padding: 2px 6px; border-radius: 4px; vertical-align: middle; }}
-  .empty {{ color: #7c887f; padding: 14px 0; }}
-  footer {{ text-align: center; font-size: 0.78em; color: #7c887f; padding: 16px; }}
-
-  @media (max-width: 520px) {{
-    header {{ padding: 16px 14px; }}
-    header h1 {{ font-size: 1.25em; }}
-    header p {{ font-size: 0.82em; }}
-    main {{ padding: 14px 12px 24px; }}
-    .stats-bar {{ gap: 6px; }}
-    .stat {{ padding: 8px 6px; }}
-    .stat strong {{ font-size: 1.1em; }}
-    .stat span {{ font-size: 0.68em; }}
-    .tab-btn {{ font-size: 0.78em; padding: 7px 10px; }}
-    .tab-panel {{ max-height: 60vh; padding: 4px 8px; }}
-    .card-title a {{ font-size: 0.95em; }}
-  }}
-</style>
-</head>
-<body>
-<header>
-  <h1>Sustainable AI Weekly Monitor</h1>
-  <p>AI &amp; sustainability news, Scope 3 emissions audits, and cloud computing carbon reporting &middot; last updated {escape(run_at or "never")} UTC</p>
-</header>
-<main>
-{stats_html}
-{spike_html}
-{search_html}
-{filter_html}
-<div class="tabs">{''.join(tabs)}</div>
-{''.join(panels)}
-</main>
-<footer>Automatically refreshed on a schedule via GitHub Actions. Sources: Google News RSS, summarized with Gemini.</footer>
-<script>
-function activeTabId() {{
-  var btn = document.querySelector('.tab-btn.active');
-  return btn ? btn.getAttribute('data-tab') : 'new';
-}}
-
-function showTab(id, btn) {{
-  document.querySelectorAll('.tab-btn').forEach(function(b) {{ b.classList.remove('active'); }});
-  btn.classList.add('active');
-  applyFilters();
-}}
-
-function applyFilters() {{
-  var cutoff = document.getElementById('dateFilter').value;
-  var query = document.getElementById('searchBox').value.trim().toLowerCase();
-  var tokens = query.split(/\\s+/).filter(Boolean);
-  var searching = tokens.length > 0;
-  var active = activeTabId();
-
-  document.querySelector('.tabs').style.display = searching ? 'none' : 'flex';
-
-  var totalMatches = 0;
-  document.querySelectorAll('.tab-panel').forEach(function(panel) {{
-    var isNewTab = panel.id === 'tab-new';
-
-    if (searching && isNewTab) {{
-      panel.style.display = 'none';
-      return;
-    }}
-
-    var cards = panel.querySelectorAll('.card');
-    var visible = 0;
-    cards.forEach(function(card) {{
-      var dateOK = !cutoff || (card.dataset.date && card.dataset.date >= cutoff);
-      var text = searching ? card.textContent.toLowerCase() : '';
-      var searchOK = !searching || tokens.every(function(t) {{ return text.indexOf(t) !== -1; }});
-      var show = dateOK && searchOK;
-      card.style.display = show ? '' : 'none';
-      if (show) {{ visible++; if (searching) totalMatches++; }}
-    }});
-
-    var emptyMsg = panel.querySelector('.filter-empty');
-    if (searching) {{
-      // Hide categories with zero matches entirely -- an empty box next to
-      // real results reads as broken, not as "nothing here."
-      panel.style.display = visible > 0 ? 'block' : 'none';
-      if (emptyMsg) emptyMsg.style.display = 'none';
-    }} else {{
-      panel.style.display = (panel.id === 'tab-' + active) ? 'block' : 'none';
-      if (emptyMsg) emptyMsg.style.display = (cards.length > 0 && visible === 0) ? 'block' : 'none';
-    }}
-  }});
-
-  var status = document.getElementById('searchStatus');
-  if (searching) {{
-    status.textContent = totalMatches > 0
-      ? 'Showing ' + totalMatches + ' result' + (totalMatches === 1 ? '' : 's') + ' for "' + query + '" across all topics'
-      : 'No articles match "' + query + '"';
-  }} else {{
-    status.textContent = '';
-  }}
-}}
-</script>
-</body>
-</html>"""
+      {spike_html}
+      {stats_html}
+      <div class="sidebar-footer">
+        Sources: Google News RSS, Data Center Dynamics, and Northeastern Global News, summarized with Gemini.
+        Refreshes automatically on a schedule &mdash; see the
+        <a href="https://github.com/joshuam0y/sustainable-ai-weekly-monitor" target="_blank" rel="noopener">README</a>.
+      </div>
+    </aside>
+    <main class="main">
+      <div class="type-tabs">{type_tabs}</div>
+      <div id="resultCount"></div>
+      <div class="article-list">{rows_html}</div>
+      {empty_state}
+    </main>
+  </div>
+  <footer class="site-footer">Automatically refreshed on a schedule via GitHub Actions.</footer>
+{SCRIPT}
+</body></html>
+"""
 
     os.makedirs(OUT_DIR, exist_ok=True)
     with open(os.path.join(OUT_DIR, "index.html"), "w") as f:
-        f.write(html)
+        f.write(out_html)
 
     conn.close()
-    print(f"Rendered report with {len(rows)} articles ({len(new_rows)} new)")
+    print(f"Rendered report with {len(rows)} articles ({new_count} new)")
 
 
 if __name__ == "__main__":

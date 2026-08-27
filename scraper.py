@@ -40,12 +40,56 @@ AI_KEYWORDS = re.compile(
 )
 
 
+def _has_environmental_and_ai_keywords(title):
+    return bool(ENVIRONMENTAL_KEYWORDS.search(title) and AI_KEYWORDS.search(title))
+
+
 def is_relevant(title, category):
-    if not ENVIRONMENTAL_KEYWORDS.search(title) or not AI_KEYWORDS.search(title):
+    if not _has_environmental_and_ai_keywords(title):
         return False
     if category == "northeastern" and "northeastern university" not in title.lower():
         return False
     return True
+
+
+def _normalize_title(title):
+    """Lowercased, whitespace-collapsed, truncated to the first 50 chars --
+    the same real story, reprinted by a different outlet or given a
+    different length headline by whichever aggregator wrote it, keeps that
+    much verbatim even when trailing clauses/subtitles differ. Confirmed
+    live: "AI Adoption Reaches 37% in Supplier Risk and Sustainability, but
+    Widespread Integration Remains Limited: Achilles Survey" and "AI
+    adoption reaches 37% in supplier risk and sustainability" are the same
+    underlying story, but the exact-title (COLLATE NOCASE) dedup this
+    replaced didn't catch it -- confirmed shipped as a real visible
+    duplicate on the live report before this fix."""
+    return re.sub(r"\s+", " ", title.strip().lower())[:50]
+
+
+def load_seen_title_prefixes(conn):
+    return {_normalize_title(r["title"]) for r in conn.execute("SELECT title FROM articles").fetchall()}
+
+
+def dedupe_existing(conn):
+    """One-time (well, every-run, but a no-op once caught up) cleanup for
+    rows already stored before _normalize_title()'s prefix-based dedup
+    existed -- that check only prevents NEW duplicates, it doesn't remove
+    ones already sitting in monitor.db from when this compared full exact
+    titles instead. Keeps the earliest (by first_seen) row in each
+    normalized-prefix group, drops the rest."""
+    rows = conn.execute("SELECT link, title, first_seen FROM articles ORDER BY first_seen ASC").fetchall()
+    seen = {}
+    to_delete = []
+    for row in rows:
+        norm = _normalize_title(row["title"])
+        if norm in seen:
+            to_delete.append(row["link"])
+        else:
+            seen[norm] = row["link"]
+    if to_delete:
+        conn.executemany("DELETE FROM articles WHERE link = ?", [(link,) for link in to_delete])
+        conn.commit()
+        print(f"dedupe_existing: removed {len(to_delete)} already-stored near-duplicate article(s).")
 
 
 def strip_source_suffix(title, source):
@@ -85,6 +129,16 @@ QUERIES = {
 
 FEED_URL = "https://news.google.com/rss/search?q={q}+when:7d&hl=en-US&gl=US&ceid=US:en"
 
+# Each site's own real RSS feed -- read directly, not searched. Confirmed
+# live: both are plain, working feeds (DCD: 20 items/fetch, Northeastern:
+# 25). Assigned straight to a category rather than run through QUERIES,
+# since there's no keyword query to construct for "just give me your
+# latest items."
+GENERAL_FEEDS = [
+    ("https://www.datacenterdynamics.com/en/rss/", "scope3_cloud", "Data Center Dynamics"),
+    ("https://news.northeastern.edu/feed/", "northeastern", "Northeastern Global News"),
+]
+
 
 def fetch_query(query):
     url = FEED_URL.format(q=quote(query))
@@ -92,10 +146,65 @@ def fetch_query(query):
     return feed.entries
 
 
+def fetch_general_feeds(conn, now, seen_prefixes):
+    """
+    Unlike QUERIES above (Google News searches, filtered by is_relevant()'s
+    full keyword+category gate), these feeds are each site's own real RSS
+    output -- the northeastern-specific "title must literally say
+    'Northeastern University'" check in is_relevant() doesn't apply here:
+    Northeastern's own newsroom feed is inherently about Northeastern by
+    construction, without needing the headline to say so (confirmed live,
+    most of its real headlines don't -- e.g. "Northeastern students find AI
+    isn't a cure all for drug discovery"). This was the exact gap noted in
+    is_relevant()'s own comment history: 100% of "northeastern"-category
+    articles from Google News search had zero real Northeastern connection
+    (matching "northeastern India" as a compass direction); going straight
+    to Northeastern's own feed instead of searching for it sidesteps that
+    false-positive problem entirely. Still requires the same environmental
+    AND AI keyword gate everything else does -- most of a campus newsroom's
+    or a data-center trade publication's own feed is routine news with
+    neither.
+    """
+    new_count = 0
+    for url, category, source_label in GENERAL_FEEDS:
+        try:
+            feed = feedparser.parse(url)
+        except Exception as e:
+            print(f"general feed {url} failed ({type(e).__name__}: {e}), skipping.")
+            continue
+        for entry in feed.entries:
+            link = entry.get("link")
+            if not link:
+                continue
+            title = entry.get("title", "").strip()
+            if not _has_environmental_and_ai_keywords(title):
+                continue
+            norm = _normalize_title(title)
+            if norm in seen_prefixes:
+                continue
+            published = entry.get("published", "")
+            cur = conn.execute(
+                "INSERT OR IGNORE INTO articles (link, title, source, published, category, summary, first_seen) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (link, title, source_label, published, category, "", now),
+            )
+            if cur.rowcount:
+                seen_prefixes.add(norm)
+                new_count += 1
+        time.sleep(1)  # polite delay between feeds
+    return new_count
+
+
 def run():
     conn = get_conn()
+    dedupe_existing(conn)
     now = datetime.now(timezone.utc).isoformat()
     new_count = 0
+    # Shared across every query AND every general feed, updated as new
+    # rows are added within this same run -- catches a duplicate the
+    # instant it shows up a second time in this run, not just against
+    # history from previous runs.
+    seen_prefixes = load_seen_title_prefixes(conn)
 
     for category, queries in QUERIES.items():
         for query in queries:
@@ -114,15 +223,17 @@ def run():
                 # The same article can reach us twice under different Google
                 # News tracking URLs (once per matching query), and wire
                 # syndication means the same press release often runs
-                # verbatim across multiple *different* outlets -- confirmed
-                # in production: 105 near-duplicate title pairs, including
-                # the identical headline picked up by three separate energy
-                # trade sites. Dedup on title alone (not source), so a wire
-                # story doesn't show up once per outlet that reprinted it.
-                existing = conn.execute(
-                    "SELECT link FROM articles WHERE title = ? COLLATE NOCASE", (title,)
-                ).fetchone()
-                if existing:
+                # verbatim (or with a different trailing subtitle -- see
+                # _normalize_title()'s own docstring for a real confirmed
+                # case) across multiple *different* outlets -- confirmed in
+                # production: 105 near-duplicate title pairs, including the
+                # identical headline picked up by three separate energy
+                # trade sites. Dedup on a normalized title prefix (not
+                # source, not the full exact string), so a wire story
+                # doesn't show up once per outlet that reprinted or
+                # re-headlined it.
+                norm = _normalize_title(title)
+                if norm in seen_prefixes:
                     continue
 
                 cur = conn.execute(
@@ -131,8 +242,11 @@ def run():
                     (link, title, source, published, category, "", now),
                 )
                 if cur.rowcount:
+                    seen_prefixes.add(norm)
                     new_count += 1
             time.sleep(1)  # be polite to Google News
+
+    new_count += fetch_general_feeds(conn, now, seen_prefixes)
 
     conn.execute("INSERT OR REPLACE INTO runs (run_at, new_articles) VALUES (?, ?)", (now, new_count))
     conn.commit()
