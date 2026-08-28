@@ -180,109 +180,130 @@ def _article_row_html(row, is_new, dt):
 
 STYLE = """
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
   :root {
     color-scheme: light;
-    --bg: #F7F6F1; --surface: #ffffff; --surface-2: #EFEDE4;
-    --ink: #20241E; --ink-dim: #565C50; --ink-muted: #8B9084;
-    --border: rgba(32,36,30,0.11); --shadow: 0 1px 2px rgba(32,36,30,.05), 0 8px 20px rgba(32,36,30,.05);
-    --accent: #21603F; --accent-bg: rgba(33,96,63,0.10);
-    --up: #b3541e; --up-bg: rgba(179,84,30,0.12);
+    --bg: #EEF1F6; --surface: #ffffff; --surface-2: #E3E8F1;
+    --ink: #10182B; --ink-dim: #4B5670; --ink-muted: #8993AB;
+    --border: rgba(16,24,43,0.09); --shadow: 0 1px 2px rgba(16,24,43,.05), 0 10px 26px rgba(16,24,43,.07);
+    --accent: #2A4FDE; --accent-bg: rgba(42,79,222,0.10);
+    --up: #B4560D; --up-bg: rgba(180,86,13,0.12);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --bg: #14170F; --surface: #1B1F17; --surface-2: #23281E;
-      --ink: #EEF0E8; --ink-dim: #B7BEAC; --ink-muted: #7C8571;
-      --border: rgba(255,255,255,0.09); --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 20px rgba(0,0,0,.35);
-      --accent: #4FB287; --accent-bg: rgba(79,178,135,0.16);
-      --up: #e08a4c; --up-bg: rgba(224,138,76,0.16);
+      --bg: #0A0F1C; --surface: #171F35; --surface-2: #212B45;
+      --ink: #E9EDF7; --ink-dim: #AEB7CC; --ink-muted: #76819C;
+      --border: rgba(255,255,255,0.08); --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 30px rgba(0,0,0,.4);
+      --accent: #7C97FF; --accent-bg: rgba(124,151,255,0.16);
+      --up: #EF9758; --up-bg: rgba(239,151,88,0.16);
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --bg: #14170F; --surface: #1B1F17; --surface-2: #23281E;
-    --ink: #EEF0E8; --ink-dim: #B7BEAC; --ink-muted: #7C8571;
-    --border: rgba(255,255,255,0.09); --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 20px rgba(0,0,0,.35);
-    --accent: #4FB287; --accent-bg: rgba(79,178,135,0.16);
-    --up: #e08a4c; --up-bg: rgba(224,138,76,0.16);
+    --bg: #0A0F1C; --surface: #171F35; --surface-2: #212B45;
+    --ink: #E9EDF7; --ink-dim: #AEB7CC; --ink-muted: #76819C;
+    --border: rgba(255,255,255,0.08); --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 30px rgba(0,0,0,.4);
+    --accent: #7C97FF; --accent-bg: rgba(124,151,255,0.16);
+    --up: #EF9758; --up-bg: rgba(239,151,88,0.16);
   }
   * { box-sizing: border-box; }
+  html { font-size: 16px; }
   html, body { margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
-  h1, h2, .brand { font-family: Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  body {
+    background: var(--bg); color: var(--ink); line-height: 1.5;
+    font-family: 'Inter', -apple-system, "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, .brand { font-family: inherit; }
 
   header.site {
     display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap;
-    max-width: 1180px; margin: 0 auto; padding: 28px 24px 18px; border-bottom: 1px solid var(--border);
+    max-width: 1180px; margin: 0 auto; padding: 30px 24px 20px; border-bottom: 1px solid var(--border);
   }
-  .brand { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
-  .tagline { margin: 6px 0 0; color: var(--ink-dim); font-size: 13.5px; max-width: 62ch; line-height: 1.55; }
-  .header-meta { font-size: 12px; color: var(--ink-muted); margin-top: 6px; }
+  .brand { font-size: 25px; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+  .tagline { margin: 7px 0 0; color: var(--ink-dim); font-size: 14px; max-width: 58ch; line-height: 1.55; }
+  .header-meta { font-size: 12.5px; color: var(--ink-muted); margin-top: 8px; font-weight: 500; }
   .theme-toggle {
-    background: var(--surface-2); color: var(--ink); border: 1px solid var(--border);
-    border-radius: 7px; padding: 7px 13px; font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit;
+    background: var(--surface); color: var(--ink); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+    box-shadow: var(--shadow);
   }
-  .theme-toggle:hover { background: var(--surface); }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
-  .layout { max-width: 1180px; margin: 0 auto; padding: 22px 24px 60px; display: flex; gap: 28px; align-items: flex-start; }
+  .layout { max-width: 1180px; margin: 0 auto; padding: 24px 24px 60px; display: flex; gap: 28px; align-items: flex-start; }
 
   .sidebar { width: 270px; flex: none; position: sticky; top: 20px; }
-  .sidebar h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.02em; margin: 18px 0 8px; color: var(--ink-dim); }
+  .sidebar h2 { font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin: 20px 0 9px; color: var(--ink-muted); }
   .sidebar h2:first-child { margin-top: 0; }
   .side-search {
-    width: 100%; padding: 8px 10px; border: none; border-bottom: 2px solid var(--border);
-    background: transparent; color: var(--ink); font-size: 13.5px; font-family: inherit;
+    width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 9px;
+    background: var(--surface); color: var(--ink); font-size: 14px; font-family: inherit;
   }
-  .side-search:focus { outline: none; border-bottom-color: var(--accent); }
+  .side-search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
   .side-select {
-    width: 100%; padding: 7px 9px; border-radius: 7px; border: 1px solid var(--border);
-    background: var(--surface); color: var(--ink); font-size: 13px; font-family: inherit;
+    width: 100%; padding: 8px 10px; border-radius: 9px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink); font-size: 13.5px; font-family: inherit;
   }
-  .side-toggle { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-dim); margin-top: 10px; }
+  .side-toggle { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink-dim); margin-top: 11px; font-weight: 500; }
+  .side-toggle input { accent-color: var(--accent); width: 15px; height: 15px; }
 
-  .spike-box { font-size: 12.5px; }
+  .spike-box { font-size: 13px; }
   .spike-chip { display: inline-flex; align-items: center; gap: 5px; margin: 3px 4px 3px 0; }
-  .spike-badge { font-size: 10px; font-weight: 700; border-radius: 5px; padding: 1px 6px; color: #fff; background: var(--up); }
+  .spike-badge { font-size: 10.5px; font-weight: 700; border-radius: 5px; padding: 1px 6px; color: #fff; background: var(--up); }
   .spike-badge.spike-new { background: var(--ink-muted); }
-  .spike-hint { font-size: 11px; color: var(--ink-muted); margin-top: 6px; line-height: 1.5; }
+  .spike-hint { font-size: 11.5px; color: var(--ink-muted); margin-top: 7px; line-height: 1.5; }
 
-  .stat-line { font-size: 12.5px; color: var(--ink-dim); display: flex; justify-content: space-between; padding: 3px 0; }
-  .stat-line b { color: var(--ink); }
+  .stat-line { font-size: 13px; color: var(--ink-dim); display: flex; justify-content: space-between; padding: 3px 0; font-weight: 500; }
+  .stat-line b { color: var(--ink); font-weight: 700; }
 
-  .sidebar-footer { font-size: 11.5px; color: var(--ink-muted); margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); line-height: 1.6; }
+  .sidebar-footer { font-size: 12px; color: var(--ink-muted); margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border); line-height: 1.6; }
 
   .main { flex: 1; min-width: 0; }
+
+  .how-to {
+    display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;
+    background: var(--accent-bg); border-radius: 10px; padding: 11px 16px; margin-bottom: 16px;
+  }
+  .how-to-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink-dim); font-weight: 500; }
+  .how-to-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 800; flex: none;
+  }
+
   .type-tabs {
-    display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--border);
+    display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid var(--border);
     overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%;
   }
   .type-tab {
-    background: none; border: none; border-bottom: 2px solid transparent; padding: 8px 4px; margin-right: 14px;
-    font-size: 13.5px; font-weight: 600; color: var(--ink-dim); cursor: pointer; font-family: inherit;
+    background: none; border: none; border-bottom: 2px solid transparent; padding: 9px 4px; margin-right: 16px;
+    font-size: 14px; font-weight: 600; color: var(--ink-dim); cursor: pointer; font-family: inherit;
     white-space: nowrap; flex: none;
   }
   .type-tab:hover { color: var(--ink); }
-  .type-tab.on { color: var(--ink); border-bottom-color: var(--accent); }
+  .type-tab.on { color: var(--accent); border-bottom-color: var(--accent); }
   .type-tab .count { color: var(--ink-muted); font-weight: 700; margin-left: 4px; }
-  #resultCount { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 10px; }
+  #resultCount { font-size: 13px; color: var(--ink-muted); margin-bottom: 12px; font-weight: 500; }
 
-  .article-list { display: flex; flex-direction: column; }
+  .article-list { display: flex; flex-direction: column; gap: 8px; }
   .article-row {
-    display: flex; align-items: flex-start; gap: 12px; padding: 13px 4px; border-bottom: 1px solid var(--border);
-    text-decoration: none; color: inherit;
+    display: flex; align-items: flex-start; gap: 12px; padding: 15px 16px; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--surface);
+    text-decoration: none; color: inherit; transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
   }
-  .article-row:hover { background: var(--surface-2); }
-  .article-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-  .article-row-title { font-size: 14.5px; font-weight: 700; color: var(--ink); min-width: 0; overflow-wrap: break-word; }
-  .article-row-meta { font-size: 12.5px; color: var(--ink-dim); min-width: 0; }
-  .row-summary { font-size: 12.5px; color: var(--ink-dim); line-height: 1.5; min-width: 0; overflow-wrap: break-word; }
-  .tag { font-size: 10px; font-weight: 700; border-radius: 5px; padding: 1px 6px; margin-right: 6px; vertical-align: middle; }
+  .article-row:hover { box-shadow: var(--shadow); border-color: var(--accent); transform: translateY(-1px); }
+  .article-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .article-row-title { font-size: 16px; font-weight: 700; color: var(--ink); min-width: 0; overflow-wrap: break-word; line-height: 1.4; }
+  .article-row-meta { font-size: 13px; color: var(--ink-dim); min-width: 0; font-weight: 500; }
+  .row-summary { font-size: 13.5px; color: var(--ink-dim); line-height: 1.6; min-width: 0; overflow-wrap: break-word; }
+  .tag { font-size: 10.5px; font-weight: 700; border-radius: 5px; padding: 2px 7px; margin-right: 6px; vertical-align: middle; }
   .tag-new { background: var(--accent-bg); color: var(--accent); }
   .tag-offtopic { background: var(--up-bg); color: var(--up); }
 
-  .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); font-size: 14px; }
   footer.site-footer {
-    max-width: 1180px; margin: 10px auto 0; padding: 16px 24px 30px; font-size: 12px; color: var(--ink-muted); line-height: 1.6;
+    max-width: 1180px; margin: 10px auto 0; padding: 16px 24px 30px; font-size: 12.5px; color: var(--ink-muted); line-height: 1.6;
   }
   footer.site-footer a { color: var(--accent); }
 
@@ -290,8 +311,17 @@ STYLE = """
     .layout { flex-direction: column; align-items: stretch; }
     .main { min-width: 0; }
     .sidebar { width: 100%; position: static; }
+    .article-row-title { font-size: 15px; }
   }
 </style>
+"""
+
+HOW_TO_HTML = """
+<div class="how-to">
+  <span class="how-to-item"><span class="how-to-num">1</span>Newest first, updated hourly</span>
+  <span class="how-to-item"><span class="how-to-num">2</span>Filter by category, date, or search</span>
+  <span class="how-to-item"><span class="how-to-num">3</span>Off-topic toggle (sidebar) reveals hidden mentions</span>
+</div>
 """
 
 SCRIPT = """
@@ -456,8 +486,7 @@ def render():
   <header class="site">
     <div>
       <h1 class="brand">Sustainable AI Weekly Monitor</h1>
-      <p class="tagline">AI &amp; sustainability news, Scope 3 emissions audits, and cloud computing carbon
-         reporting, pulled automatically and refreshed on a schedule.</p>
+      <p class="tagline">AI &amp; sustainability news, Scope 3 audits, and cloud carbon reporting &mdash; updated hourly.</p>
       <div class="header-meta">Last updated {generated_at}</div>
     </div>
     <button type="button" class="theme-toggle" id="themeToggle">Switch to dark</button>
@@ -478,15 +507,14 @@ def render():
       {spike_html}
       {stats_html}
       <div class="sidebar-footer">
-        Sources: Google News RSS, Data Center Dynamics, and Northeastern Global News. Each article is
-        screened by Gemini for whether the sustainability/AI angle is genuinely its main point, not
-        just a keyword that happens to appear &mdash; ones that read as off-topic (e.g. investor/market
-        stories that merely mention "data center" or "AI") are hidden by default but never deleted; use
-        the toggle above to review them. Refreshes automatically on a schedule &mdash; see the
-        <a href="https://github.com/joshuam0y/sustainable-ai-weekly-monitor" target="_blank" rel="noopener">README</a>.
+        Sources: Google News, Data Center Dynamics, Northeastern Global News. Screened by Gemini for
+        genuine relevance, not just keywords &mdash; see the
+        <a href="https://github.com/joshuam0y/sustainable-ai-weekly-monitor" target="_blank" rel="noopener">README</a>
+        for details.
       </div>
     </aside>
     <main class="main">
+      {HOW_TO_HTML}
       <div class="type-tabs">{type_tabs}</div>
       <div id="resultCount"></div>
       <div class="article-list">{rows_html}</div>
