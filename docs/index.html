@@ -7,21 +7,21 @@
 <title>Sustainable AI Weekly Monitor</title>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap');
 
   :root {
     color-scheme: light;
     --bg: #EEF1F6; --surface: #ffffff; --surface-2: #E3E8F1;
-    --ink: #10182B; --ink-dim: #4B5670; --ink-muted: #8993AB;
+    --ink: #10182B; --ink-dim: #4B5670; --ink-muted: #5F6988;
     --border: rgba(16,24,43,0.09); --shadow: 0 1px 2px rgba(16,24,43,.05), 0 10px 26px rgba(16,24,43,.07);
     --accent: #2A4FDE; --accent-bg: rgba(42,79,222,0.10);
-    --up: #B4560D; --up-bg: rgba(180,86,13,0.12);
+    --up: #95470B; --up-bg: rgba(149,71,11,0.12);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
       --bg: #0A0F1C; --surface: #171F35; --surface-2: #212B45;
-      --ink: #E9EDF7; --ink-dim: #AEB7CC; --ink-muted: #76819C;
+      --ink: #E9EDF7; --ink-dim: #AEB7CC; --ink-muted: #8D98B2;
       --border: rgba(255,255,255,0.08); --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 30px rgba(0,0,0,.4);
       --accent: #7C97FF; --accent-bg: rgba(124,151,255,0.16);
       --up: #EF9758; --up-bg: rgba(239,151,88,0.16);
@@ -30,115 +30,135 @@
   :root[data-theme="dark"] {
     color-scheme: dark;
     --bg: #0A0F1C; --surface: #171F35; --surface-2: #212B45;
-    --ink: #E9EDF7; --ink-dim: #AEB7CC; --ink-muted: #76819C;
+    --ink: #E9EDF7; --ink-dim: #AEB7CC; --ink-muted: #8D98B2;
     --border: rgba(255,255,255,0.08); --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 30px rgba(0,0,0,.4);
     --accent: #7C97FF; --accent-bg: rgba(124,151,255,0.16);
     --up: #EF9758; --up-bg: rgba(239,151,88,0.16);
   }
   * { box-sizing: border-box; }
-  html { font-size: 16px; }
+  html { font-size: 17px; }
   html, body { margin: 0; padding: 0; }
   body {
-    background: var(--bg); color: var(--ink); line-height: 1.5;
-    font-family: 'Inter', -apple-system, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.55;
+    font-family: 'Source Sans 3', -apple-system, "Segoe UI", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, .brand { font-family: inherit; }
+  h1, h2, .brand { font-family: 'Manrope', 'Source Sans 3', sans-serif; }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px;
+  }
 
   header.site {
     display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap;
-    max-width: 1180px; margin: 0 auto; padding: 30px 24px 20px; border-bottom: 1px solid var(--border);
+    max-width: 1220px; margin: 0 auto; padding: 26px 24px 20px; border-bottom: 1px solid var(--border);
+    flex: none; width: 100%;
   }
-  .brand { font-size: 25px; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
-  .tagline { margin: 7px 0 0; color: var(--ink-dim); font-size: 14px; max-width: 58ch; line-height: 1.55; }
-  .header-meta { font-size: 12.5px; color: var(--ink-muted); margin-top: 8px; font-weight: 500; }
+  .brand { font-size: 27px; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+  .tagline { margin: 8px 0 0; color: var(--ink-dim); font-size: 15px; max-width: 58ch; line-height: 1.6; }
+  .header-meta { font-size: 13px; color: var(--ink-muted); margin-top: 9px; font-weight: 600; }
   .theme-toggle {
     background: var(--surface); color: var(--ink); border: 1px solid var(--border);
-    border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+    border-radius: 8px; padding: 9px 15px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
     box-shadow: var(--shadow);
   }
   .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
-  .layout { max-width: 1180px; margin: 0 auto; padding: 24px 24px 60px; display: flex; gap: 28px; align-items: flex-start; }
+  .layout {
+    max-width: 1220px; margin: 0 auto; padding: 22px 24px 40px; display: flex; gap: 28px; align-items: flex-start;
+    width: 100%;
+  }
 
-  .sidebar { width: 270px; flex: none; position: sticky; top: 20px; }
-  .sidebar h2 { font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin: 20px 0 9px; color: var(--ink-muted); }
+  .sidebar { width: 280px; flex: none; position: sticky; top: 20px; }
+  .sidebar h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin: 21px 0 10px; color: var(--ink-muted); }
   .sidebar h2:first-child { margin-top: 0; }
   .side-search {
-    width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 9px;
-    background: var(--surface); color: var(--ink); font-size: 14px; font-family: inherit;
+    width: 100%; padding: 10px 13px; border: 1px solid var(--border); border-radius: 9px;
+    background: var(--surface); color: var(--ink); font-size: 15px; font-family: inherit;
   }
   .side-search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
   .side-select {
-    width: 100%; padding: 8px 10px; border-radius: 9px; border: 1px solid var(--border);
-    background: var(--surface); color: var(--ink); font-size: 13.5px; font-family: inherit;
+    width: 100%; padding: 9px 11px; border-radius: 9px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink); font-size: 14.5px; font-family: inherit;
   }
-  .side-toggle { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink-dim); margin-top: 11px; font-weight: 500; }
-  .side-toggle input { accent-color: var(--accent); width: 15px; height: 15px; }
+  .side-toggle { display: flex; align-items: center; gap: 9px; font-size: 14.5px; color: var(--ink-dim); margin-top: 12px; font-weight: 500; }
+  .side-toggle input { accent-color: var(--accent); width: 17px; height: 17px; }
 
-  .spike-box { font-size: 13px; }
+  .spike-box { font-size: 14px; }
   .spike-chip { display: inline-flex; align-items: center; gap: 5px; margin: 3px 4px 3px 0; }
-  .spike-badge { font-size: 10.5px; font-weight: 700; border-radius: 5px; padding: 1px 6px; color: #fff; background: var(--up); }
+  .spike-badge { font-size: 11px; font-weight: 700; border-radius: 5px; padding: 2px 7px; color: #fff; background: var(--up); }
   .spike-badge.spike-new { background: var(--ink-muted); }
-  .spike-hint { font-size: 11.5px; color: var(--ink-muted); margin-top: 7px; line-height: 1.5; }
+  .spike-hint { font-size: 12.5px; color: var(--ink-muted); margin-top: 8px; line-height: 1.55; }
 
-  .stat-line { font-size: 13px; color: var(--ink-dim); display: flex; justify-content: space-between; padding: 3px 0; font-weight: 500; }
+  .stat-line { font-size: 14px; color: var(--ink-dim); display: flex; justify-content: space-between; padding: 4px 0; font-weight: 500; }
   .stat-line b { color: var(--ink); font-weight: 700; }
 
-  .sidebar-footer { font-size: 12px; color: var(--ink-muted); margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border); line-height: 1.6; }
+  .sidebar-footer { font-size: 12.5px; color: var(--ink-muted); margin-top: 21px; padding-top: 16px; border-top: 1px solid var(--border); line-height: 1.6; }
 
   .main { flex: 1; min-width: 0; }
 
   .how-to {
-    display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;
-    background: var(--accent-bg); border-radius: 10px; padding: 11px 16px; margin-bottom: 16px;
+    display: flex; flex-wrap: wrap; gap: 9px 22px; align-items: center; flex-shrink: 0;
+    background: var(--accent-bg); border-radius: 10px; padding: 12px 17px; margin-bottom: 18px;
   }
-  .how-to-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink-dim); font-weight: 500; }
+  .how-to-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-dim); font-weight: 500; }
   .how-to-num {
-    display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px;
-    border-radius: 50%; background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 800; flex: none;
+    display: inline-flex; align-items: center; justify-content: center; width: 19px; height: 19px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; flex: none;
   }
 
   .type-tabs {
-    display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid var(--border);
-    overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%;
+    display: flex; gap: 4px; margin-bottom: 15px; border-bottom: 1px solid var(--border);
+    overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; flex-shrink: 0;
   }
   .type-tab {
-    background: none; border: none; border-bottom: 2px solid transparent; padding: 9px 4px; margin-right: 16px;
-    font-size: 14px; font-weight: 600; color: var(--ink-dim); cursor: pointer; font-family: inherit;
+    background: none; border: none; border-bottom: 2px solid transparent; padding: 10px 4px; margin-right: 18px;
+    font-size: 15px; font-weight: 600; color: var(--ink-dim); cursor: pointer; font-family: inherit;
     white-space: nowrap; flex: none;
   }
   .type-tab:hover { color: var(--ink); }
   .type-tab.on { color: var(--accent); border-bottom-color: var(--accent); }
   .type-tab .count { color: var(--ink-muted); font-weight: 700; margin-left: 4px; }
-  #resultCount { font-size: 13px; color: var(--ink-muted); margin-bottom: 12px; font-weight: 500; }
+  #resultCount { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 13px; font-weight: 600; flex-shrink: 0; }
 
-  .article-list { display: flex; flex-direction: column; gap: 8px; }
+  .article-list { display: flex; flex-direction: column; gap: 9px; }
   .article-row {
-    display: flex; align-items: flex-start; gap: 12px; padding: 15px 16px; border-radius: 12px;
+    display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 12px;
     border: 1px solid var(--border); background: var(--surface);
     text-decoration: none; color: inherit; transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
   }
   .article-row:hover { box-shadow: var(--shadow); border-color: var(--accent); transform: translateY(-1px); }
-  .article-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-  .article-row-title { font-size: 16px; font-weight: 700; color: var(--ink); min-width: 0; overflow-wrap: break-word; line-height: 1.4; }
-  .article-row-meta { font-size: 13px; color: var(--ink-dim); min-width: 0; font-weight: 500; }
-  .row-summary { font-size: 13.5px; color: var(--ink-dim); line-height: 1.6; min-width: 0; overflow-wrap: break-word; }
-  .tag { font-size: 10.5px; font-weight: 700; border-radius: 5px; padding: 2px 7px; margin-right: 6px; vertical-align: middle; }
+  .article-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+  .article-row-title { font-size: 17.5px; font-weight: 700; color: var(--ink); min-width: 0; overflow-wrap: break-word; line-height: 1.4; }
+  .article-row-meta { font-size: 13.5px; color: var(--ink-dim); min-width: 0; font-weight: 600; }
+  .row-summary { font-size: 14.5px; color: var(--ink-dim); line-height: 1.6; min-width: 0; overflow-wrap: break-word; }
+  .tag { font-size: 11px; font-weight: 700; border-radius: 5px; padding: 2px 8px; margin-right: 7px; vertical-align: middle; }
   .tag-new { background: var(--accent-bg); color: var(--accent); }
   .tag-offtopic { background: var(--up-bg); color: var(--up); }
 
-  .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); font-size: 14px; }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); font-size: 15px; flex-shrink: 0; }
   footer.site-footer {
-    max-width: 1180px; margin: 10px auto 0; padding: 16px 24px 30px; font-size: 12.5px; color: var(--ink-muted); line-height: 1.6;
+    margin: 18px 0 4px; padding-top: 16px; border-top: 1px solid var(--border);
+    font-size: 13px; color: var(--ink-muted); line-height: 1.6; flex-shrink: 0;
   }
   footer.site-footer a { color: var(--accent); }
+
+  /* Contain scrolling to the sidebar/article-list panes on desktop, instead of
+     the whole page growing to fit hundreds of cards -- the header and search/
+     filters stay put while only the list underneath scrolls. */
+  @media (min-width: 761px) {
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; overflow: hidden; }
+    .layout { flex: 1 1 auto; min-height: 0; align-items: stretch; }
+    .sidebar { order: 2; position: static; overflow-y: auto; padding-right: 6px; }
+    .main { order: 1; overflow-y: auto; padding-right: 6px; display: flex; flex-direction: column; min-height: 0; }
+    .article-list { flex: 1 1 auto; }
+  }
 
   @media (max-width: 760px) {
     .layout { flex-direction: column; align-items: stretch; }
     .main { min-width: 0; }
     .sidebar { width: 100%; position: static; }
-    .article-row-title { font-size: 15px; }
+    .article-row-title { font-size: 16px; }
   }
 </style>
 
@@ -167,7 +187,7 @@
       </select>
       
         <h2>Unusual this week</h2>
-        <div class="spike-box"><span class="spike-chip"><span class="spike-badge">5.3x</span> MIT &middot; 8</span><span class="spike-chip"><span class="spike-badge">3.3x</span> AWS &middot; 2</span><span class="spike-chip"><span class="spike-badge">2.6x</span> Nvidia &middot; 4</span><span class="spike-chip"><span class="spike-badge">2.5x</span> Microsoft &middot; 3</span><div class="spike-hint">Still building up baseline history &mdash; "NEW" just means no older data to compare against yet.</div></div>
+        <div class="spike-box"><span class="spike-chip"><span class="spike-badge">5.3x</span> MIT &middot; 8</span><span class="spike-chip"><span class="spike-badge">3.3x</span> AWS &middot; 2</span><span class="spike-chip"><span class="spike-badge">2.6x</span> Nvidia &middot; 4</span><div class="spike-hint">Still building up baseline history &mdash; "NEW" just means no older data to compare against yet.</div></div>
         
       
         <h2>At a glance</h2>
@@ -5615,9 +5635,9 @@
     </a>
     </div>
       <div class="empty-state" id="emptyState" style="display:none">No articles match these filters right now &mdash; try clearing the search or picking a different category.</div>
+      <footer class="site-footer">Automatically refreshed on a schedule via GitHub Actions.</footer>
     </main>
   </div>
-  <footer class="site-footer">Automatically refreshed on a schedule via GitHub Actions.</footer>
 
 <script>
 function initTheme() {
