@@ -52,6 +52,54 @@ def is_relevant(title, category):
     return True
 
 
+# Real feedback (from the person this project reports to): the keyword gate
+# above proves an environmental term and an AI term both appear somewhere in
+# the title, but not that either is the article's actual MAIN POINT. Confirmed
+# example that passed the gate above: "ERCOT Hits Pause on Texas Data Center
+# Queue. How Worried Should AI Infrastructure Investors Be?" -- has "data
+# center" and "AI", but is an investor-sentiment story, not a Scope 3
+# emissions one. STRONG_ENVIRONMENTAL_KEYWORDS below is the subset of
+# ENVIRONMENTAL_KEYWORDS that's actually specific to emissions/sustainability
+# substance (as opposed to "grid" or "data center", which show up in plain
+# business/infrastructure stories too) -- a title with investor/market
+# framing AND none of these strong terms is cheap, free evidence of exactly
+# the false-positive pattern flagged. This doesn't replace the Gemini
+# classification in ai_summary.py (which still runs on everything else and
+# catches subtler cases) -- it just catches the obvious ones without
+# spending an API call, and per the same "never hard-delete" principle used
+# elsewhere in this project, it soft-hides (is_core_topic = 0) rather than
+# skipping insertion entirely, so it stays reviewable via the "Show
+# off-topic mentions too" toggle instead of silently vanishing.
+STRONG_ENVIRONMENTAL_KEYWORDS = re.compile(
+    r"carbon|emission|footprint|scope ?3|\bghg\b|net.?zero|sustainab|greenhouse|renewable",
+    re.IGNORECASE,
+)
+
+FINANCIAL_ANGLE_KEYWORDS = re.compile(
+    r"investor|invest(?:ing|ment)?s?\b|\bstocks?\b|\bshares\b|earnings|market cap|valuation|"
+    r"how worried should|\bqueue\b|buildout|capacity crunch|\bipo\b|hedge fund|"
+    r"should .* be\b",
+    re.IGNORECASE,
+)
+
+INVESTOR_ANGLE_SUMMARY = (
+    "Pre-filtered: matches the environmental+AI keyword gate, but reads as investor/market "
+    "framing with no emissions-specific term in the headline."
+)
+
+
+def _is_investor_angle_without_substance(title):
+    return bool(FINANCIAL_ANGLE_KEYWORDS.search(title) and not STRONG_ENVIRONMENTAL_KEYWORDS.search(title))
+
+
+def precheck_core_topic(title):
+    """Returns (ai_summary, is_core_topic) to pre-populate at insert time, or
+    (None, None) to leave both NULL for the normal Gemini backfill pass."""
+    if _is_investor_angle_without_substance(title):
+        return INVESTOR_ANGLE_SUMMARY, 0
+    return None, None
+
+
 def _normalize_title(title):
     """Lowercased, whitespace-collapsed, truncated to the first 50 chars --
     the same real story, reprinted by a different outlet or given a
@@ -183,10 +231,12 @@ def fetch_general_feeds(conn, now, seen_prefixes):
             if norm in seen_prefixes:
                 continue
             published = entry.get("published", "")
+            ai_summary, is_core_topic = precheck_core_topic(title)
             cur = conn.execute(
-                "INSERT OR IGNORE INTO articles (link, title, source, published, category, summary, first_seen) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?)",
-                (link, title, source_label, published, category, "", now),
+                "INSERT OR IGNORE INTO articles "
+                "(link, title, source, published, category, summary, first_seen, ai_summary, is_core_topic) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (link, title, source_label, published, category, "", now, ai_summary, is_core_topic),
             )
             if cur.rowcount:
                 seen_prefixes.add(norm)
@@ -236,10 +286,12 @@ def run():
                 if norm in seen_prefixes:
                     continue
 
+                ai_summary, is_core_topic = precheck_core_topic(title)
                 cur = conn.execute(
-                    "INSERT OR IGNORE INTO articles (link, title, source, published, category, summary, first_seen) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (link, title, source, published, category, "", now),
+                    "INSERT OR IGNORE INTO articles "
+                    "(link, title, source, published, category, summary, first_seen, ai_summary, is_core_topic) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (link, title, source, published, category, "", now, ai_summary, is_core_topic),
                 )
                 if cur.rowcount:
                     seen_prefixes.add(norm)

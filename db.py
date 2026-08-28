@@ -28,4 +28,16 @@ def get_conn(path=DB_PATH):
     if "ai_summary" not in cols:
         conn.execute("ALTER TABLE articles ADD COLUMN ai_summary TEXT")
         conn.commit()
+    # NULL = not yet evaluated (e.g. GEMINI_API_KEY unset, or still queued
+    # behind the per-run backfill limit), 1 = the environmental/AI angle is
+    # the article's actual main point, 0 = it just mentions a keyword in
+    # passing (a real, confirmed example: "ERCOT Hits Pause on Texas Data
+    # Center Queue. How Worried Should AI Infrastructure Investors Be?" is
+    # an investor-sentiment story, not a Scope 3 emissions one, despite
+    # matching both keyword gates). Never deletes anything the keyword
+    # filter already accepted -- see render_report.py's "Show off-topic
+    # mentions too" toggle -- so a wrong LLM call is reviewable, not lost.
+    if "is_core_topic" not in cols:
+        conn.execute("ALTER TABLE articles ADD COLUMN is_core_topic INTEGER")
+        conn.commit()
     return conn

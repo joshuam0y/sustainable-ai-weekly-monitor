@@ -147,6 +147,7 @@ def summary_stats(rows):
         "total": len(rows),
         "sources": len(sources),
         "oldest": min(dates) if dates else None,
+        "off_topic": sum(1 for r in rows if r["is_core_topic"] == 0),
     }
 
 
@@ -160,13 +161,16 @@ def _article_row_html(row, is_new, dt):
     ai_summary = row["ai_summary"]
     summary_html = f'<span class="row-summary">{html_lib.escape(ai_summary)}</span>' if ai_summary else ""
     new_tag = '<span class="tag tag-new">New</span>' if is_new else ""
+    is_off_topic = row["is_core_topic"] == 0
+    off_topic_tag = '<span class="tag tag-offtopic">Off-topic?</span>' if is_off_topic else ""
     search_blob = html_lib.escape((row["title"] + " " + (row["source"] or "") + " " + (ai_summary or "")).lower())
 
     return f"""
     <a class="article-row" href="{html_lib.escape(row['link'])}" target="_blank" rel="noopener"
-       data-category="{cat}" data-date="{date_attr}" data-new="{'1' if is_new else '0'}" data-search="{search_blob}">
+       data-category="{cat}" data-date="{date_attr}" data-new="{'1' if is_new else '0'}"
+       data-offtopic="{'1' if is_off_topic else '0'}" data-search="{search_blob}">
       <span class="article-row-body">
-        <span class="article-row-title">{new_tag}{html_lib.escape(row['title'])}</span>
+        <span class="article-row-title">{new_tag}{off_topic_tag}{html_lib.escape(row['title'])}</span>
         <span class="article-row-meta">{src} &middot; {date_txt} &middot; {html_lib.escape(cat_label)}</span>
         {summary_html}
       </span>
@@ -274,6 +278,7 @@ STYLE = """
   .row-summary { font-size: 12.5px; color: var(--ink-dim); line-height: 1.5; min-width: 0; overflow-wrap: break-word; }
   .tag { font-size: 10px; font-weight: 700; border-radius: 5px; padding: 1px 6px; margin-right: 6px; vertical-align: middle; }
   .tag-new { background: var(--accent-bg); color: var(--accent); }
+  .tag-offtopic { background: var(--up-bg); color: var(--up); }
 
   .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); }
   footer.site-footer {
@@ -316,11 +321,13 @@ function applyFilters() {
   const search = document.getElementById('searchBox').value.trim().toLowerCase();
   const cutoff = document.getElementById('dateFilter').value;
   const onlyNew = document.getElementById('onlyNew').checked;
+  const showOffTopic = document.getElementById('showOffTopic').checked;
   let visible = 0;
   document.querySelectorAll('.article-row').forEach(function (row) {
     let show = true;
     if (activeCategory !== 'all' && row.dataset.category !== activeCategory) show = false;
     if (onlyNew && row.dataset.new !== '1') show = false;
+    if (!showOffTopic && row.dataset.offtopic === '1') show = false;
     if (cutoff && (!row.dataset.date || row.dataset.date < cutoff)) show = false;
     if (search && row.dataset.search.indexOf(search) === -1) show = false;
     row.style.display = show ? '' : 'none';
@@ -344,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('searchBox').addEventListener('input', applyFilters);
   document.getElementById('dateFilter').addEventListener('change', applyFilters);
   document.getElementById('onlyNew').addEventListener('change', applyFilters);
+  document.getElementById('showOffTopic').addEventListener('change', applyFilters);
   applyFilters();
 });
 </script>
@@ -419,6 +427,10 @@ def render():
         <div class="stat-line"><span>Days covered</span><b>{span_days}</b></div>
         <div class="stat-line"><span>New since last check</span><b>{new_count}</b></div>
         """
+        if stats["off_topic"]:
+            stats_html += (
+                f'<div class="stat-line"><span>Flagged off-topic</span><b>{stats["off_topic"]}</b></div>'
+            )
 
     now_eastern = now.astimezone(EASTERN)
     today_str = now_eastern.strftime("%Y-%m-%d")
@@ -455,6 +467,7 @@ def render():
       <h2>Search</h2>
       <input type="text" id="searchBox" class="side-search" placeholder="Title, source, summary...">
       <label class="side-toggle"><input type="checkbox" id="onlyNew"> Only new since last check</label>
+      <label class="side-toggle"><input type="checkbox" id="showOffTopic"> Show off-topic mentions too</label>
       <h2>Filter by date</h2>
       <select id="dateFilter" class="side-select">
         <option value="">All time</option>
@@ -465,8 +478,11 @@ def render():
       {spike_html}
       {stats_html}
       <div class="sidebar-footer">
-        Sources: Google News RSS, Data Center Dynamics, and Northeastern Global News, summarized with Gemini.
-        Refreshes automatically on a schedule &mdash; see the
+        Sources: Google News RSS, Data Center Dynamics, and Northeastern Global News. Each article is
+        screened by Gemini for whether the sustainability/AI angle is genuinely its main point, not
+        just a keyword that happens to appear &mdash; ones that read as off-topic (e.g. investor/market
+        stories that merely mention "data center" or "AI") are hidden by default but never deleted; use
+        the toggle above to review them. Refreshes automatically on a schedule &mdash; see the
         <a href="https://github.com/joshuam0y/sustainable-ai-weekly-monitor" target="_blank" rel="noopener">README</a>.
       </div>
     </aside>

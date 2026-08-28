@@ -29,8 +29,21 @@ Every hour, a GitHub Actions workflow:
    deduplicated on a normalized title prefix (not just an exact match or
    URL), so the same story reprinted with a different trailing subtitle by
    a different outlet doesn't show up twice.
-4. Generates a one-sentence, headline-based AI summary for each new article
-   (via the free Gemini API) so the report is skimmable without opening every link.
+4. Sends each new article's headline to the free Gemini API for **two**
+   things in one call: a one-sentence summary, and a genuine on-topic
+   judgment — is the environmental/AI angle actually the article's main
+   point, or just a keyword that happens to appear? The keyword gate above
+   only proves an environmental term and an AI term both show up in the
+   title; it can't tell "Scope 3 emissions audit of AI data centers" (on
+   topic) from "ERCOT Hits Pause on Texas Data Center Queue. How Worried
+   Should AI Infrastructure Investors Be?" (an investor-sentiment story that
+   happens to mention "data center" and "AI"). A cheap, free keyword
+   pre-filter (`scraper.py`'s `precheck_core_topic`) also catches the most
+   obvious investor/market-framing cases before spending a Gemini call.
+   Articles judged off-topic are never deleted — they're hidden from the
+   default view but reviewable via a "Show off-topic mentions too" toggle,
+   same principle as job listings in the companion `conservation-climate-jobs`
+   project never being hard-deleted by a new filter rule.
 5. Renders a static report (`docs/index.html`) — a sidebar (search, date
    filter, spike-detection, at-a-glance stats) plus a single filterable
    article list with simple category tabs above it, not a boxed panel per
@@ -64,6 +77,6 @@ the scraper still runs, it just skips the summary step.
 |---|---|
 | `db.py` | SQLite schema + connection helper |
 | `scraper.py` | Pulls Google News RSS results, dedupes, categorizes |
-| `ai_summary.py` | Headline-based AI summaries via Gemini |
+| `ai_summary.py` | Headline-based AI summaries + on-topic classification via Gemini |
 | `render_report.py` | Builds the static HTML report in `docs/` |
 | `.github/workflows/hourly.yml` | Scheduled scrape + render + publish |
