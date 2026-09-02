@@ -16,15 +16,23 @@ Every hour, a GitHub Actions workflow:
    - **Scope 3 AI Audits** — companies/universities auditing Scope 3 emissions of their AI usage
    - **Scope 3 Cloud Emissions** — broader Scope 3 disclosures for cloud computing
    - **General Conversation** — the wider AI-and-sustainability discourse
-2. Also pulls two sites' own real RSS feeds directly (not searched) —
-   [Data Center Dynamics](https://www.datacenterdynamics.com/) (Scope 3 Cloud
-   Emissions) and [Northeastern Global News](https://news.northeastern.edu/)
-   (Northeastern Mentions) — filtered through the same environmental+AI
-   keyword gate as everything else. Going straight to Northeastern's own
-   newsroom instead of searching for "Northeastern" fixed a real, confirmed
-   bug: Google News search for that category had a 100% false-positive rate
-   (mostly matching "northeastern India" as a compass direction, not the
-   university).
+2. Also pulls five sites' own real RSS feeds directly (not searched) —
+   [Data Center Dynamics](https://www.datacenterdynamics.com/) (Scope 3
+   Cloud Emissions) and four from
+   [Northeastern Global News](https://news.northeastern.edu/) (Northeastern
+   Mentions): the main feed plus its sustainability, climate, and
+   artificial-intelligence tag feeds specifically. Going straight to
+   Northeastern's own newsroom instead of searching for "Northeastern" fixed
+   a real, confirmed bug: Google News search for that category had a 100%
+   false-positive rate (mostly matching "northeastern India" as a compass
+   direction, not the university). The Northeastern feeds use an OR gate
+   (environmental keyword OR AI keyword, not both) since they're already
+   about the university by construction — confirmed live, requiring both
+   left this category sitting at exactly 0 articles in production despite
+   the feeds working fine, because a general campus newsroom rarely
+   publishes one headline matching both keyword classes at once. Adding the
+   three tag-specific feeds on top of the main one turned that into 42 real
+   candidates in a single fetch.
 3. Stores every article it finds in a local SQLite database (`monitor.db`),
    deduplicated on a normalized title prefix (not just an exact match or
    URL), so the same story reprinted with a different trailing subtitle by

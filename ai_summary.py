@@ -136,7 +136,14 @@ def evaluate_article(client, title, source):
     return category, on_topic, relevance, topic_tag, summary or (text[:200] if text else None)
 
 
-def backfill_summaries(conn, limit=24):
+def backfill_summaries(conn, limit=40):
+    # Bumped from 24 -- the real throughput ceiling here is run FREQUENCY
+    # (hourly), not the per-minute rate limit: CALL_DELAY_SECONDS=5 already
+    # caps this at 12 calls/minute even at a much higher batch size, safely
+    # under the free tier's 15 RPM. 40 calls * 5s is ~3.3 minutes of Gemini
+    # calls per run, still comfortably inside one hourly job. Backlog grew
+    # further after adding 3 more Northeastern feeds in this same change,
+    # so catch-up speed matters more now, not less.
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         print("GEMINI_API_KEY not set -- skipping AI summaries")

@@ -44,12 +44,51 @@ def _has_environmental_and_ai_keywords(title):
     return bool(ENVIRONMENTAL_KEYWORDS.search(title) and AI_KEYWORDS.search(title))
 
 
-def is_relevant(title, category):
-    if not _has_environmental_and_ai_keywords(title):
-        return False
-    if category == "northeastern" and "northeastern university" not in title.lower():
-        return False
-    return True
+# Confirmed live: requiring the exact phrase "northeastern university" left
+# this category at 0 real articles across the whole database, even though
+# genuinely on-topic Northeastern stories were reaching this filter --
+# "Aoun declares 'human centrality' as focus of Northeastern's new academic
+# plan" and an algae-biofuel piece from Northeastern Global News itself both
+# got dropped for saying "Northeastern's" or nothing at all, not the exact
+# phrase. Loosened to just "northeastern" appearing anywhere, with an
+# exclusion list for the actual false-positive pattern this was originally
+# guarding against (the compass direction, e.g. "northeastern India").
+NORTHEASTERN_COMPASS_DIRECTION = re.compile(
+    r"northeastern\s+(india|china|u\.?s\.?a?\b|united states|region|asia|europe|africa|"
+    r"brazil|nigeria|thailand|syria|australia)",
+    re.IGNORECASE,
+)
+
+
+def is_relevant(title, category, source=""):
+    if category == "northeastern":
+        # Same OR-gate reasoning as fetch_general_feeds(): confirmed live,
+        # the two real NU-relevant headlines this path actually surfaced
+        # ("Aoun declares 'human centrality'...", an algae-biofuel piece)
+        # each had only an AI keyword or neither, never both -- the AND
+        # gate alone accounts for why this category sat at 0 articles.
+        # These queries already anchor on "Northeastern University" plus a
+        # topic term, so the title itself doesn't have to carry both
+        # keyword classes on top of that.
+        if not (ENVIRONMENTAL_KEYWORDS.search(title) or AI_KEYWORDS.search(title)):
+            return False
+        # A story bylined by a Northeastern-affiliated outlet (its own
+        # newsroom, the student paper) is already about Northeastern by
+        # construction, the same reasoning fetch_general_feeds() uses --
+        # confirmed live, the algae-biofuel piece never says "Northeastern"
+        # in its own headline despite running on Northeastern Global News.
+        # A third-party outlet that merely mentions NU still needs the
+        # title to actually say so, to keep out the compass-direction
+        # false positive this check was originally built to catch.
+        is_nu_source = "northeastern" in (source or "").lower()
+        if not is_nu_source:
+            lowered = title.lower()
+            if "northeastern" not in lowered:
+                return False
+            if NORTHEASTERN_COMPASS_DIRECTION.search(title):
+                return False
+        return True
+    return _has_environmental_and_ai_keywords(title)
 
 
 # Real feedback (from the person this project reports to): the keyword gate
@@ -182,13 +221,25 @@ QUERIES = {
 FEED_URL = "https://news.google.com/rss/search?q={q}+when:7d&hl=en-US&gl=US&ceid=US:en"
 
 # Each site's own real RSS feed -- read directly, not searched. Confirmed
-# live: both are plain, working feeds (DCD: 20 items/fetch, Northeastern:
-# 25). Assigned straight to a category rather than run through QUERIES,
-# since there's no keyword query to construct for "just give me your
-# latest items."
+# live: all are plain, working feeds. Assigned straight to a category
+# rather than run through QUERIES, since there's no keyword query to
+# construct for "just give me your latest items."
+#
+# The three tag-specific Northeastern feeds (confirmed live, all real and
+# distinct from the main feed and from each other -- "Breakthrough research
+# uses machine learning to better predict New England floods" only showed
+# up in the climate tag, not the main feed) exist because the plain
+# newsroom feed alone left "northeastern" sitting at 0 real articles in
+# production: a general campus newsroom rarely publishes one headline that
+# happens to be topical AND about NU specifically in the same 25-item
+# window. These are already filtered to Northeastern's own sustainability/
+# climate/AI coverage, so genuinely relevant volume is far higher per fetch.
 GENERAL_FEEDS = [
     ("https://www.datacenterdynamics.com/en/rss/", "scope3_cloud", "Data Center Dynamics"),
     ("https://news.northeastern.edu/feed/", "northeastern", "Northeastern Global News"),
+    ("https://news.northeastern.edu/tag/sustainability/feed/", "northeastern", "Northeastern Global News"),
+    ("https://news.northeastern.edu/tag/climate/feed/", "northeastern", "Northeastern Global News"),
+    ("https://news.northeastern.edu/tag/artificial-intelligence/feed/", "northeastern", "Northeastern Global News"),
 ]
 
 
@@ -212,10 +263,16 @@ def fetch_general_feeds(conn, now, seen_prefixes):
     articles from Google News search had zero real Northeastern connection
     (matching "northeastern India" as a compass direction); going straight
     to Northeastern's own feed instead of searching for it sidesteps that
-    false-positive problem entirely. Still requires the same environmental
-    AND AI keyword gate everything else does -- most of a campus newsroom's
-    or a data-center trade publication's own feed is routine news with
-    neither.
+    false-positive problem entirely.
+
+    The Northeastern feed uses an OR gate (environmental OR AI keyword), not
+    the AND gate everything else uses -- confirmed live, a general campus
+    newsroom almost never produces one headline matching both keyword
+    classes at once (0 of 25 real current items passed the AND gate; the
+    "northeastern" category sat at zero articles in the whole database as a
+    result). It's still a curated single feed already about Northeastern by
+    construction, so the volume risk from loosening this one gate is capped
+    at ~25 items/fetch, unlike an open Google News search.
     """
     new_count = 0
     for url, category, source_label in GENERAL_FEEDS:
@@ -229,7 +286,12 @@ def fetch_general_feeds(conn, now, seen_prefixes):
             if not link:
                 continue
             title = entry.get("title", "").strip()
-            if not _has_environmental_and_ai_keywords(title):
+            has_env = ENVIRONMENTAL_KEYWORDS.search(title)
+            has_ai = AI_KEYWORDS.search(title)
+            if category == "northeastern":
+                if not (has_env or has_ai):
+                    continue
+            elif not (has_env and has_ai):
                 continue
             norm = _normalize_title(title)
             if norm in seen_prefixes:
@@ -270,7 +332,7 @@ def run():
                 title = entry.get("title", "").strip()
                 source = entry.get("source", {}).get("title", "") if entry.get("source") else ""
                 title = strip_source_suffix(title, source)
-                if not is_relevant(title, category):
+                if not is_relevant(title, category, source):
                     continue
                 published = entry.get("published", "")
 
