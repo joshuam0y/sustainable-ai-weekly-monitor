@@ -151,7 +151,31 @@ def summary_stats(rows):
     }
 
 
-def _article_row_html(row, is_new, dt):
+def top_picks(dated_rows, per_category=5):
+    """The top N by relevance_score in each bucket -- on-topic isn't the
+    same as a *strong, central* example of a bucket's specific theme, and
+    the boss wants an easy way to skip straight to the best of each rather
+    than reading everything on-topic with equal weight.
+
+    Takes render()'s already newest-first-sorted dated_rows and does a
+    stable sort by score only, so ties keep that recency order instead of
+    being shuffled arbitrarily.
+    """
+    by_category = {}
+    for _dt, row, _is_new in dated_rows:
+        if row["is_core_topic"] == 0 or row["relevance_score"] is None:
+            continue
+        by_category.setdefault(row["category"], []).append(row)
+
+    picks = set()
+    for cat_rows in by_category.values():
+        ranked = sorted(cat_rows, key=lambda r: -r["relevance_score"])
+        for r in ranked[:per_category]:
+            picks.add(r["link"])
+    return picks
+
+
+def _article_row_html(row, is_new, dt, is_top_pick):
     cat = row["category"]
     cat_label = CATEGORY_LABELS.get(cat, cat)
     src = html_lib.escape(row["source"] or "Unknown source")
@@ -163,14 +187,16 @@ def _article_row_html(row, is_new, dt):
     new_tag = '<span class="tag tag-new">New</span>' if is_new else ""
     is_off_topic = row["is_core_topic"] == 0
     off_topic_tag = '<span class="tag tag-offtopic">Off-topic?</span>' if is_off_topic else ""
+    top_pick_tag = '<span class="tag tag-toppick">Top pick</span>' if is_top_pick else ""
     search_blob = html_lib.escape((row["title"] + " " + (row["source"] or "") + " " + (ai_summary or "")).lower())
 
     return f"""
     <a class="article-row" href="{html_lib.escape(row['link'])}" target="_blank" rel="noopener"
        data-category="{cat}" data-date="{date_attr}" data-new="{'1' if is_new else '0'}"
-       data-offtopic="{'1' if is_off_topic else '0'}" data-search="{search_blob}">
+       data-offtopic="{'1' if is_off_topic else '0'}" data-toppick="{'1' if is_top_pick else '0'}"
+       data-search="{search_blob}">
       <span class="article-row-body">
-        <span class="article-row-title">{new_tag}{off_topic_tag}{html_lib.escape(row['title'])}</span>
+        <span class="article-row-title">{top_pick_tag}{new_tag}{off_topic_tag}{html_lib.escape(row['title'])}</span>
         <span class="article-row-meta">{src} &middot; {date_txt} &middot; {html_lib.escape(cat_label)}</span>
         {summary_html}
       </span>
@@ -189,6 +215,7 @@ STYLE = """
     --border: rgba(16,24,43,0.09); --shadow: 0 1px 2px rgba(16,24,43,.05), 0 10px 26px rgba(16,24,43,.07);
     --accent: #2A4FDE; --accent-bg: rgba(42,79,222,0.10);
     --up: #95470B; --up-bg: rgba(149,71,11,0.12);
+    --pick: #7A5F00; --pick-bg: rgba(122,95,0,0.14);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -198,6 +225,7 @@ STYLE = """
       --border: rgba(255,255,255,0.08); --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 30px rgba(0,0,0,.4);
       --accent: #7C97FF; --accent-bg: rgba(124,151,255,0.16);
       --up: #EF9758; --up-bg: rgba(239,151,88,0.16);
+      --pick: #E8C34A; --pick-bg: rgba(232,195,74,0.18);
     }
   }
   :root[data-theme="dark"] {
@@ -207,6 +235,7 @@ STYLE = """
     --border: rgba(255,255,255,0.08); --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 30px rgba(0,0,0,.4);
     --accent: #7C97FF; --accent-bg: rgba(124,151,255,0.16);
     --up: #EF9758; --up-bg: rgba(239,151,88,0.16);
+    --pick: #E8C34A; --pick-bg: rgba(232,195,74,0.18);
   }
   * { box-sizing: border-box; }
   html { font-size: 17px; }
@@ -307,6 +336,7 @@ STYLE = """
   .tag { font-size: 11px; font-weight: 700; border-radius: 5px; padding: 2px 8px; margin-right: 7px; vertical-align: middle; }
   .tag-new { background: var(--accent-bg); color: var(--accent); }
   .tag-offtopic { background: var(--up-bg); color: var(--up); }
+  .tag-toppick { background: var(--pick-bg); color: var(--pick); }
 
   .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); font-size: 15px; flex-shrink: 0; }
   footer.site-footer {
@@ -339,8 +369,8 @@ STYLE = """
 HOW_TO_HTML = """
 <div class="how-to">
   <span class="how-to-item"><span class="how-to-num">1</span>Newest first, updated hourly</span>
-  <span class="how-to-item"><span class="how-to-num">2</span>Filter by category, date, or search</span>
-  <span class="how-to-item"><span class="how-to-num">3</span>Off-topic toggle (sidebar) reveals hidden mentions</span>
+  <span class="how-to-item"><span class="how-to-num">2</span>Filter by category, date, search, or top picks</span>
+  <span class="how-to-item"><span class="how-to-num">3</span>Sidebar toggles reveal hidden/lower-ranked mentions</span>
 </div>
 """
 
@@ -372,11 +402,13 @@ function applyFilters() {
   const cutoff = document.getElementById('dateFilter').value;
   const onlyNew = document.getElementById('onlyNew').checked;
   const showOffTopic = document.getElementById('showOffTopic').checked;
+  const onlyTopPicks = document.getElementById('onlyTopPicks').checked;
   let visible = 0;
   document.querySelectorAll('.article-row').forEach(function (row) {
     let show = true;
     if (activeCategory !== 'all' && row.dataset.category !== activeCategory) show = false;
     if (onlyNew && row.dataset.new !== '1') show = false;
+    if (onlyTopPicks && row.dataset.toppick !== '1') show = false;
     if (!showOffTopic && row.dataset.offtopic === '1') show = false;
     if (cutoff && (!row.dataset.date || row.dataset.date < cutoff)) show = false;
     if (search && row.dataset.search.indexOf(search) === -1) show = false;
@@ -401,6 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('searchBox').addEventListener('input', applyFilters);
   document.getElementById('dateFilter').addEventListener('change', applyFilters);
   document.getElementById('onlyNew').addEventListener('change', applyFilters);
+  document.getElementById('onlyTopPicks').addEventListener('change', applyFilters);
   document.getElementById('showOffTopic').addEventListener('change', applyFilters);
   applyFilters();
 });
@@ -428,6 +461,7 @@ def render():
             new_count += 1
         dated_rows.append((dt, row, is_new))
     dated_rows.sort(key=lambda triple: triple[0] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    top_pick_links = top_picks(dated_rows)
 
     spikes = spike_orgs(conn, now)
     stats = summary_stats(rows)
@@ -440,7 +474,9 @@ def render():
             f'{html_lib.escape(label)}<span class="count">{counts.get(cat, 0)}</span></button>'
         )
 
-    rows_html = "".join(_article_row_html(row, is_new, dt) for dt, row, is_new in dated_rows)
+    rows_html = "".join(
+        _article_row_html(row, is_new, dt, row["link"] in top_pick_links) for dt, row, is_new in dated_rows
+    )
     empty_state = (
         '<div class="empty-state" id="emptyState" style="display:none">'
         "No articles match these filters right now &mdash; try clearing the search or picking a different category."
@@ -516,6 +552,7 @@ def render():
       <h2>Search</h2>
       <input type="text" id="searchBox" class="side-search" placeholder="Title, source, summary...">
       <label class="side-toggle"><input type="checkbox" id="onlyNew"> Only new since last check</label>
+      <label class="side-toggle"><input type="checkbox" id="onlyTopPicks"> Top 5 picks per category only</label>
       <label class="side-toggle"><input type="checkbox" id="showOffTopic"> Show off-topic mentions too</label>
       <h2>Filter by date</h2>
       <select id="dateFilter" class="side-select">
@@ -527,8 +564,9 @@ def render():
       {spike_html}
       {stats_html}
       <div class="sidebar-footer">
-        Sources: Google News, Data Center Dynamics, Northeastern Global News. Screened by Gemini for
-        genuine relevance, not just keywords &mdash; see the
+        Sources: Google News, Data Center Dynamics, Northeastern Global News. Gemini re-checks each
+        article's actual content to place it in the right category and score its relevance, not just
+        whichever search term found it &mdash; see the
         <a href="https://github.com/joshuam0y/sustainable-ai-weekly-monitor" target="_blank" rel="noopener">README</a>
         for details.
       </div>

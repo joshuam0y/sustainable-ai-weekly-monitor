@@ -93,11 +93,15 @@ def _is_investor_angle_without_substance(title):
 
 
 def precheck_core_topic(title):
-    """Returns (ai_summary, is_core_topic) to pre-populate at insert time, or
-    (None, None) to leave both NULL for the normal Gemini backfill pass."""
+    """Returns (ai_summary, is_core_topic, relevance_score) to pre-populate
+    at insert time, or (None, None, None) to leave all three NULL for the
+    normal Gemini backfill pass. relevance_score is pinned to 1 (the floor)
+    rather than left NULL so this row is never re-queued for a Gemini call
+    it doesn't need -- ai_summary.py's pending query checks relevance_score,
+    not is_core_topic."""
     if _is_investor_angle_without_substance(title):
-        return INVESTOR_ANGLE_SUMMARY, 0
-    return None, None
+        return INVESTOR_ANGLE_SUMMARY, 0, 1
+    return None, None, None
 
 
 def _normalize_title(title):
@@ -231,12 +235,12 @@ def fetch_general_feeds(conn, now, seen_prefixes):
             if norm in seen_prefixes:
                 continue
             published = entry.get("published", "")
-            ai_summary, is_core_topic = precheck_core_topic(title)
+            ai_summary, is_core_topic, relevance_score = precheck_core_topic(title)
             cur = conn.execute(
                 "INSERT OR IGNORE INTO articles "
-                "(link, title, source, published, category, summary, first_seen, ai_summary, is_core_topic) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (link, title, source_label, published, category, "", now, ai_summary, is_core_topic),
+                "(link, title, source, published, category, summary, first_seen, ai_summary, is_core_topic, relevance_score) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (link, title, source_label, published, category, "", now, ai_summary, is_core_topic, relevance_score),
             )
             if cur.rowcount:
                 seen_prefixes.add(norm)
@@ -286,12 +290,12 @@ def run():
                 if norm in seen_prefixes:
                     continue
 
-                ai_summary, is_core_topic = precheck_core_topic(title)
+                ai_summary, is_core_topic, relevance_score = precheck_core_topic(title)
                 cur = conn.execute(
                     "INSERT OR IGNORE INTO articles "
-                    "(link, title, source, published, category, summary, first_seen, ai_summary, is_core_topic) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (link, title, source, published, category, "", now, ai_summary, is_core_topic),
+                    "(link, title, source, published, category, summary, first_seen, ai_summary, is_core_topic, relevance_score) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (link, title, source, published, category, "", now, ai_summary, is_core_topic, relevance_score),
                 )
                 if cur.rowcount:
                     seen_prefixes.add(norm)

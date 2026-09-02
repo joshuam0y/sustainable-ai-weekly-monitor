@@ -29,26 +29,36 @@ Every hour, a GitHub Actions workflow:
    deduplicated on a normalized title prefix (not just an exact match or
    URL), so the same story reprinted with a different trailing subtitle by
    a different outlet doesn't show up twice.
-4. Sends each new article's headline to the free Gemini API for **two**
-   things in one call: a one-sentence summary, and a genuine on-topic
-   judgment — is the environmental/AI angle actually the article's main
-   point, or just a keyword that happens to appear? The keyword gate above
-   only proves an environmental term and an AI term both show up in the
-   title; it can't tell "Scope 3 emissions audit of AI data centers" (on
-   topic) from "ERCOT Hits Pause on Texas Data Center Queue. How Worried
-   Should AI Infrastructure Investors Be?" (an investor-sentiment story that
-   happens to mention "data center" and "AI"). A cheap, free keyword
-   pre-filter (`scraper.py`'s `precheck_core_topic`) also catches the most
-   obvious investor/market-framing cases before spending a Gemini call.
-   Articles judged off-topic are never deleted — they're hidden from the
-   default view but reviewable via a "Show off-topic mentions too" toggle,
+4. Sends each new article's headline to the free Gemini API for **four**
+   things in one call: which of the four buckets it actually belongs in,
+   an on-topic judgment, a 1-10 relevance score, and a one-sentence summary.
+   - *On-topic* catches articles that only pass the keyword gate in passing —
+     the keyword gate above only proves an environmental term and an AI term
+     both show up in the title; it can't tell "Scope 3 emissions audit of AI
+     data centers" (on topic) from "ERCOT Hits Pause on Texas Data Center
+     Queue. How Worried Should AI Infrastructure Investors Be?" (investor
+     sentiment that happens to mention "data center" and "AI"). A cheap, free
+     keyword pre-filter (`scraper.py`'s `precheck_core_topic`) also catches
+     the most obvious investor/market-framing cases before spending a Gemini
+     call.
+   - *Category* is re-decided from the headline's actual content instead of
+     trusting whichever search query originally surfaced it — real feedback
+     flagged articles sitting in a bucket that didn't actually fit.
+   - *Relevance* (1-10) ranks how strongly a headline exemplifies its
+     bucket's specific theme, not just whether it's on-topic at all. The
+     report surfaces each bucket's top 5 by this score as a "Top 5 picks per
+     category only" filter.
+
+   Articles judged off-topic are never deleted, and category/relevance never
+   overwrite anything silently unreviewable — off-topic ones are hidden from
+   the default view but visible via a "Show off-topic mentions too" toggle,
    same principle as job listings in the companion `conservation-climate-jobs`
    project never being hard-deleted by a new filter rule.
 5. Renders a static report (`docs/index.html`) — a sidebar (search, date
-   filter, spike-detection, at-a-glance stats) plus a single filterable
-   article list with simple category tabs above it, not a boxed panel per
-   topic — everything filters together instead of needing to leave one tab
-   to search across all of them.
+   filter, spike-detection, at-a-glance stats, toggles) plus a single
+   filterable article list with simple category tabs above it, not a boxed
+   panel per topic — everything filters together instead of needing to leave
+   one tab to search across all of them.
 6. Commits the updated database and report, and republishes the page via
    GitHub Pages.
 

@@ -40,4 +40,15 @@ def get_conn(path=DB_PATH):
     if "is_core_topic" not in cols:
         conn.execute("ALTER TABLE articles ADD COLUMN is_core_topic INTEGER")
         conn.commit()
+    # 1-10, how strongly the headline exemplifies ITS bucket's specific theme
+    # (not just "is it on topic at all" -- is_core_topic already covers
+    # that). NULL = not yet scored. Real feedback: buckets were assigned by
+    # which search query surfaced an article, not by what it's actually
+    # about, so some articles sat in the wrong bucket entirely -- category
+    # itself gets corrected by the same Gemini call that sets this score
+    # (see ai_summary.py), and render_report.py uses the score to surface
+    # each bucket's top 5 as an easy "just show me the best ones" filter.
+    if "relevance_score" not in cols:
+        conn.execute("ALTER TABLE articles ADD COLUMN relevance_score INTEGER")
+        conn.commit()
     return conn
