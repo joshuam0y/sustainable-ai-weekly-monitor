@@ -507,17 +507,28 @@ def render():
 
     new_cutoff = now - timedelta(hours=NEW_WINDOW_HOURS)
 
+    # Counts below only include is_core_topic != 0 (on-topic or not yet
+    # evaluated) -- real feedback: "relevancy over quantity," and a tab
+    # count that includes rows hidden by default as off-topic overstates
+    # what's actually there. Confirmed live: "Northeastern Mentions" showed
+    # 31 while only 12 were actually visible without the off-topic toggle.
+    # The true total is still fully visible via the sidebar's own "Flagged
+    # off-topic" stat, so nothing is hidden, just not double-counted here.
     counts = {cat: 0 for cat in CATEGORY_ORDER}
     topic_counts = {tag: 0 for tag in TOPIC_TAG_ORDER}
     dated_rows = []
     new_count = 0
+    visible_total = 0
     for row in rows:
-        counts[row["category"]] = counts.get(row["category"], 0) + 1
+        is_relevant_row = row["is_core_topic"] != 0
+        if is_relevant_row:
+            counts[row["category"]] = counts.get(row["category"], 0) + 1
+            visible_total += 1
         if row["topic_tag"] in topic_counts:
             topic_counts[row["topic_tag"]] += 1
         dt = resolve_dt(row)
         is_new = parse_dt(row["first_seen"], since) >= new_cutoff
-        if is_new:
+        if is_new and is_relevant_row:
             new_count += 1
         dated_rows.append((dt, row, is_new))
     dated_rows.sort(key=lambda triple: triple[0] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
@@ -526,7 +537,7 @@ def render():
     spikes = spike_orgs(conn, now)
     stats = summary_stats(rows, now)
 
-    type_tabs = f'<button type="button" class="type-tab on" data-category="all">All<span class="count">{len(rows)}</span></button>'
+    type_tabs = f'<button type="button" class="type-tab on" data-category="all">All<span class="count">{visible_total}</span></button>'
     for cat in CATEGORY_ORDER:
         label = CATEGORY_LABELS.get(cat, cat)
         type_tabs += (
