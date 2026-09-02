@@ -159,13 +159,20 @@ def spike_data_is_immature(conn, now):
     return (now - earliest).days < (SPIKE_CURRENT_DAYS + SPIKE_BASELINE_DAYS)
 
 
-def summary_stats(rows):
+def summary_stats(rows, now):
     sources = {r["source"] for r in rows if r["source"]}
-    dates = [d for d in (resolve_dt(r) for r in rows) if d]
+    # "Days covered" means scan history, not article age -- deliberately
+    # first_seen (when WE found it), not resolve_dt()'s real published
+    # date. Confirmed live: Northeastern's tag feeds return evergreen/
+    # all-time content, not just recent items (one real article from
+    # 2013), which made this stat read "Days covered: 4942" when it used
+    # the article's actual publish date instead.
+    first_seen_dates = [parse_dt(r["first_seen"], None) for r in rows]
+    first_seen_dates = [d for d in first_seen_dates if d]
     return {
         "total": len(rows),
         "sources": len(sources),
-        "oldest": min(dates) if dates else None,
+        "oldest": min(first_seen_dates) if first_seen_dates else now,
         "off_topic": sum(1 for r in rows if r["is_core_topic"] == 0),
     }
 
@@ -517,7 +524,7 @@ def render():
     top_pick_links = top_picks(dated_rows)
 
     spikes = spike_orgs(conn, now)
-    stats = summary_stats(rows)
+    stats = summary_stats(rows, now)
 
     type_tabs = f'<button type="button" class="type-tab on" data-category="all">All<span class="count">{len(rows)}</span></button>'
     for cat in CATEGORY_ORDER:

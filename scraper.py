@@ -1,6 +1,7 @@
 import re
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from urllib.parse import quote
 
 import feedparser
@@ -249,6 +250,30 @@ def fetch_query(query):
     return feed.entries
 
 
+MAX_GENERAL_FEED_AGE_DAYS = 90
+
+
+def _is_stale(published, max_age_days=MAX_GENERAL_FEED_AGE_DAYS):
+    """The Google News query path is already recency-scoped (FEED_URL's
+    when:7d), but a plain site RSS feed isn't -- confirmed live, Northeastern's
+    sustainability/climate tag feeds return their all-time best-matching
+    content, not just recent posts (real published dates found: 2013, 2019,
+    2021). 40% of everything the Northeastern feeds surfaced in one fetch was
+    over a year old, which isn't "news" for something called a WEEKLY
+    monitor. Unparseable dates fail open (kept, not stale) since a feed
+    entry with no date at all is far more likely a formatting quirk than
+    confirmed old content."""
+    if not published:
+        return False
+    try:
+        dt = parsedate_to_datetime(published)
+    except (TypeError, ValueError):
+        return False
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return (datetime.now(timezone.utc) - dt) > timedelta(days=max_age_days)
+
+
 def fetch_general_feeds(conn, now, seen_prefixes):
     """
     Unlike QUERIES above (Google News searches, filtered by is_relevant()'s
@@ -293,10 +318,12 @@ def fetch_general_feeds(conn, now, seen_prefixes):
                     continue
             elif not (has_env and has_ai):
                 continue
+            published = entry.get("published", "")
+            if _is_stale(published):
+                continue
             norm = _normalize_title(title)
             if norm in seen_prefixes:
                 continue
-            published = entry.get("published", "")
             ai_summary, is_core_topic, relevance_score = precheck_core_topic(title)
             cur = conn.execute(
                 "INSERT OR IGNORE INTO articles "
