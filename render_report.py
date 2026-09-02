@@ -17,6 +17,25 @@ CATEGORY_LABELS = {
 }
 CATEGORY_ORDER = ["northeastern", "scope3_ai_audit", "scope3_cloud", "conversation"]
 
+# A second row of AI-assigned buckets, layered on top of the 4 categories
+# above rather than replacing them -- two articles in the same category
+# (say, scope3_cloud) can be about entirely different things, one a
+# water-cooling retrofit, another a formal emissions audit. Same slugs as
+# ai_summary.py's VALID_TOPIC_TAGS.
+TOPIC_TAG_LABELS = {
+    "grid_energy": "Grid & Energy Demand",
+    "water_cooling": "Water & Cooling",
+    "renewable_policy": "Renewable Sourcing & Policy",
+    "emissions_disclosure": "Emissions Disclosure & Audit",
+    "hardware_efficiency": "Hardware & Efficiency",
+    "community_political": "Community & Political Response",
+    "corporate_strategy": "Corporate Strategy & Reporting",
+}
+TOPIC_TAG_ORDER = [
+    "grid_energy", "emissions_disclosure", "renewable_policy", "water_cooling",
+    "hardware_efficiency", "community_political", "corporate_strategy",
+]
+
 WATCHLIST = [
     "Northeastern", "MIT", "Stanford", "Harvard", "Microsoft", "Amazon",
     "Meta", "OpenAI", "Anthropic", "Nvidia", "Apple", "IBM", "Salesforce", "AWS",
@@ -178,6 +197,8 @@ def top_picks(dated_rows, per_category=5):
 def _article_row_html(row, is_new, dt, is_top_pick):
     cat = row["category"]
     cat_label = CATEGORY_LABELS.get(cat, cat)
+    topic_tag = row["topic_tag"]
+    topic_label = TOPIC_TAG_LABELS.get(topic_tag)
     src = html_lib.escape(row["source"] or "Unknown source")
     local_dt = dt.astimezone(EASTERN) if dt else None
     date_txt = html_lib.escape(local_dt.strftime("%b %d, %Y")) if local_dt else "Unknown date"
@@ -188,16 +209,19 @@ def _article_row_html(row, is_new, dt, is_top_pick):
     is_off_topic = row["is_core_topic"] == 0
     off_topic_tag = '<span class="tag tag-offtopic">Off-topic?</span>' if is_off_topic else ""
     top_pick_tag = '<span class="tag tag-toppick">Top pick</span>' if is_top_pick else ""
-    search_blob = html_lib.escape((row["title"] + " " + (row["source"] or "") + " " + (ai_summary or "")).lower())
+    topic_chip = f'<span class="topic-chip">{html_lib.escape(topic_label)}</span>' if topic_label else ""
+    search_blob = html_lib.escape(
+        (row["title"] + " " + (row["source"] or "") + " " + (ai_summary or "") + " " + (topic_label or "")).lower()
+    )
 
     return f"""
     <a class="article-row" href="{html_lib.escape(row['link'])}" target="_blank" rel="noopener"
-       data-category="{cat}" data-date="{date_attr}" data-new="{'1' if is_new else '0'}"
-       data-offtopic="{'1' if is_off_topic else '0'}" data-toppick="{'1' if is_top_pick else '0'}"
-       data-search="{search_blob}">
+       data-category="{cat}" data-topictag="{topic_tag or ''}" data-date="{date_attr}"
+       data-new="{'1' if is_new else '0'}" data-offtopic="{'1' if is_off_topic else '0'}"
+       data-toppick="{'1' if is_top_pick else '0'}" data-search="{search_blob}">
       <span class="article-row-body">
         <span class="article-row-title">{top_pick_tag}{new_tag}{off_topic_tag}{html_lib.escape(row['title'])}</span>
-        <span class="article-row-meta">{src} &middot; {date_txt} &middot; {html_lib.escape(cat_label)}</span>
+        <span class="article-row-meta">{src} &middot; {date_txt} &middot; {html_lib.escape(cat_label)}{topic_chip}</span>
         {summary_html}
       </span>
     </a>
@@ -320,6 +344,17 @@ STYLE = """
   .type-tab:hover { color: var(--ink); }
   .type-tab.on { color: var(--accent); border-bottom-color: var(--accent); }
   .type-tab .count { color: var(--ink-muted); font-weight: 700; margin-left: 4px; }
+
+  .topic-pills { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 15px; flex-shrink: 0; }
+  .topic-pill {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 6px 13px; font-size: 13px; font-weight: 600; color: var(--ink-dim); cursor: pointer;
+    font-family: inherit; white-space: nowrap;
+  }
+  .topic-pill:hover { border-color: var(--accent); color: var(--ink); }
+  .topic-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .topic-pill .count { opacity: 0.8; margin-left: 3px; }
+
   #resultCount { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 13px; font-weight: 600; flex-shrink: 0; }
 
   .article-list { display: flex; flex-direction: column; gap: 9px; }
@@ -337,6 +372,11 @@ STYLE = """
   .tag-new { background: var(--accent-bg); color: var(--accent); }
   .tag-offtopic { background: var(--up-bg); color: var(--up); }
   .tag-toppick { background: var(--pick-bg); color: var(--pick); }
+  .topic-chip {
+    display: inline-block; margin-left: 8px; padding: 1px 9px; border-radius: 20px;
+    background: var(--surface-2); color: var(--ink-dim); font-size: 12px; font-weight: 600;
+    vertical-align: middle;
+  }
 
   .empty-state { text-align: center; padding: 60px 20px; color: var(--ink-muted); font-size: 15px; flex-shrink: 0; }
   footer.site-footer {
@@ -369,8 +409,8 @@ STYLE = """
 HOW_TO_HTML = """
 <div class="how-to">
   <span class="how-to-item"><span class="how-to-num">1</span>Newest first, updated hourly</span>
-  <span class="how-to-item"><span class="how-to-num">2</span>Filter by category, date, search, or top picks</span>
-  <span class="how-to-item"><span class="how-to-num">3</span>Sidebar toggles reveal hidden/lower-ranked mentions</span>
+  <span class="how-to-item"><span class="how-to-num">2</span>Tabs = category, pills below = AI-tagged theme</span>
+  <span class="how-to-item"><span class="how-to-num">3</span>Sidebar: search, date, top picks, off-topic reveal</span>
 </div>
 """
 
@@ -397,6 +437,7 @@ function initTheme() {
 }
 
 let activeCategory = 'all';
+let activeTopicTag = 'all';
 function applyFilters() {
   const search = document.getElementById('searchBox').value.trim().toLowerCase();
   const cutoff = document.getElementById('dateFilter').value;
@@ -407,6 +448,7 @@ function applyFilters() {
   document.querySelectorAll('.article-row').forEach(function (row) {
     let show = true;
     if (activeCategory !== 'all' && row.dataset.category !== activeCategory) show = false;
+    if (activeTopicTag !== 'all' && row.dataset.topictag !== activeTopicTag) show = false;
     if (onlyNew && row.dataset.new !== '1') show = false;
     if (onlyTopPicks && row.dataset.toppick !== '1') show = false;
     if (!showOffTopic && row.dataset.offtopic === '1') show = false;
@@ -427,6 +469,14 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('.type-tab').forEach(function (p) { p.classList.remove('on'); });
       tab.classList.add('on');
       activeCategory = tab.dataset.category;
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('.topic-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      document.querySelectorAll('.topic-pill').forEach(function (p) { p.classList.remove('on'); });
+      pill.classList.add('on');
+      activeTopicTag = pill.dataset.topictag;
       applyFilters();
     });
   });
@@ -451,10 +501,13 @@ def render():
     new_cutoff = now - timedelta(hours=NEW_WINDOW_HOURS)
 
     counts = {cat: 0 for cat in CATEGORY_ORDER}
+    topic_counts = {tag: 0 for tag in TOPIC_TAG_ORDER}
     dated_rows = []
     new_count = 0
     for row in rows:
         counts[row["category"]] = counts.get(row["category"], 0) + 1
+        if row["topic_tag"] in topic_counts:
+            topic_counts[row["topic_tag"]] += 1
         dt = resolve_dt(row)
         is_new = parse_dt(row["first_seen"], since) >= new_cutoff
         if is_new:
@@ -473,6 +526,18 @@ def render():
             f'<button type="button" class="type-tab" data-category="{cat}">'
             f'{html_lib.escape(label)}<span class="count">{counts.get(cat, 0)}</span></button>'
         )
+
+    active_topic_tags = [tag for tag in TOPIC_TAG_ORDER if topic_counts.get(tag)]
+    topic_pills_html = ""
+    if active_topic_tags:
+        pills = ['<button type="button" class="topic-pill on" data-topictag="all">All topics</button>']
+        for tag in active_topic_tags:
+            label = TOPIC_TAG_LABELS[tag]
+            pills.append(
+                f'<button type="button" class="topic-pill" data-topictag="{tag}">'
+                f'{html_lib.escape(label)}<span class="count">{topic_counts[tag]}</span></button>'
+            )
+        topic_pills_html = f'<div class="topic-pills">{"".join(pills)}</div>'
 
     rows_html = "".join(
         _article_row_html(row, is_new, dt, row["link"] in top_pick_links) for dt, row, is_new in dated_rows
@@ -574,6 +639,7 @@ def render():
     <main class="main">
       {HOW_TO_HTML}
       <div class="type-tabs">{type_tabs}</div>
+      {topic_pills_html}
       <div id="resultCount"></div>
       <div class="article-list">{rows_html}</div>
       {empty_state}

@@ -51,4 +51,15 @@ def get_conn(path=DB_PATH):
     if "relevance_score" not in cols:
         conn.execute("ALTER TABLE articles ADD COLUMN relevance_score INTEGER")
         conn.commit()
+    # A finer-grained AI-assigned theme (grid/energy, water/cooling,
+    # renewable policy, emissions disclosure, hardware efficiency,
+    # community/political response, corporate strategy) layered on top of
+    # the 4 main categories, not replacing them -- those 4 stay as the
+    # primary structure the report already uses. NULL = not yet tagged, or
+    # genuinely didn't fit any of the 7 well (see ai_summary.py's
+    # VALID_TOPIC_TAGS). See render_report.py's TOPIC_TAG_LABELS for the
+    # human-readable names and the second filter row it renders from this.
+    if "topic_tag" not in cols:
+        conn.execute("ALTER TABLE articles ADD COLUMN topic_tag TEXT")
+        conn.commit()
     return conn

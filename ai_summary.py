@@ -6,11 +6,30 @@ CALL_DELAY_SECONDS = 5  # free tier is rate-limited to 15 requests/minute
 
 VALID_CATEGORIES = {"northeastern", "scope3_ai_audit", "scope3_cloud", "conversation"}
 
+# A second, finer-grained dimension layered ON TOP of the 4 main categories
+# above -- those 4 stay as the primary structure (the boss specifically
+# praised having them), this is an additional lens for "what specific theme
+# is this article actually about," built from the recurring patterns really
+# seen in this feed's own headlines (grid strain, water/cooling, renewable
+# mandates, formal emissions audits, chip/model efficiency, local political
+# pushback, corporate PR). Only assigned to on-topic articles -- an
+# off-topic one doesn't need a theme, it's already hidden by default.
+VALID_TOPIC_TAGS = {
+    "grid_energy",
+    "water_cooling",
+    "renewable_policy",
+    "emissions_disclosure",
+    "hardware_efficiency",
+    "community_political",
+    "corporate_strategy",
+}
+
 
 def evaluate_article(client, title, source):
-    """One call does four jobs -- category, on-topic judgment, a relevance
-    score, and the summary -- so none of this costs anything extra against
-    the free-tier rate limit versus the summary-only version this replaced.
+    """One call does five jobs -- category, on-topic judgment, a relevance
+    score, a topic tag, and the summary -- so none of this costs anything
+    extra against the free-tier rate limit versus the summary-only version
+    this replaced.
 
     CATEGORY exists because buckets were being assigned by which search
     query happened to surface an article, not by what it's actually about --
@@ -26,6 +45,12 @@ def evaluate_article(client, title, source):
     render_report.py surface each bucket's top 5 as a fast "just show me
     the best ones" filter instead of everything on-topic being lumped
     together with equal weight.
+
+    TOPIC_TAG is a THIRD dimension, orthogonal to category: two articles in
+    the same category bucket (say, scope3_cloud) can be about completely
+    different things -- one about a water-cooling retrofit, another about a
+    formal emissions audit. This is the "new buckets" layer requested on
+    top of the 4 existing ones, not a replacement for them.
     """
     prompt = (
         f"Article headline: {title}\nSource: {source}\n\n"
@@ -50,12 +75,23 @@ def evaluate_article(client, title, source):
         "market-sizing or valuation reports, routine facility openings/expansions/deals with no "
         "energy or environmental angle, or unrelated corporate PR/award announcements that merely "
         "use ESG or sustainability as a buzzword.\n\n"
-        "Based only on this headline, reply with exactly four lines, nothing else:\n"
+        "If (and only if) it's on-topic, ALSO pick the one specific theme that best describes it:\n"
+        "- grid_energy: power/energy demand, grid capacity or strain\n"
+        "- water_cooling: water use or cooling systems specifically\n"
+        "- renewable_policy: renewable energy sourcing, mandates, or policy\n"
+        "- emissions_disclosure: a formal Scope 3 / carbon audit, report, or disclosure\n"
+        "- hardware_efficiency: chips, GPUs, model design, or infrastructure built to use less energy\n"
+        "- community_political: local/political opposition, regulation debate, or community impact\n"
+        "- corporate_strategy: a company's sustainability strategy, commitments, or PR\n"
+        "Leave it blank only if truly none of these fit.\n\n"
+        "Based only on this headline, reply with exactly five lines, nothing else:\n"
         "CATEGORY: one of northeastern, scope3_ai_audit, scope3_cloud, conversation -- whichever "
         "actually fits best.\n"
         "ON_TOPIC: yes or no -- per the distinction above.\n"
         "RELEVANCE: a number 1-10 for how strongly this headline exemplifies its chosen bucket's "
         "specific theme (10 = a textbook example, 1 = barely related even though it's on-topic).\n"
+        "TOPIC_TAG: one of grid_energy, water_cooling, renewable_policy, emissions_disclosure, "
+        "hardware_efficiency, community_political, corporate_strategy, or blank.\n"
         "SUMMARY: one short sentence (max 25 words) describing what this article likely covers. "
         "Don't claim certainty about details not implied by the headline."
     )
@@ -64,11 +100,12 @@ def evaluate_article(client, title, source):
         text = (resp.text or "").strip()
     except Exception as e:
         print(f"Gemini evaluate failed for '{title[:60]}': {e!r}")
-        return None, None, None, None
+        return None, None, None, None, None
 
     category = None
     on_topic = None
     relevance = None
+    topic_tag = None
     summary = None
     for line in text.splitlines():
         stripped = line.strip()
@@ -85,14 +122,18 @@ def evaluate_article(client, title, source):
             digits = "".join(c for c in value if c.isdigit())
             if digits:
                 relevance = max(1, min(10, int(digits)))
+        elif upper.startswith("TOPIC_TAG:"):
+            value = stripped.split(":", 1)[1].strip().lower()
+            if value in VALID_TOPIC_TAGS:
+                topic_tag = value
         elif upper.startswith("SUMMARY:"):
             summary = stripped.split(":", 1)[1].strip()
 
     # Fail open on every field independently: an unparseable line leaves
-    # that field None (category/relevance untouched, on_topic treated as
-    # "not yet evaluated" i.e. still shown) rather than silently discarding
-    # or miscategorizing something real.
-    return category, on_topic, relevance, summary or (text[:200] if text else None)
+    # that field None (category/relevance/tag untouched, on_topic treated
+    # as "not yet evaluated" i.e. still shown) rather than silently
+    # discarding or miscategorizing something real.
+    return category, on_topic, relevance, topic_tag, summary or (text[:200] if text else None)
 
 
 def backfill_summaries(conn, limit=24):
@@ -115,8 +156,11 @@ def backfill_summaries(conn, limit=24):
     done = 0
     off_topic = 0
     recategorized = 0
+    tagged = 0
     for i, row in enumerate(rows):
-        category, on_topic, relevance, summary = evaluate_article(client, row["title"], row["source"])
+        category, on_topic, relevance, topic_tag, summary = evaluate_article(
+            client, row["title"], row["source"]
+        )
         if summary:
             is_core = None if on_topic is None else (1 if on_topic else 0)
             if category:
@@ -124,9 +168,12 @@ def backfill_summaries(conn, limit=24):
                 if cur_cat and cur_cat["category"] != category:
                     recategorized += 1
                 conn.execute("UPDATE articles SET category = ? WHERE link = ?", (category, row["link"]))
+            if topic_tag:
+                tagged += 1
             conn.execute(
-                "UPDATE articles SET ai_summary = ?, is_core_topic = ?, relevance_score = ? WHERE link = ?",
-                (summary, is_core, relevance, row["link"]),
+                "UPDATE articles SET ai_summary = ?, is_core_topic = ?, relevance_score = ?, topic_tag = ? "
+                "WHERE link = ?",
+                (summary, is_core, relevance, topic_tag, row["link"]),
             )
             conn.commit()
             done += 1
@@ -137,6 +184,6 @@ def backfill_summaries(conn, limit=24):
 
     print(
         f"Generated {done} AI summaries ({off_topic} flagged off-topic, {recategorized} moved to a "
-        f"different bucket, {len(rows)} attempted, {len(all_pending)} pending total)"
+        f"different bucket, {tagged} given a topic tag, {len(rows)} attempted, {len(all_pending)} pending total)"
     )
     return done
