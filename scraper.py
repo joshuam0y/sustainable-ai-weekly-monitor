@@ -1,3 +1,4 @@
+import html as html_lib
 import re
 import time
 from datetime import datetime, timedelta, timezone
@@ -142,6 +143,27 @@ def precheck_core_topic(title):
     if _is_investor_angle_without_substance(title):
         return INVESTOR_ANGLE_SUMMARY, 0, 1
     return None, None, None
+
+
+HTML_TAG = re.compile(r"<[^>]+>")
+
+
+def _clean_excerpt(raw_summary, max_len=280):
+    """Strips HTML from an RSS entry's own summary/description field.
+    Confirmed live: Google News RSS's summary is just an <a> tag repeating
+    the title (worthless), but direct-site feeds like Northeastern's and
+    Data Center Dynamics' include a real sentence -- e.g. "There's more to
+    a simple 'thank you' than meets the ear..." -- worth passing to Gemini
+    as extra context. Returns None (not empty string) when there's nothing
+    usable, so callers can tell "no excerpt" apart from "empty excerpt"."""
+    if not raw_summary:
+        return None
+    text = html_lib.unescape(HTML_TAG.sub(" ", raw_summary))
+    text = re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"\s*The post .* appeared first on .*$", "", text)  # WordPress feed boilerplate
+    if not text:
+        return None
+    return text[:max_len]
 
 
 def _normalize_title(title):
@@ -324,12 +346,15 @@ def fetch_general_feeds(conn, now, seen_prefixes):
             norm = _normalize_title(title)
             if norm in seen_prefixes:
                 continue
+            excerpt = _clean_excerpt(entry.get("summary", ""))
             ai_summary, is_core_topic, relevance_score = precheck_core_topic(title)
             cur = conn.execute(
                 "INSERT OR IGNORE INTO articles "
-                "(link, title, source, published, category, summary, first_seen, ai_summary, is_core_topic, relevance_score) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (link, title, source_label, published, category, "", now, ai_summary, is_core_topic, relevance_score),
+                "(link, title, source, published, category, summary, first_seen, ai_summary, is_core_topic, "
+                "relevance_score, excerpt) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (link, title, source_label, published, category, "", now, ai_summary, is_core_topic,
+                 relevance_score, excerpt),
             )
             if cur.rowcount:
                 seen_prefixes.add(norm)

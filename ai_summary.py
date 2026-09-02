@@ -25,7 +25,7 @@ VALID_TOPIC_TAGS = {
 }
 
 
-def evaluate_article(client, title, source):
+def evaluate_article(client, title, source, excerpt=None):
     """One call does five jobs -- category, on-topic judgment, a relevance
     score, a topic tag, and the summary -- so none of this costs anything
     extra against the free-tier rate limit versus the summary-only version
@@ -44,7 +44,12 @@ def evaluate_article(client, title, source):
     isn't the same as a *strong* example of its bucket. It lets
     render_report.py surface each bucket's top 5 as a fast "just show me
     the best ones" filter instead of everything on-topic being lumped
-    together with equal weight.
+    together with equal weight. Real feedback: top picks need to actually
+    be relevant, and a bare headline is sometimes too thin to judge that
+    well -- excerpt (a real sentence from the source's own RSS entry, see
+    scraper.py's _clean_excerpt) gives this call more to work with when
+    one exists, without the cost/fragility of fetching and parsing each
+    article's actual page across dozens of unpredictable third-party sites.
 
     TOPIC_TAG is a THIRD dimension, orthogonal to category: two articles in
     the same category bucket (say, scope3_cloud) can be about completely
@@ -52,12 +57,23 @@ def evaluate_article(client, title, source):
     formal emissions audit. This is the "new buckets" layer requested on
     top of the 4 existing ones, not a replacement for them.
     """
+    excerpt_line = f"Article excerpt: {excerpt}\n" if excerpt else ""
     prompt = (
-        f"Article headline: {title}\nSource: {source}\n\n"
+        f"Article headline: {title}\nSource: {source}\n{excerpt_line}\n"
         "You're organizing AI-and-sustainability news for a university sustainability team into "
         "four buckets. Read the headline and decide which bucket it ACTUALLY belongs in based on "
-        "content, not on what search term might have surfaced it:\n"
-        "- northeastern: substantively about Northeastern University itself\n"
+        "content, not on what search term might have surfaced it, and not on the Source field above "
+        "-- Northeastern's own newsroom also publishes general AI/tech commentary and analysis that "
+        "isn't actually about the university, so 'Source: Northeastern Global News' on its own is "
+        "NOT evidence for the northeastern bucket:\n"
+        "- northeastern: the article's actual SUBJECT is Northeastern University itself -- its "
+        "students, faculty, or researchers as the story's protagonists, its campus, or its programs. "
+        "Being published by Northeastern's newsroom does not qualify on its own: 'Inside the growing "
+        "US effort to block Chinese AI hardware' or 'Why Anthropic, OpenAI and SpaceX are racing to "
+        "go public' both ran on Northeastern's site but are general AI-industry stories, not "
+        "northeastern (they're conversation). 'Scientists put algae to work making fuel. AI keeps "
+        "watch.' or 'Iron powder could soon become renewable energy resource, Northeastern "
+        "researchers say' ARE northeastern -- specific NU people/research are the subject.\n"
         "- scope3_ai_audit: a Scope 3 emissions audit, disclosure, or methodology specifically tied "
         "to AI/ML usage\n"
         "- scope3_cloud: Scope 3 or broader emissions disclosures for cloud computing or data "
@@ -75,6 +91,10 @@ def evaluate_article(client, title, source):
         "market-sizing or valuation reports, routine facility openings/expansions/deals with no "
         "energy or environmental angle, or unrelated corporate PR/award announcements that merely "
         "use ESG or sustainability as a buzzword.\n\n"
+        "This team would rather have a smaller set of genuinely relevant articles than a larger set "
+        "padded with loosely-related ones -- if you're genuinely unsure whether something is "
+        "on-topic or which bucket it belongs in, decide OFF_TOPIC / conversation rather than forcing "
+        "a more specific fit.\n\n"
         "If (and only if) it's on-topic, ALSO pick the one specific theme that best describes it:\n"
         "- grid_energy: power/energy demand, grid capacity or strain\n"
         "- water_cooling: water use or cooling systems specifically\n"
@@ -84,7 +104,8 @@ def evaluate_article(client, title, source):
         "- community_political: local/political opposition, regulation debate, or community impact\n"
         "- corporate_strategy: a company's sustainability strategy, commitments, or PR\n"
         "Leave it blank only if truly none of these fit.\n\n"
-        "Based only on this headline, reply with exactly five lines, nothing else:\n"
+        "Based on the headline (and the excerpt above, if one was given), reply with exactly five "
+        "lines, nothing else:\n"
         "CATEGORY: one of northeastern, scope3_ai_audit, scope3_cloud, conversation -- whichever "
         "actually fits best.\n"
         "ON_TOPIC: yes or no -- per the distinction above.\n"
@@ -156,7 +177,15 @@ def backfill_summaries(conn, limit=40):
     # it's the newest signal, so this one query naturally catches both
     # brand-new articles and everything scored before relevance_score
     # existed (which otherwise would never get a category/relevance pass).
-    query = "SELECT link, title, source FROM articles WHERE relevance_score IS NULL ORDER BY first_seen DESC"
+    # Northeastern rows go first: real feedback specifically wants that
+    # category's already-mis-bucketed items corrected fast, not stuck
+    # behind hundreds of older pending rows in a plain recency queue --
+    # it's a small category (dozens, not hundreds), so this clears within
+    # 1-2 runs instead of waiting on the general backlog.
+    query = (
+        "SELECT link, title, source, excerpt FROM articles WHERE relevance_score IS NULL "
+        "ORDER BY (category = 'northeastern') DESC, first_seen DESC"
+    )
     all_pending = conn.execute(query).fetchall()
     rows = all_pending[:limit] if limit else all_pending
 
@@ -166,7 +195,7 @@ def backfill_summaries(conn, limit=40):
     tagged = 0
     for i, row in enumerate(rows):
         category, on_topic, relevance, topic_tag, summary = evaluate_article(
-            client, row["title"], row["source"]
+            client, row["title"], row["source"], row["excerpt"]
         )
         if summary:
             is_core = None if on_topic is None else (1 if on_topic else 0)

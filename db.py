@@ -62,4 +62,17 @@ def get_conn(path=DB_PATH):
     if "topic_tag" not in cols:
         conn.execute("ALTER TABLE articles ADD COLUMN topic_tag TEXT")
         conn.commit()
+    # A real excerpt sentence from the source's own RSS entry, when one
+    # exists -- confirmed live, Google News RSS's "summary" field is
+    # useless (just an <a> tag repeating the title), but direct-site feeds
+    # (Northeastern's own, Data Center Dynamics) include a genuine sentence
+    # of content. Passing this to ai_summary.py's Gemini call gives it more
+    # to judge relevance from than a bare headline, without the cost/
+    # fragility of fetching and parsing each article's actual page across
+    # dozens of unpredictable third-party sites. NULL when no real excerpt
+    # was available (most Google-News-sourced rows) -- the prompt just
+    # falls back to headline-only, same as before this column existed.
+    if "excerpt" not in cols:
+        conn.execute("ALTER TABLE articles ADD COLUMN excerpt TEXT")
+        conn.commit()
     return conn
