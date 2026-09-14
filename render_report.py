@@ -1,5 +1,6 @@
 import html as html_lib
 import os
+import re
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
@@ -36,9 +37,28 @@ TOPIC_TAG_ORDER = [
     "hardware_efficiency", "community_political", "corporate_strategy",
 ]
 
+# Who to watch for in headlines. Every name here was checked against the
+# real corpus with the same word-boundary match the counter uses, rather
+# than assumed: the previous list carried five names that had never once
+# matched anything (MIT, Stanford, Harvard, IBM, Salesforce) while missing
+# the single most-mentioned organization in the whole feed -- Google, 23
+# mentions. Also added are the data-center/grid players this beat actually
+# turns on (utilities, grid operators, colo and chip firms), which a
+# generic big-tech list leaves out entirely.
 WATCHLIST = [
-    "Northeastern", "MIT", "Stanford", "Harvard", "Microsoft", "Amazon",
-    "Meta", "OpenAI", "Anthropic", "Nvidia", "Apple", "IBM", "Salesforce", "AWS",
+    # universities / the home institution
+    "Northeastern",
+    # hyperscalers and AI labs
+    "Google", "Microsoft", "Amazon", "AWS", "Meta", "OpenAI", "Anthropic",
+    "xAI", "Oracle", "Apple", "Alibaba", "Tencent", "ByteDance", "DeepSeek", "Mistral",
+    # silicon
+    "Nvidia", "AMD", "Intel", "TSMC", "Samsung",
+    # colo / data-center operators and builders
+    "Equinix", "Digital Realty", "CoreWeave", "Vantage", "Crusoe", "Vertiv",
+    "Schneider Electric", "Siemens",
+    # grid operators and utilities -- the other half of this story
+    "ERCOT", "PJM", "Dominion", "Duke Energy", "NextEra", "Constellation",
+    "Exelon", "Entergy", "Talen", "Vistra", "AEP", "Xcel",
 ]
 
 OUT_DIR = "docs"
@@ -94,11 +114,19 @@ def last_run_at(conn):
     return row["run_at"] if row else None
 
 
+# Whole-word matching, not substring. Confirmed live: the substring test
+# this replaces scored "MIT" 24 times without a single real MIT article --
+# every hit came from inside an ordinary word ("Limiting", "permitting",
+# "Summit", "Commits", "committee", "admits"), which then fed straight
+# into the "Unusual this week" panel as if it were news about MIT.
+WATCHLIST_PATTERNS = [(org, re.compile(r"\b" + re.escape(org) + r"\b", re.IGNORECASE)) for org in WATCHLIST]
+
+
 def _mention_counts(titles):
     counts = Counter()
     for title in titles:
-        for org in WATCHLIST:
-            if org.lower() in title.lower():
+        for org, pattern in WATCHLIST_PATTERNS:
+            if pattern.search(title):
                 counts[org] += 1
     return counts
 
@@ -114,14 +142,19 @@ def spike_orgs(conn, now):
     current_start = now - timedelta(days=SPIKE_CURRENT_DAYS)
     baseline_start = current_start - timedelta(days=SPIKE_BASELINE_DAYS)
 
+    # Off-topic rows are excluded here for the same reason they're excluded
+    # from the tab counts: a burst of investor-sentiment stories naming a
+    # chipmaker shouldn't register as this beat's news "spiking".
     current_titles = [
         r["title"] for r in conn.execute(
-            "SELECT title FROM articles WHERE first_seen >= ?", (current_start.isoformat(),)
+            "SELECT title FROM articles WHERE first_seen >= ? AND IFNULL(is_core_topic, 1) != 0",
+            (current_start.isoformat(),),
         ).fetchall()
     ]
     baseline_titles = [
         r["title"] for r in conn.execute(
-            "SELECT title FROM articles WHERE first_seen >= ? AND first_seen < ?",
+            "SELECT title FROM articles WHERE first_seen >= ? AND first_seen < ? "
+            "AND IFNULL(is_core_topic, 1) != 0",
             (baseline_start.isoformat(), current_start.isoformat()),
         ).fetchall()
     ]
