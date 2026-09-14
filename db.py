@@ -75,4 +75,16 @@ def get_conn(path=DB_PATH):
     if "excerpt" not in cols:
         conn.execute("ALTER TABLE articles ADD COLUMN excerpt TEXT")
         conn.commit()
+    # The article's real body text, scraped from the page itself (see
+    # article_text.py), so classification and summaries reflect what a
+    # piece actually says rather than what its headline implies. Three
+    # distinct states, which the backfill query in ai_summary.py depends
+    # on: NULL = never attempted, "" = attempted and nothing was readable
+    # (paywalled, 404, blocked, or a Google News link that can't be
+    # resolved without a headless browser), non-empty = real text. Without
+    # the "" sentinel, every unreadable article would be re-queued and
+    # re-spend a Gemini call on every run forever.
+    if "article_text" not in cols:
+        conn.execute("ALTER TABLE articles ADD COLUMN article_text TEXT")
+        conn.commit()
     return conn

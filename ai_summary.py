@@ -1,6 +1,8 @@
 import os
 import time
 
+from article_text import fetch_article_text
+
 MODEL = "gemini-3.5-flash-lite"
 CALL_DELAY_SECONDS = 5  # free tier is rate-limited to 15 requests/minute
 
@@ -25,7 +27,7 @@ VALID_TOPIC_TAGS = {
 }
 
 
-def evaluate_article(client, title, source, excerpt=None):
+def evaluate_article(client, title, source, excerpt=None, article_text=None):
     """One call does five jobs -- category, on-topic judgment, a relevance
     score, a topic tag, and the summary -- so none of this costs anything
     extra against the free-tier rate limit versus the summary-only version
@@ -57,9 +59,16 @@ def evaluate_article(client, title, source, excerpt=None):
     formal emissions audit. This is the "new buckets" layer requested on
     top of the 4 existing ones, not a replacement for them.
     """
-    excerpt_line = f"Article excerpt: {excerpt}\n" if excerpt else ""
+    # Full scraped body text beats the RSS excerpt, which beats the bare
+    # headline -- use the best one available for this article.
+    if article_text:
+        context_line = f"Article text: {article_text}\n"
+    elif excerpt:
+        context_line = f"Article excerpt: {excerpt}\n"
+    else:
+        context_line = ""
     prompt = (
-        f"Article headline: {title}\nSource: {source}\n{excerpt_line}\n"
+        f"Article headline: {title}\nSource: {source}\n{context_line}\n"
         "You're organizing AI-and-sustainability news for a university sustainability team into "
         "four buckets. Read the headline and decide which bucket it ACTUALLY belongs in based on "
         "content, not on what search term might have surfaced it, and not on the Source field above "
@@ -104,17 +113,19 @@ def evaluate_article(client, title, source, excerpt=None):
         "- community_political: local/political opposition, regulation debate, or community impact\n"
         "- corporate_strategy: a company's sustainability strategy, commitments, or PR\n"
         "Leave it blank only if truly none of these fit.\n\n"
-        "Based on the headline (and the excerpt above, if one was given), reply with exactly five "
-        "lines, nothing else:\n"
+        "Judge all of the below from the article text above when one was provided (it's the real "
+        "body of the article, so rely on it over the headline's phrasing); otherwise judge from the "
+        "headline alone. Reply with exactly five lines, nothing else:\n"
         "CATEGORY: one of northeastern, scope3_ai_audit, scope3_cloud, conversation -- whichever "
         "actually fits best.\n"
         "ON_TOPIC: yes or no -- per the distinction above.\n"
-        "RELEVANCE: a number 1-10 for how strongly this headline exemplifies its chosen bucket's "
+        "RELEVANCE: a number 1-10 for how strongly this article exemplifies its chosen bucket's "
         "specific theme (10 = a textbook example, 1 = barely related even though it's on-topic).\n"
         "TOPIC_TAG: one of grid_energy, water_cooling, renewable_policy, emissions_disclosure, "
         "hardware_efficiency, community_political, corporate_strategy, or blank.\n"
-        "SUMMARY: one short sentence (max 25 words) describing what this article likely covers. "
-        "Don't claim certainty about details not implied by the headline."
+        "SUMMARY: one factual sentence (max 25 words) on what this article actually says. If you "
+        "were given the article text, state what it reports -- do NOT hedge with \"likely\" or "
+        "\"appears to\". If you only have the headline, don't claim details it doesn't imply."
     )
     try:
         resp = client.models.generate_content(model=MODEL, contents=prompt)
@@ -173,17 +184,21 @@ def backfill_summaries(conn, limit=40):
     from google import genai
     client = genai.Client(api_key=api_key)
 
-    # relevance_score, not is_core_topic, marks "already evaluated" now --
-    # it's the newest signal, so this one query naturally catches both
-    # brand-new articles and everything scored before relevance_score
-    # existed (which otherwise would never get a category/relevance pass).
+    # Two things make a row pending: never scored at all, or never had its
+    # real page text attempted (article_text IS NULL) on a link we can
+    # actually fetch. The second clause is what re-runs already-scored
+    # articles once, now that the judgment can be based on the real body
+    # instead of the headline. Rows whose fetch fails get "" rather than
+    # NULL (see db.py), so an unreadable page doesn't re-queue forever.
     # Northeastern rows go first: real feedback specifically wants that
     # category's already-mis-bucketed items corrected fast, not stuck
     # behind hundreds of older pending rows in a plain recency queue --
     # it's a small category (dozens, not hundreds), so this clears within
     # 1-2 runs instead of waiting on the general backlog.
     query = (
-        "SELECT link, title, source, excerpt FROM articles WHERE relevance_score IS NULL "
+        "SELECT link, title, source, excerpt FROM articles "
+        "WHERE relevance_score IS NULL "
+        "   OR (article_text IS NULL AND link NOT LIKE '%news.google.com%') "
         "ORDER BY (category = 'northeastern') DESC, first_seen DESC"
     )
     all_pending = conn.execute(query).fetchall()
@@ -193,9 +208,13 @@ def backfill_summaries(conn, limit=40):
     off_topic = 0
     recategorized = 0
     tagged = 0
+    with_text = 0
     for i, row in enumerate(rows):
+        article_text = fetch_article_text(row["link"])
+        if article_text:
+            with_text += 1
         category, on_topic, relevance, topic_tag, summary = evaluate_article(
-            client, row["title"], row["source"], row["excerpt"]
+            client, row["title"], row["source"], row["excerpt"], article_text
         )
         if summary:
             is_core = None if on_topic is None else (1 if on_topic else 0)
@@ -206,10 +225,14 @@ def backfill_summaries(conn, limit=40):
                 conn.execute("UPDATE articles SET category = ? WHERE link = ?", (category, row["link"]))
             if topic_tag:
                 tagged += 1
+            # article_text is written in the SAME update as the rest, and
+            # only on success: if the Gemini call failed we store nothing,
+            # so the row retries in full next run rather than being left
+            # marked as "text attempted" with no judgment to show for it.
             conn.execute(
-                "UPDATE articles SET ai_summary = ?, is_core_topic = ?, relevance_score = ?, topic_tag = ? "
-                "WHERE link = ?",
-                (summary, is_core, relevance, topic_tag, row["link"]),
+                "UPDATE articles SET ai_summary = ?, is_core_topic = ?, relevance_score = ?, topic_tag = ?, "
+                "article_text = ? WHERE link = ?",
+                (summary, is_core, relevance, topic_tag, article_text, row["link"]),
             )
             conn.commit()
             done += 1
@@ -219,7 +242,8 @@ def backfill_summaries(conn, limit=40):
             time.sleep(CALL_DELAY_SECONDS)
 
     print(
-        f"Generated {done} AI summaries ({off_topic} flagged off-topic, {recategorized} moved to a "
-        f"different bucket, {tagged} given a topic tag, {len(rows)} attempted, {len(all_pending)} pending total)"
+        f"Generated {done} AI summaries ({with_text} judged from real page text, {off_topic} flagged "
+        f"off-topic, {recategorized} moved to a different bucket, {tagged} given a topic tag, "
+        f"{len(rows)} attempted, {len(all_pending)} pending total)"
     )
     return done

@@ -257,12 +257,30 @@ FEED_URL = "https://news.google.com/rss/search?q={q}+when:7d&hl=en-US&gl=US&ceid
 # happens to be topical AND about NU specifically in the same 25-item
 # window. These are already filtered to Northeastern's own sustainability/
 # climate/AI coverage, so genuinely relevant volume is far higher per fetch.
+#
+# The four non-Northeastern additions below were picked by measuring, not
+# guessing: each candidate feed was pulled live and scored on how many of
+# its current items actually clear the environmental+AI keyword gate.
+# Latitude Media 3/10, Data Center Frontier 4/10, IEEE Spectrum 8/30,
+# Heatmap 5/30, Canary Media 8/100 -- versus Carbon Brief 0/12, MIT Tech
+# Review 0/10 and Grist 0/20, which were dropped for adding fetch cost and
+# noise without relevant volume. Data Center Frontier was dropped despite
+# the best hit rate because every link in its feed 404s (it serves stale
+# permalinks), and shipping dead links to readers isn't worth the content.
+#
+# These also matter for a second reason: unlike Google News search results,
+# a publisher's own feed gives a REAL article URL, which is the only kind
+# article_text.py can actually fetch and read (see its module docstring).
 GENERAL_FEEDS = [
     ("https://www.datacenterdynamics.com/en/rss/", "scope3_cloud", "Data Center Dynamics"),
     ("https://news.northeastern.edu/feed/", "northeastern", "Northeastern Global News"),
     ("https://news.northeastern.edu/tag/sustainability/feed/", "northeastern", "Northeastern Global News"),
     ("https://news.northeastern.edu/tag/climate/feed/", "northeastern", "Northeastern Global News"),
     ("https://news.northeastern.edu/tag/artificial-intelligence/feed/", "northeastern", "Northeastern Global News"),
+    ("https://www.latitudemedia.com/feed", "conversation", "Latitude Media"),
+    ("https://spectrum.ieee.org/feeds/topic/energy.rss", "conversation", "IEEE Spectrum"),
+    ("https://heatmap.news/feeds/feed.rss", "conversation", "Heatmap News"),
+    ("https://www.canarymedia.com/feed", "conversation", "Canary Media"),
 ]
 
 
