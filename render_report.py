@@ -361,6 +361,8 @@ STYLE = """
   .topic-pill:hover { border-color: var(--accent); color: var(--ink); }
   .topic-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
   .topic-pill .count { opacity: 0.8; margin-left: 3px; }
+  .topic-pill.empty { opacity: 0.4; cursor: default; }
+  .topic-pill.empty:hover { border-color: var(--border); color: var(--ink-dim); }
 
   #resultCount { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 13px; font-weight: 600; flex-shrink: 0; }
 
@@ -452,18 +454,54 @@ function applyFilters() {
   const showOffTopic = document.getElementById('showOffTopic').checked;
   const onlyTopPicks = document.getElementById('onlyTopPicks').checked;
   let visible = 0;
+  // Counts are faceted: a tab/pill shows what you'd get if you clicked it
+  // GIVEN everything else already selected, so it never advertises a
+  // number the click can't deliver. Each dimension is therefore counted
+  // while ignoring only its own filter.
+  const catCounts = {};
+  const tagCounts = {};
+  let allTabCount = 0;
   document.querySelectorAll('.article-row').forEach(function (row) {
-    let show = true;
-    if (activeCategory !== 'all' && row.dataset.category !== activeCategory) show = false;
-    if (activeTopicTag !== 'all' && row.dataset.topictag !== activeTopicTag) show = false;
-    if (onlyNew && row.dataset.new !== '1') show = false;
-    if (onlyTopPicks && row.dataset.toppick !== '1') show = false;
-    if (!showOffTopic && row.dataset.offtopic === '1') show = false;
-    if (cutoff && (!row.dataset.date || row.dataset.date < cutoff)) show = false;
-    if (search && row.dataset.search.indexOf(search) === -1) show = false;
+    const okCategory = activeCategory === 'all' || row.dataset.category === activeCategory;
+    const okTag = activeTopicTag === 'all' || row.dataset.topictag === activeTopicTag;
+    const okRest = (!onlyNew || row.dataset.new === '1')
+      && (!onlyTopPicks || row.dataset.toppick === '1')
+      && (showOffTopic || row.dataset.offtopic !== '1')
+      && (!cutoff || (row.dataset.date && row.dataset.date >= cutoff))
+      && (!search || row.dataset.search.indexOf(search) !== -1);
+
+    if (okRest && okTag) {
+      allTabCount++;
+      const c = row.dataset.category;
+      catCounts[c] = (catCounts[c] || 0) + 1;
+    }
+    if (okRest && okCategory) {
+      const t = row.dataset.topictag;
+      if (t) tagCounts[t] = (tagCounts[t] || 0) + 1;
+    }
+
+    const show = okCategory && okTag && okRest;
     row.style.display = show ? '' : 'none';
     if (show) visible++;
   });
+
+  document.querySelectorAll('.type-tab').forEach(function (tab) {
+    const span = tab.querySelector('.count');
+    if (!span) return;
+    const cat = tab.dataset.category;
+    span.textContent = cat === 'all' ? allTabCount : (catCounts[cat] || 0);
+  });
+  document.querySelectorAll('.topic-pill').forEach(function (pill) {
+    const span = pill.querySelector('.count');
+    if (!span) return;
+    const n = tagCounts[pill.dataset.topictag] || 0;
+    span.textContent = n;
+    // A pill that can only return nothing shouldn't look clickable --
+    // but the active one stays usable so you can always clear it.
+    const dead = n === 0 && pill.dataset.topictag !== activeTopicTag;
+    pill.classList.toggle('empty', dead);
+  });
+
   document.getElementById('resultCount').textContent = visible + ' shown';
   const empty = document.getElementById('emptyState');
   if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
@@ -481,6 +519,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   document.querySelectorAll('.topic-pill').forEach(function (pill) {
     pill.addEventListener('click', function () {
+      if (pill.classList.contains('empty')) return;  // would return nothing
       document.querySelectorAll('.topic-pill').forEach(function (p) { p.classList.remove('on'); });
       pill.classList.add('on');
       activeTopicTag = pill.dataset.topictag;
@@ -524,7 +563,9 @@ def render():
         if is_relevant_row:
             counts[row["category"]] = counts.get(row["category"], 0) + 1
             visible_total += 1
-        if row["topic_tag"] in topic_counts:
+        # Match the JS default state (off-topic hidden) so the first paint
+        # shows the same numbers applyFilters() computes a moment later.
+        if is_relevant_row and row["topic_tag"] in topic_counts:
             topic_counts[row["topic_tag"]] += 1
         dt = resolve_dt(row)
         is_new = parse_dt(row["first_seen"], since) >= new_cutoff

@@ -131,6 +131,8 @@
   .topic-pill:hover { border-color: var(--accent); color: var(--ink); }
   .topic-pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
   .topic-pill .count { opacity: 0.8; margin-left: 3px; }
+  .topic-pill.empty { opacity: 0.4; cursor: default; }
+  .topic-pill.empty:hover { border-color: var(--border); color: var(--ink-dim); }
 
   #resultCount { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 13px; font-weight: 600; flex-shrink: 0; }
 
@@ -212,7 +214,7 @@
         
       
         <h2>At a glance</h2>
-        <div class="stat-line"><span>Articles tracked</span><b>1094</b></div>
+        <div class="stat-line"><span>Articles tracked</span><b>1093</b></div>
         <div class="stat-line"><span>Sources</span><b>623</b></div>
         <div class="stat-line"><span>Days covered</span><b>29</b></div>
         <div class="stat-line"><span>New since last check</span><b>41</b></div>
@@ -233,8 +235,8 @@
   <span class="how-to-item"><span class="how-to-num">3</span>Sidebar: search, date, top picks, off-topic reveal</span>
 </div>
 
-      <div class="type-tabs"><button type="button" class="type-tab on" data-category="all">All<span class="count">845</span></button><button type="button" class="type-tab" data-category="northeastern">Northeastern Mentions<span class="count">25</span></button><button type="button" class="type-tab" data-category="scope3_ai_audit">Scope 3 AI Audits<span class="count">5</span></button><button type="button" class="type-tab" data-category="scope3_cloud">Scope 3 Cloud Emissions<span class="count">32</span></button><button type="button" class="type-tab" data-category="conversation">General Conversation<span class="count">783</span></button></div>
-      <div class="topic-pills"><button type="button" class="topic-pill on" data-topictag="all">All topics</button><button type="button" class="topic-pill" data-topictag="grid_energy">Grid &amp; Energy Demand<span class="count">238</span></button><button type="button" class="topic-pill" data-topictag="emissions_disclosure">Emissions Disclosure &amp; Audit<span class="count">11</span></button><button type="button" class="topic-pill" data-topictag="renewable_policy">Renewable Sourcing &amp; Policy<span class="count">30</span></button><button type="button" class="topic-pill" data-topictag="water_cooling">Water &amp; Cooling<span class="count">90</span></button><button type="button" class="topic-pill" data-topictag="hardware_efficiency">Hardware &amp; Efficiency<span class="count">106</span></button><button type="button" class="topic-pill" data-topictag="community_political">Community &amp; Political Response<span class="count">191</span></button><button type="button" class="topic-pill" data-topictag="corporate_strategy">Corporate Strategy &amp; Reporting<span class="count">123</span></button></div>
+      <div class="type-tabs"><button type="button" class="type-tab on" data-category="all">All<span class="count">844</span></button><button type="button" class="type-tab" data-category="northeastern">Northeastern Mentions<span class="count">25</span></button><button type="button" class="type-tab" data-category="scope3_ai_audit">Scope 3 AI Audits<span class="count">5</span></button><button type="button" class="type-tab" data-category="scope3_cloud">Scope 3 Cloud Emissions<span class="count">32</span></button><button type="button" class="type-tab" data-category="conversation">General Conversation<span class="count">782</span></button></div>
+      <div class="topic-pills"><button type="button" class="topic-pill on" data-topictag="all">All topics</button><button type="button" class="topic-pill" data-topictag="grid_energy">Grid &amp; Energy Demand<span class="count">238</span></button><button type="button" class="topic-pill" data-topictag="emissions_disclosure">Emissions Disclosure &amp; Audit<span class="count">11</span></button><button type="button" class="topic-pill" data-topictag="renewable_policy">Renewable Sourcing &amp; Policy<span class="count">30</span></button><button type="button" class="topic-pill" data-topictag="water_cooling">Water &amp; Cooling<span class="count">90</span></button><button type="button" class="topic-pill" data-topictag="hardware_efficiency">Hardware &amp; Efficiency<span class="count">105</span></button><button type="button" class="topic-pill" data-topictag="community_political">Community &amp; Political Response<span class="count">191</span></button><button type="button" class="topic-pill" data-topictag="corporate_strategy">Corporate Strategy &amp; Reporting<span class="count">121</span></button></div>
       <div id="resultCount"></div>
       <div class="article-list">
     <a class="article-row" href="https://www.latitudemedia.com/news/tar-aims-to-build-off-grid-power-for-data-centers-in-just-six-months/" target="_blank" rel="noopener"
@@ -11633,17 +11635,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiVkFVX3lxTFA2NEZxV2hWNVJyaXhQZmstTlNvYldwTW5ia3gtdEMyUldVTHVyUzNrMFJDUlZMTTN5NFdhYWtJeUZIRE0xeXJDTHJrZVVIZlJ0VGRpSDRn?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-08-12"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="ai cuts energy use and boosts co2 absorption in spirulina cultivation, unist team says 헤럴드경제 researchers at unist used artificial intelligence to reduce energy consumption and improve carbon dioxide absorption in spirulina cultivation. hardware &amp; efficiency">
-      <span class="article-row-body">
-        <span class="article-row-title">AI cuts energy use and boosts CO2 absorption in spirulina cultivation, UNIST team says</span>
-        <span class="article-row-meta">헤럴드경제 &middot; Aug 12, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
-        <span class="row-summary">Researchers at UNIST used artificial intelligence to reduce energy consumption and improve carbon dioxide absorption in spirulina cultivation.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMid0FVX3lxTE82emdOOTY1SUVkSGNpNUZITUdjQ3Z3UEFCLXdlTFpSSmNLbm1wNzdEU0RhVXpDaGgyZ2FDYnhsV0JScG5LOXBaSEFGNUhrdzA2OUxVYnBWZEdWZE9WeE1JWTJFQlludjFBUTlUSFFyZkRnRzlEb0tB?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="corporate_strategy" data-date="2026-08-12"
        data-new="0" data-offtopic="0"
@@ -12314,18 +12305,54 @@ function applyFilters() {
   const showOffTopic = document.getElementById('showOffTopic').checked;
   const onlyTopPicks = document.getElementById('onlyTopPicks').checked;
   let visible = 0;
+  // Counts are faceted: a tab/pill shows what you'd get if you clicked it
+  // GIVEN everything else already selected, so it never advertises a
+  // number the click can't deliver. Each dimension is therefore counted
+  // while ignoring only its own filter.
+  const catCounts = {};
+  const tagCounts = {};
+  let allTabCount = 0;
   document.querySelectorAll('.article-row').forEach(function (row) {
-    let show = true;
-    if (activeCategory !== 'all' && row.dataset.category !== activeCategory) show = false;
-    if (activeTopicTag !== 'all' && row.dataset.topictag !== activeTopicTag) show = false;
-    if (onlyNew && row.dataset.new !== '1') show = false;
-    if (onlyTopPicks && row.dataset.toppick !== '1') show = false;
-    if (!showOffTopic && row.dataset.offtopic === '1') show = false;
-    if (cutoff && (!row.dataset.date || row.dataset.date < cutoff)) show = false;
-    if (search && row.dataset.search.indexOf(search) === -1) show = false;
+    const okCategory = activeCategory === 'all' || row.dataset.category === activeCategory;
+    const okTag = activeTopicTag === 'all' || row.dataset.topictag === activeTopicTag;
+    const okRest = (!onlyNew || row.dataset.new === '1')
+      && (!onlyTopPicks || row.dataset.toppick === '1')
+      && (showOffTopic || row.dataset.offtopic !== '1')
+      && (!cutoff || (row.dataset.date && row.dataset.date >= cutoff))
+      && (!search || row.dataset.search.indexOf(search) !== -1);
+
+    if (okRest && okTag) {
+      allTabCount++;
+      const c = row.dataset.category;
+      catCounts[c] = (catCounts[c] || 0) + 1;
+    }
+    if (okRest && okCategory) {
+      const t = row.dataset.topictag;
+      if (t) tagCounts[t] = (tagCounts[t] || 0) + 1;
+    }
+
+    const show = okCategory && okTag && okRest;
     row.style.display = show ? '' : 'none';
     if (show) visible++;
   });
+
+  document.querySelectorAll('.type-tab').forEach(function (tab) {
+    const span = tab.querySelector('.count');
+    if (!span) return;
+    const cat = tab.dataset.category;
+    span.textContent = cat === 'all' ? allTabCount : (catCounts[cat] || 0);
+  });
+  document.querySelectorAll('.topic-pill').forEach(function (pill) {
+    const span = pill.querySelector('.count');
+    if (!span) return;
+    const n = tagCounts[pill.dataset.topictag] || 0;
+    span.textContent = n;
+    // A pill that can only return nothing shouldn't look clickable --
+    // but the active one stays usable so you can always clear it.
+    const dead = n === 0 && pill.dataset.topictag !== activeTopicTag;
+    pill.classList.toggle('empty', dead);
+  });
+
   document.getElementById('resultCount').textContent = visible + ' shown';
   const empty = document.getElementById('emptyState');
   if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
@@ -12343,6 +12370,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   document.querySelectorAll('.topic-pill').forEach(function (pill) {
     pill.addEventListener('click', function () {
+      if (pill.classList.contains('empty')) return;  // would return nothing
       document.querySelectorAll('.topic-pill').forEach(function (p) { p.classList.remove('on'); });
       pill.classList.add('on');
       activeTopicTag = pill.dataset.topictag;

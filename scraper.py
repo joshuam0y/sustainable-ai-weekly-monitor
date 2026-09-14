@@ -228,6 +228,20 @@ QUERIES = {
         "Scope 3 emissions AI",
         "Scope 3 audit artificial intelligence",
         "AI carbon footprint audit university",
+        # Formal Scope-3-of-AI reporting is genuinely thin in the news, so
+        # this bucket stays small on purpose rather than being padded. The
+        # two below were the only additions (out of ten candidates tested
+        # live) whose hits were actually about corporate emissions
+        # disclosure rather than general grid/community coverage that would
+        # just swell "conversation" -- e.g. "Google's Emissions Climbed 48%
+        # Since 2019. AI Is Why." and "CIOs need to start accounting for AI
+        # carbon footprint". Rejected for exactly that reason: "Google
+        # environmental report data center emissions" (17/28 keyword hits
+        # but all grid stories), "CDP disclosure data center emissions",
+        # "supply chain emissions AI hardware", "corporate sustainability
+        # report AI emissions".
+        "AI emissions reporting standard",
+        "tech company carbon accounting AI",
     ],
     "scope3_cloud": [
         "Scope 3 emissions cloud computing",
