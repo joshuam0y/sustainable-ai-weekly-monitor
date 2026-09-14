@@ -167,39 +167,86 @@ def _clean_excerpt(raw_summary, max_len=280):
 
 
 def _normalize_title(title):
-    """Lowercased, whitespace-collapsed, truncated to the first 50 chars --
-    the same real story, reprinted by a different outlet or given a
-    different length headline by whichever aggregator wrote it, keeps that
-    much verbatim even when trailing clauses/subtitles differ. Confirmed
-    live: "AI Adoption Reaches 37% in Supplier Risk and Sustainability, but
-    Widespread Integration Remains Limited: Achilles Survey" and "AI
-    adoption reaches 37% in supplier risk and sustainability" are the same
-    underlying story, but the exact-title (COLLATE NOCASE) dedup this
-    replaced didn't catch it -- confirmed shipped as a real visible
-    duplicate on the live report before this fix."""
-    return re.sub(r"\s+", " ", title.strip().lower())[:50]
+    """Lowercased, punctuation-stripped, whitespace-collapsed, truncated to
+    the first 50 chars -- the same real story, reprinted by a different
+    outlet or given a different length headline by whichever aggregator
+    wrote it, keeps that much verbatim even when trailing clauses differ.
+
+    Punctuation is flattened and British spellings folded to American
+    because that's what the misses actually looked like. Confirmed live,
+    all shipped as visible duplicates: "AI data centers are less thirsty
+    now, tech giants say" vs "...data centres..."; "AI boom is testing tech
+    firms' climate pledges" vs the same line with a curly apostrophe; and
+    "energy-efficient 'Green AI'" vs "energy efficient 'Green AI'". Each
+    one differs only in characters a reader wouldn't even notice.
+    """
+    text = title.strip().lower()
+    text = text.replace("centres", "centers").replace("centre", "center")
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()[:50]
+
+
+# Prefix matching only catches rewordings that share an identical opening.
+# It can't catch a wire story that six outlets each re-headlined -- really
+# confirmed live, the same China data-centre forecast ran as "China's AI
+# boom to quadruple data centre power use by 2030", "AI Boom to Quadruple
+# China's Data Centre Power Demand to 774 TWh", "China's data centre power
+# demand to quadruple to 774 TWh by 2030 amid..." and three more. Comparing
+# the set of meaningful words catches those; a 0.7 overlap threshold was
+# checked against every pair in the live corpus scoring 0.7-0.88 and each
+# one was a genuine reprint.
+NEAR_DUP_THRESHOLD = 0.7
+# Short headlines have too few words for overlap to mean anything -- "Rage
+# Against the Data Centers" and "The War Against Data Centers" score 0.75
+# but are different pieces, so anything under this many words is left to
+# the prefix check alone.
+NEAR_DUP_MIN_TOKENS = 5
+
+
+def _title_tokens(title):
+    normalized = title.lower().replace("centres", "centers").replace("centre", "center")
+    return frozenset(w for w in re.findall(r"[a-z0-9]+", normalized) if len(w) > 3)
+
+
+def _is_near_duplicate(tokens, seen_token_sets):
+    if len(tokens) < NEAR_DUP_MIN_TOKENS:
+        return False
+    for other in seen_token_sets:
+        if len(other) < NEAR_DUP_MIN_TOKENS:
+            continue
+        union = len(tokens | other)
+        if union and len(tokens & other) / union >= NEAR_DUP_THRESHOLD:
+            return True
+    return False
 
 
 def load_seen_title_prefixes(conn):
     return {_normalize_title(r["title"]) for r in conn.execute("SELECT title FROM articles").fetchall()}
 
 
+def load_seen_token_sets(conn):
+    return [_title_tokens(r["title"]) for r in conn.execute("SELECT title FROM articles").fetchall()]
+
+
 def dedupe_existing(conn):
     """One-time (well, every-run, but a no-op once caught up) cleanup for
-    rows already stored before _normalize_title()'s prefix-based dedup
-    existed -- that check only prevents NEW duplicates, it doesn't remove
-    ones already sitting in monitor.db from when this compared full exact
-    titles instead. Keeps the earliest (by first_seen) row in each
-    normalized-prefix group, drops the rest."""
+    rows already stored before the current dedup rules existed -- those
+    checks only prevent NEW duplicates, they don't remove ones already
+    sitting in monitor.db. Keeps the earliest (by first_seen) row in each
+    group and drops the rest, so the copy that has already accumulated
+    classification and summary work is the one that survives."""
     rows = conn.execute("SELECT link, title, first_seen FROM articles ORDER BY first_seen ASC").fetchall()
-    seen = {}
+    seen_prefixes = {}
+    seen_tokens = []
     to_delete = []
     for row in rows:
         norm = _normalize_title(row["title"])
-        if norm in seen:
+        tokens = _title_tokens(row["title"])
+        if norm in seen_prefixes or _is_near_duplicate(tokens, seen_tokens):
             to_delete.append(row["link"])
         else:
-            seen[norm] = row["link"]
+            seen_prefixes[norm] = row["link"]
+            seen_tokens.append(tokens)
     if to_delete:
         conn.executemany("DELETE FROM articles WHERE link = ?", [(link,) for link in to_delete])
         conn.commit()
@@ -328,7 +375,7 @@ def _is_stale(published, max_age_days=MAX_GENERAL_FEED_AGE_DAYS):
     return (datetime.now(timezone.utc) - dt) > timedelta(days=max_age_days)
 
 
-def fetch_general_feeds(conn, now, seen_prefixes):
+def fetch_general_feeds(conn, now, seen_prefixes, seen_tokens):
     """
     Unlike QUERIES above (Google News searches, filtered by is_relevant()'s
     full keyword+category gate), these feeds are each site's own real RSS
@@ -376,7 +423,8 @@ def fetch_general_feeds(conn, now, seen_prefixes):
             if _is_stale(published):
                 continue
             norm = _normalize_title(title)
-            if norm in seen_prefixes:
+            tokens = _title_tokens(title)
+            if norm in seen_prefixes or _is_near_duplicate(tokens, seen_tokens):
                 continue
             excerpt = _clean_excerpt(entry.get("summary", ""))
             ai_summary, is_core_topic, relevance_score = precheck_core_topic(title)
@@ -390,6 +438,7 @@ def fetch_general_feeds(conn, now, seen_prefixes):
             )
             if cur.rowcount:
                 seen_prefixes.add(norm)
+                seen_tokens.append(tokens)
                 new_count += 1
         time.sleep(1)  # polite delay between feeds
     return new_count
@@ -405,6 +454,7 @@ def run():
     # instant it shows up a second time in this run, not just against
     # history from previous runs.
     seen_prefixes = load_seen_title_prefixes(conn)
+    seen_tokens = load_seen_token_sets(conn)
 
     for category, queries in QUERIES.items():
         for query in queries:
@@ -433,7 +483,8 @@ def run():
                 # doesn't show up once per outlet that reprinted or
                 # re-headlined it.
                 norm = _normalize_title(title)
-                if norm in seen_prefixes:
+                tokens = _title_tokens(title)
+                if norm in seen_prefixes or _is_near_duplicate(tokens, seen_tokens):
                     continue
 
                 ai_summary, is_core_topic, relevance_score = precheck_core_topic(title)
@@ -445,10 +496,11 @@ def run():
                 )
                 if cur.rowcount:
                     seen_prefixes.add(norm)
+                    seen_tokens.append(tokens)
                     new_count += 1
             time.sleep(1)  # be polite to Google News
 
-    new_count += fetch_general_feeds(conn, now, seen_prefixes)
+    new_count += fetch_general_feeds(conn, now, seen_prefixes, seen_tokens)
 
     conn.execute("INSERT OR REPLACE INTO runs (run_at, new_articles) VALUES (?, ?)", (now, new_count))
     conn.commit()
