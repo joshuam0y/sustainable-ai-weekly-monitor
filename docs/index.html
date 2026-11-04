@@ -190,7 +190,7 @@
     <div>
       <h1 class="brand">Sustainable AI Weekly Monitor</h1>
       <p class="tagline">AI &amp; sustainability news, Scope 3 audits, and cloud carbon reporting &mdash; updated hourly.</p>
-      <div class="header-meta">Last updated November 4, 2026 at 1:51 AM UTC</div>
+      <div class="header-meta">Last updated November 4, 2026 at 8:31 AM UTC</div>
     </div>
     <button type="button" class="theme-toggle" id="themeToggle">Switch to dark</button>
   </header>
@@ -204,9 +204,9 @@
       <h2>Filter by date</h2>
       <select id="dateFilter" class="side-select">
         <option value="">All time</option>
-        <option value="2026-11-03">Today</option>
-        <option value="2026-10-31">Last 3 days</option>
-        <option value="2026-10-27">Last 7 days</option>
+        <option value="2026-11-04">Today</option>
+        <option value="2026-11-01">Last 3 days</option>
+        <option value="2026-10-28">Last 7 days</option>
       </select>
       
         <h2>Unusual this week</h2>
@@ -214,11 +214,11 @@
         
       
         <h2>At a glance</h2>
-        <div class="stat-line"><span>Articles tracked</span><b>1170</b></div>
-        <div class="stat-line"><span>Sources</span><b>581</b></div>
+        <div class="stat-line"><span>Articles tracked</span><b>1173</b></div>
+        <div class="stat-line"><span>Sources</span><b>580</b></div>
         <div class="stat-line"><span>Days covered</span><b>29</b></div>
-        <div class="stat-line"><span>New since last check</span><b>52</b></div>
-        <div class="stat-line"><span>Flagged off-topic</span><b>311</b></div>
+        <div class="stat-line"><span>New since last check</span><b>43</b></div>
+        <div class="stat-line"><span>Flagged off-topic</span><b>312</b></div>
       <div class="sidebar-footer">
         Sources: Google News, Data Center Dynamics, Northeastern Global News. Gemini re-checks each
         article's actual content to place it in the right category and score its relevance, not just
@@ -235,10 +235,76 @@
   <span class="how-to-item"><span class="how-to-num">3</span>Sidebar: search, date, top picks, off-topic reveal</span>
 </div>
 
-      <div class="type-tabs"><button type="button" class="type-tab on" data-category="all">All<span class="count">859</span></button><button type="button" class="type-tab" data-category="northeastern">Northeastern Mentions<span class="count">8</span></button><button type="button" class="type-tab" data-category="scope3_ai_audit">Scope 3 AI Audits<span class="count">3</span></button><button type="button" class="type-tab" data-category="scope3_cloud">Scope 3 Cloud Emissions<span class="count">47</span></button><button type="button" class="type-tab" data-category="conversation">General Conversation<span class="count">801</span></button></div>
-      <div class="topic-pills"><button type="button" class="topic-pill on" data-topictag="all">All topics</button><button type="button" class="topic-pill" data-topictag="grid_energy">Grid &amp; Energy Demand<span class="count">289</span></button><button type="button" class="topic-pill" data-topictag="emissions_disclosure">Emissions Disclosure &amp; Audit<span class="count">14</span></button><button type="button" class="topic-pill" data-topictag="renewable_policy">Renewable Sourcing &amp; Policy<span class="count">34</span></button><button type="button" class="topic-pill" data-topictag="water_cooling">Water &amp; Cooling<span class="count">71</span></button><button type="button" class="topic-pill" data-topictag="hardware_efficiency">Hardware &amp; Efficiency<span class="count">114</span></button><button type="button" class="topic-pill" data-topictag="community_political">Community &amp; Political Response<span class="count">201</span></button><button type="button" class="topic-pill" data-topictag="corporate_strategy">Corporate Strategy &amp; Reporting<span class="count">130</span></button></div>
+      <div class="type-tabs"><button type="button" class="type-tab on" data-category="all">All<span class="count">861</span></button><button type="button" class="type-tab" data-category="northeastern">Northeastern Mentions<span class="count">8</span></button><button type="button" class="type-tab" data-category="scope3_ai_audit">Scope 3 AI Audits<span class="count">3</span></button><button type="button" class="type-tab" data-category="scope3_cloud">Scope 3 Cloud Emissions<span class="count">47</span></button><button type="button" class="type-tab" data-category="conversation">General Conversation<span class="count">803</span></button></div>
+      <div class="topic-pills"><button type="button" class="topic-pill on" data-topictag="all">All topics</button><button type="button" class="topic-pill" data-topictag="grid_energy">Grid &amp; Energy Demand<span class="count">286</span></button><button type="button" class="topic-pill" data-topictag="emissions_disclosure">Emissions Disclosure &amp; Audit<span class="count">14</span></button><button type="button" class="topic-pill" data-topictag="renewable_policy">Renewable Sourcing &amp; Policy<span class="count">34</span></button><button type="button" class="topic-pill" data-topictag="water_cooling">Water &amp; Cooling<span class="count">71</span></button><button type="button" class="topic-pill" data-topictag="hardware_efficiency">Hardware &amp; Efficiency<span class="count">116</span></button><button type="button" class="topic-pill" data-topictag="community_political">Community &amp; Political Response<span class="count">203</span></button><button type="button" class="topic-pill" data-topictag="corporate_strategy">Corporate Strategy &amp; Reporting<span class="count">131</span></button></div>
       <div id="resultCount"></div>
       <div class="article-list">
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxQRjVHSmNYbW9scmpsQmRMTXJ1Y1VZaFBhak5BVEZod3VpaFM3TnFpX1NfQ25iZWlWR3BndXlwZ2J2eEJ4TVRqMDVjajM3cENwSThncHNtQXRudDVGVnB6emMwdFBrTlJTN3JZTndZcV8zU1pZNC1kbVN3QkszdTVRU3BrSFV5ZVNMUEtTRjBfcDdBQ2FFbEEzY3V3eHJTRHdVM1NOaDhjQWJtSFJmcHI0X2YyUS1PdTVFWk92QldidnMyMXpYQzkxQXBwdUxTR193VXdPbncwLS1MUQ?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-04"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="duqm forum explores sustainability, compliance and ai in regulatory oversight zawya the duqm forum discusses sustainability, regulatory compliance, and the role of artificial intelligence in regulatory oversight. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Duqm Forum explores sustainability, compliance and ai in regulatory oversight</span>
+        <span class="article-row-meta">Zawya &middot; Nov 04, 2026 &middot; General Conversation</span>
+        <span class="row-summary">The Duqm Forum discusses sustainability, regulatory compliance, and the role of artificial intelligence in regulatory oversight.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMikwJBVV95cUxNTW5sMVF6RTFlT1ZTdjRMM0djaDBfVUhicVZrWFR3d28wWTVlM2IzRDVMbkVKTmtHaXFCZXB0ejBOVDZ1NDV1bEZjSzhuODZZODFmaXZ4MGNrX3hOQXh3M2xzc0xoQlhfcHlOMVZNZHFHdTdOLU4tTDBWT1VYMER2LW1HcWdBY19PQ1JpcXdLTGZ4bzhmYkxTZlBFQ3BXRVFGaDJXUFFFZ2VoR1N2NFB4b2hRSTFrcXktUkc0cS00TUQyVkZoTlVZN0Myd1BRbDNadFNXUmROS3QzcC1EaTlPN1lZb29BN1d4NUJ0czBNak5KVXgya1Q1WGlxc0ZRbzIzelRNa2djNGY0STVQdl8zUGVTVdIBmAJBVV95cUxPV3Y0UnYxNWxralMxQUoxVW9oaE90enJNQU5WQjgwSUhPS0hoaE1rT1R1MVFITG1EQ1BzeEZ3b2RMUTF5QlF1X3ZGbFdHT244bl9RWXlkY2JwYzNlY2ZiZjhfRGs1enNZVjAzSWFETFRlTXJpbkx6cjI5bmdvZzdLMFJVTm1pY2VINUVqaXo4VXFhMVpockcyWHIwT1ZUMm96ZWY0YmJGcjhqZW1uckRzNk9hN2R3VkhtUDdDQTU3WHRTelBfcHpWcFEwcTlJaVlzX1dtVURQdEJLRF9NN3FFaE1BdlNCWVJqRlBHbmFyR0tJT243d3VfeTFzQ0hVbkV4VHVkeXJYcG1yOGI1Y1YyM1g4UE82aWxq?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-04"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="stmicroelectronics reveals advanced microcontrollers for real-time power control in ai datacenters and robotics the manila times stmicroelectronics has released advanced microcontrollers designed for real-time power control in ai datacenters and robotics. hardware &amp; efficiency">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>STMicroelectronics reveals advanced microcontrollers for real-time power control in AI datacenters and robotics</span>
+        <span class="article-row-meta">The Manila Times &middot; Nov 04, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
+        <span class="row-summary">STMicroelectronics has released advanced microcontrollers designed for real-time power control in AI datacenters and robotics.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://heatmap.news/politics/data-center-election-results" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="community_political" data-date="2026-11-04"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="if this was a data center election, data centers lost heatmap news democratic candidates achieved notable electoral successes by running campaigns that strongly opposed data center developments and their local impacts. community &amp; political response">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>If This Was a Data Center Election, Data Centers Lost</span>
+        <span class="article-row-meta">Heatmap News &middot; Nov 04, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
+        <span class="row-summary">Democratic candidates achieved notable electoral successes by running campaigns that strongly opposed data center developments and their local impacts.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMia0FVX3lxTFB2VGF5ZVdoZ29TWU9LSFI1NzBLTE54eXlmQ3c5UDUyRmVvdXRfdEhwbmxzeDgyM2ZGTncxR0pnangzWlhwNEEtQUstdEdzRUI4cEJUdmpvcEN0Wllmbi14NmpPVkd3cmtWYlkw?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-04"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="fujitsu cop31: showcases ai, green technology and climate solutions electronics media fujitsu showcased its ai technologies, green initiatives, and climate solutions at cop31. corporate strategy &amp; reporting">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Fujitsu COP31: Showcases AI, Green Technology and Climate Solutions</span>
+        <span class="article-row-meta">Electronics Media &middot; Nov 04, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
+        <span class="row-summary">Fujitsu showcased its AI technologies, green initiatives, and climate solutions at COP31.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMiugFBVV95cUxOek5sazJuYkdBWlljSFVZeDdEc0JsTFBZbVQ1YXZDelBPNXZrUFR3bWk5UlNPSGY1OEJPSzhHRkJxVFBBdUJtUU8yeVpXR2thWGJodTZocFZVMk4yLVRQY2I3azl6QXhib1VuRVExUDNJSjFOQ2EtNmZqYlctcXQ2STRBNkNwb3ZDM0NMTEd2T0pOUngtV1UxYVNkQWF1Nmo3LWlSQzNvMUJsWENFV2ZpbmpJSjFUbzdCQnfSAboBQVVfeXFMTnpObGsybmJHQVpZY0hVWXg3RHNCbExQWW1UNWF2Q3pQTzV2a1BUd21pOVJTT0hmNThCT0s4R0ZCcVRQQXVCbVFPMnlaV0drYVhiaHU2aHBWVTJOMi1UUGNiN2s5ekF4Ym9VbkVRMVAzSUoxTkNhLTZmamJXLXF0Nkk0QTZDcG92QzNDTExHdk9KTlJ4LVdVMWFTZEFhdTZqNy1pUkMzbzFCbFhDRVdmaW5qSUoxVG83QkJ3?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-03"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="ai boosts operational efficiency but not systemic climate action, global study finds | newswise newswise a global study finds that while ai improves operational efficiency, it does not drive systemic climate action. corporate strategy &amp; reporting">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>AI boosts operational efficiency but not systemic climate action, global study finds | Newswise</span>
+        <span class="article-row-meta">Newswise &middot; Nov 03, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
+        <span class="row-summary">A global study finds that while AI improves operational efficiency, it does not drive systemic climate action.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMilwFBVV95cUxPN05JVVBGazZQdkwtZjAwaDR0bnBxVWJSV0FMaldrYzkzVW1tUVBEWjJFbWpsSjVTY3RITmMwX0dtOW13a1pDX0R3Zm1QUWxVSllZQkp2SGN4VDFKUk9PaGNYZlY4TE5MX3U1MU8tNFktTEp6R3Vhck1rZnZJX1R3Y1RQM2g0eHJ5bW9sTjgwTjBXS3VHWk00?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-03"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="ai governance: it’s time for un environmental leadership asia sentinel the article discusses the need for united nations environmental leadership in ai governance. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>AI Governance: It’s Time for UN Environmental Leadership</span>
+        <span class="article-row-meta">Asia Sentinel &middot; Nov 03, 2026 &middot; General Conversation</span>
+        <span class="row-summary">The article discusses the need for United Nations environmental leadership in AI governance.</span>
+      </span>
+    </a>
+    
     <a class="article-row" href="https://www.latitudemedia.com/news/does-it-matter-that-openai-is-aiming-to-protect-the-grid/" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-11-03"
        data-new="1" data-offtopic="0"
@@ -294,6 +360,17 @@
       </span>
     </a>
     
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOOVdVVUh1ZVd2WV81ZWFLUERIS2NfQWpHd3h4aEhQS2ZaOWNDT1ZycTVybHZLbXp4dHRUNS1ja3lnUjZ4RG5iTm1sMXVrdjVYcXFsYlNxWGhkSlgwelM2RldHdUtNOTVabXhTRElhcTN3T1d5ajk1eVBSX0doYzZSNVhBQlZ4TEJyMEFqdjBobE1oV014d2pGV2MzRFRoVy1VbXp0Z2NET0E0SUU?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="community_political" data-date="2026-11-03"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="google data center wins approval in minnesota after protests delay council vote twice techstory a google data center in minnesota won approval after community protests delayed the council vote twice. community &amp; political response">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Google Data Center Wins Approval in Minnesota After Protests Delay Council Vote Twice</span>
+        <span class="article-row-meta">TechStory &middot; Nov 03, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
+        <span class="row-summary">A Google data center in Minnesota won approval after community protests delayed the council vote twice.</span>
+      </span>
+    </a>
+    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMihgFBVV95cUxPXzg0eWV2WlRvX1RNTmUteTBFM3ZsaVhJQ2Fmc19teUJTeW9rYldwU0F3QUtGTC15aWlPSDZINHdxazZzanRzUHNlN0Z2M2JCNHVmcDgzaU4yMXM2cFBia0I3SkZUVjNxb19FMlpURlNqd2lMbXZMME5PNjE4X2JnblA2dDF1Zw?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-03"
        data-new="1" data-offtopic="0"
@@ -324,6 +401,17 @@
         <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Samsung SDS breaks ground on Gumi AI Data Center in South Korea</span>
         <span class="article-row-meta">Data Center Dynamics &middot; Nov 03, 2026 &middot; General Conversation</span>
         <span class="row-summary">Samsung SDS has broken ground on a new 120MW AI data center in Gumi, South Korea, scheduled for completion in late 2028.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMivwFBVV95cUxPd2F6Q3FOWDRUNzRFM0F1YnNZakQzV3AzUlFadTVJcWM3TVlQdFFHYmM1Tmh4NmdIbTdMQ1pIWnlYaldlS0NCV09lT1gxM3o5XzRRN0RUVloybDhtWktsVUQ0aG42dG5ySFI3b2o3c0p2Y1ByV1Yzbl9RMFQwU0NWdTBDLWZqSUttNHlWZWtIZXVEV1NUbkdhNktMMV9FMUthaklRVGFsOXRTS0VkSFUwN1FtUEU1aVM0NzE4MWtsWdIBxAFBVV95cUxOM0dxelVlbGlYak40Vndkb2I5S0RPOVVDd1lWX3UxSmtsN1g3ZFItLTdhN1hvUWZRMERLd0VHRG5fb0s5ejAxUG1WSU9MWHR0T1FSZnBYUkdZSm9ya0JOTWtOLVpqeU1fcjhqZk5MYjhfeUZSSDduTFdFbGcwTDdNclhBTG1jNTBVTDdZMmpPem5PSWlzZm5HbFNkZmlwSzVxNm9PdXVrdmR2dUk4M1ZhQVNTM2NMQUVFVzJpVHp1UE44dzdM?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-03"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="as energy needs of data centres draw scrutiny, their hardware deserves the same attention scroll.in data centre hardware efficiency needs the same environmental scrutiny as their growing energy consumption. hardware &amp; efficiency">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>As energy needs of data centres draw scrutiny, their hardware deserves the same attention</span>
+        <span class="article-row-meta">Scroll.in &middot; Nov 03, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
+        <span class="row-summary">Data centre hardware efficiency needs the same environmental scrutiny as their growing energy consumption.</span>
       </span>
     </a>
     
@@ -681,10 +769,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxQWm41STZLZDBReDBrRngtSzBYa1RQSzN5QkdUSXB5eGM3S2Yxbk9NM25JaUl2bXVtMlZPWVR1ZUZMQVY5MklxZkJxMWRmZFB6dFpLSEtsb1pnRGtCd3Fla2ZEWEdOMFpiVHZ5UVdXZ3l0a1VCY05iRGtlUjBBM1llaldmRmg1OEJtcFh0Q204dGZMOUJtWGlDSmx3aG04RExOR3ZnZkxlTjlEdw?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="students divided as more than 100 towns in nj ban data centers the setonian more than 100 new jersey towns have banned data centers, leaving students divided over the policy decisions. community &amp; political response">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>Students divided as more than 100 towns in NJ ban data centers</span>
+        <span class="article-row-title">Students divided as more than 100 towns in NJ ban data centers</span>
         <span class="article-row-meta">The Setonian &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">More than 100 New Jersey towns have banned data centers, leaving students divided over the policy decisions.</span>
       </span>
@@ -692,10 +780,10 @@
     
     <a class="article-row" href="https://news.northeastern.edu/2026/11/02/ai-hiring-entry-level-jobs/" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-11-02"
-       data-new="1" data-offtopic="1"
+       data-new="0" data-offtopic="1"
        data-toppick="0" data-search="ai is changing what’s in store for new hires and managers alike. northeastern global news a northeastern university survey reveals that ai is changing hiring practices by reducing entry-level positions and raising expectations for workers. ">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>AI is changing what’s in store for new hires and managers alike.</span>
+        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>AI is changing what’s in store for new hires and managers alike.</span>
         <span class="article-row-meta">Northeastern Global News &middot; Nov 02, 2026 &middot; General Conversation</span>
         <span class="row-summary">A Northeastern University survey reveals that AI is changing hiring practices by reducing entry-level positions and raising expectations for workers.</span>
       </span>
@@ -703,10 +791,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxPcC1uZDBlbjdxNHJiV1BuV2hNNG42NHV5RWJUY0h6M05XOXFSaVJtR0FETERENzUtUkw4Z0tRT0NiSnpwR1RheUZQX1l4a1FyaXluSWVUX3JEbVpvVzRfNVpLYUo5ZFg0X1Ryc0xDVUR4Z0RzTThNMzlDSjNkekhpOTBCYm5TdHNWb3R4ejZIUHYwS2dJelgyNjNBNjBTWDNmTGRyQkl4WjZsQmttRGZHX2hLM2xiWThWQVlV?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="1" data-search="japan&#x27;s aisin develops new type of ai chip that cuts energy use 98% nikkei asia japanese automotive supplier aisin has developed a new type of ai chip designed to reduce energy consumption by 98 percent. hardware &amp; efficiency">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-toppick">Top pick</span><span class="tag tag-new">New</span>Japan&#x27;s Aisin develops new type of AI chip that cuts energy use 98%</span>
+        <span class="article-row-title"><span class="tag tag-toppick">Top pick</span>Japan&#x27;s Aisin develops new type of AI chip that cuts energy use 98%</span>
         <span class="article-row-meta">Nikkei Asia &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
         <span class="row-summary">Japanese automotive supplier Aisin has developed a new type of AI chip designed to reduce energy consumption by 98 percent.</span>
       </span>
@@ -714,10 +802,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMigAFBVV95cUxPWlg2OHZXaE9sMXNjNkhPLS1WTHZtZW9XQ0h1Y0hMbTBvTHlKV2c5YWtTY1RLTEN5bl9uU09femd3bnQ1dTdaRkJHaHg0Z3hNUGhDdkEyYVp3Ml8zcHRVRUljbDNWUDJ4OFVCZkY2VTJGZURWT2NDMV9zQ2Uxb2VkQQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="new ai data center is so huge that it&#x27;ll generate the heat of 23 atomic bombs every single day futurism a new ai data center will consume massive amounts of power, generating daily heat comparable to 23 atomic bombs. grid &amp; energy demand">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>New AI Data Center Is So Huge That It&#x27;ll Generate the Heat of 23 Atomic Bombs Every Single Day</span>
+        <span class="article-row-title">New AI Data Center Is So Huge That It&#x27;ll Generate the Heat of 23 Atomic Bombs Every Single Day</span>
         <span class="article-row-meta">Futurism &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">A new AI data center will consume massive amounts of power, generating daily heat comparable to 23 atomic bombs.</span>
       </span>
@@ -725,10 +813,10 @@
     
     <a class="article-row" href="https://www.latitudemedia.com/news/open-circuit-could-ai-swarms-take-down-the-grid/" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="could ai swarms take down the grid? latitude media security experts and military plans highlight growing concerns over ai swarms and potential vulnerabilities in the power grid. grid &amp; energy demand">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>Could AI swarms take down the grid?</span>
+        <span class="article-row-title">Could AI swarms take down the grid?</span>
         <span class="article-row-meta">Latitude Media &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">Security experts and military plans highlight growing concerns over AI swarms and potential vulnerabilities in the power grid.</span>
       </span>
@@ -736,10 +824,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMicEFVX3lxTFBTTFpDaTZfNUNVWHc4NmNYSkNwSUNiaHVqQmZxUHZkZFV2czBGNkJ1Mkw4MTVpY0JDQ3RPT3l6ampHbWZQMl9EUmlHMWNJYnVsRERZcWVFbmhYd0ZDSTdsTXhaZXdRUzAzMGc0c2JuSGM?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="schneider electric to recruit 50 engineers across five hubs for ai-focused energy program esg news schneider electric is recruiting 50 engineers across five hubs for a new ai-focused energy program. corporate strategy &amp; reporting">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>Schneider Electric to Recruit 50 Engineers Across Five Hubs for AI-Focused Energy Program</span>
+        <span class="article-row-title">Schneider Electric to Recruit 50 Engineers Across Five Hubs for AI-Focused Energy Program</span>
         <span class="article-row-meta">ESG News &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
         <span class="row-summary">Schneider Electric is recruiting 50 engineers across five hubs for a new AI-focused energy program.</span>
       </span>
@@ -747,10 +835,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMijgFBVV95cUxOQmtRZ0lhSHl4S21MYzVkU3V6YXBUSkpyWEFfYU0weHg4TmVGcERqRWZYc2RvVU5Vc215VG9UOGh1SzhiRWxsamliVlltSXJ6NUZqSDM5ZmVadURrX3gzUFZjR3JsY2Ixc2dORC1VeGZyRG1sTzYxZ0JQcWZoVUJWaUtiVjJHN1JnY0ZvZGdR?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="ai’s power hungry data centers consumed more electricity than all but 10 nations yahoo ai data centers consumed massive amounts of electricity, surpassing the energy consumption of all but ten nations. grid &amp; energy demand">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>AI’s Power Hungry Data Centers Consumed More Electricity Than All but 10 Nations</span>
+        <span class="article-row-title">AI’s Power Hungry Data Centers Consumed More Electricity Than All but 10 Nations</span>
         <span class="article-row-meta">Yahoo &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">AI data centers consumed massive amounts of electricity, surpassing the energy consumption of all but ten nations.</span>
       </span>
@@ -802,10 +890,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxOOVpTXy12dkxQMUktT2VKbVp1NndQdUhGcFltXzlTSDNlTkRUc2dVUGpOWXlIdGo0MkhBZ1djOTFIbWwteHpYbTZHd3hiSnRvTlhVWUlPZTNVdi1tUTh0aDN0UDNvYXhfQkRjM29UUHQteTZSRFdfRTRMamJ3clJQaWxOMVl4UG5LcjFic3ZrRHpRdm9kbXB0UDFwQ3M1ZWVQZ3lreEVKX3Y?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="how ai is helping build a smarter, more efficient energy system energy uk ai is being utilized to optimize and build a smarter, more efficient energy system. grid &amp; energy demand">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>How AI is helping build a smarter, more efficient energy system</span>
+        <span class="article-row-title">How AI is helping build a smarter, more efficient energy system</span>
         <span class="article-row-meta">Energy UK &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">AI is being utilized to optimize and build a smarter, more efficient energy system.</span>
       </span>
@@ -813,10 +901,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNbEt2U0VDc1lDNXNHazJ2UXJwNVpwRm9SUWQ3Tm5wYWU2WHVMOTNZY096Y0pha1Z6MW5yLWc0WTBkN3JaOGhHLVFwcTItNDZBQ2tzc0RRU2dDRkp5NC1mc2xaZU8zRkNPLURiQzd5bnVvVmNjWjk0S1VIMGdiWmpOMHZDdzlDd1FwZ0JNZ1pMeFRDQ2k1eTdkeDdsdjg1WlFqOHBuSmZrNzhMMWJHQjNDZFZNYmRtQ3Br0gG4AUFVX3lxTE1sS3ZTRUNzWUM1c0drMnZRcnA1WnBGb1JRZDdObnBhZTZYdUw5M1ljT3pjSmFrVnoxbnItZzRZMGQ3clo4aEctUXBxMi00NkFDa3NzRFFTZ0NGSnk0LWZzbFplTzNGQ08tRGJDN3ludW9WY2NaOTRLVUgwZ2Jaak4wdkN3OUN3UXBnQk1nWkx4VENDaTV5N2R4N2x2ODVaUWo4cG5KZms3OEwxYkdCM0NkVk1iZG1DcGs?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="what are we talking about when we talk about climate and ai? climate group the article examines the complex intersection of climate change and artificial intelligence, exploring both the environmental impacts and potential solutions. corporate strategy &amp; reporting">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>What are we talking about when we talk about climate and AI?</span>
+        <span class="article-row-title">What are we talking about when we talk about climate and AI?</span>
         <span class="article-row-meta">Climate Group &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
         <span class="row-summary">The article examines the complex intersection of climate change and artificial intelligence, exploring both the environmental impacts and potential solutions.</span>
       </span>
@@ -857,10 +945,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiowFBVV95cUxQUnlRTC0wQUZ1N2JNSEI0LWI4dFpXY0ZINHBjRzBMYm5JMjlvZXlXcWFqQzUwSnA1TnBqckV3TnQzSVNnSEdlYWgzRjBGWWszbkdkLXNSMFNNREhaRXVleUJ1aV9tczduVVYyYUhndk5xZFF1VjV0aEpXN3FISndhenJma1AxT3lmSlN6U3BDWUEtUlZNMG1lQzFYUVllSkkwLUhZ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="africa must develop homegrown ai to accelerate sustainable development – popoola leadership newspapers popoola argues that africa must develop homegrown artificial intelligence solutions to accelerate sustainable development across the continent. corporate strategy &amp; reporting">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>Africa Must Develop Homegrown AI To Accelerate Sustainable Development – Popoola</span>
+        <span class="article-row-title">Africa Must Develop Homegrown AI To Accelerate Sustainable Development – Popoola</span>
         <span class="article-row-meta">LEADERSHIP Newspapers &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
         <span class="row-summary">Popoola argues that Africa must develop homegrown artificial intelligence solutions to accelerate sustainable development across the continent.</span>
       </span>
@@ -890,10 +978,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxQa1p0Tk1WN3cyb2J2WThOTlUyUi1kTTNQZXdLWWZmejBydEp6eGs4ME4zSWoyU1k1TEtlaXpDR3FnWk5hUzFNMXNfMHVtb0ZFMzY2T29lUjRXc05jXzlEM0hoVFAxeENOd1cwbG5wSHB3b1ZsV05JOEFzZnlpSklyTTFjWHdJMl9lNTdzQ1JrZkFaY1FYM2V2a1ZMVEg4VW5xT3lCUTdRb1NpWkk?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="renewable_policy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="how israel is delivering a sustainable approach to its energy-intensive ai the times of israel israel is implementing sustainable approaches to manage the high energy demands of its artificial intelligence sector. renewable sourcing &amp; policy">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>How Israel is Delivering a Sustainable Approach to its Energy-Intensive AI</span>
+        <span class="article-row-title">How Israel is Delivering a Sustainable Approach to its Energy-Intensive AI</span>
         <span class="article-row-meta">The Times of Israel &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Renewable Sourcing &amp; Policy</span></span>
         <span class="row-summary">Israel is implementing sustainable approaches to manage the high energy demands of its artificial intelligence sector.</span>
       </span>
@@ -978,10 +1066,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiswFBVV95cUxQLWF6OHM2S0JURndfbW9qSGtmQ2lXR1hhVWk2RTMxWlluMEF0dTh1Y2JOQjdpeUxTS0FrbnlQZDAxVHpiNHdKRmMwV2VXa2puY0NEN3dhaGw0eWlaYkpOMVZRUHd4UE1XOXNRVnBLTjMxTjhTTi11NkQ1RU1OZlNmd1JBUTUxSVpwUlJicjl5TmxkSkxreDZheWQzczFQa09ZcEF4UUFZR1k2VUZoOF9DenJWQQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="opinion: can businesses keep their sustainability promises in the age of ai? crn uk an opinion piece examines whether businesses can maintain their corporate sustainability commitments while rapidly adopting resource-intensive artificial intelligence technologies. corporate strategy &amp; reporting">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>Opinion: Can businesses keep their sustainability promises in the age of AI?</span>
+        <span class="article-row-title">Opinion: Can businesses keep their sustainability promises in the age of AI?</span>
         <span class="article-row-meta">CRN UK &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
         <span class="row-summary">An opinion piece examines whether businesses can maintain their corporate sustainability commitments while rapidly adopting resource-intensive artificial intelligence technologies.</span>
       </span>
@@ -989,10 +1077,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMic0FVX3lxTE9NOGlEOVhoaFlINUhSLXJRTzgyUmN0V3pBb2pyOXhZbmh0ZDJ3UERhajR6M1FKUWhxeS1ySlVkRnBMdExFNlNhSmVJZW94dGUxeDVaSmdSQTBuamhRY1lRZWQzRE5aRHpnYi0xRFdoQTJSTU0?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-02"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="ai energy efficiency gains highlighted by openai ceo sam altman the cryptonomist openai ceo sam altman highlighted advancements in ai energy efficiency. hardware &amp; efficiency">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>AI Energy Efficiency Gains Highlighted by OpenAI CEO Sam Altman</span>
+        <span class="article-row-title">AI Energy Efficiency Gains Highlighted by OpenAI CEO Sam Altman</span>
         <span class="article-row-meta">The Cryptonomist &middot; Nov 02, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
         <span class="row-summary">OpenAI CEO Sam Altman highlighted advancements in AI energy efficiency.</span>
       </span>
@@ -1066,10 +1154,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMixAFBVV95cUxOdEJzRXN0YS1yWjdOc3k0YjBfRjE5cVdENGhSVkt2TFJJUno2NE5FWS1oWEhJYWhtTjVNOUVmel8xMS1BQVJkQWhnZTMxRUZRMk1rWm5Va0FQYVI1d1V3b0xZVnJfM1JWUTktOEY1MFlyZ3c3UmVRWnJjUllKTTc0dHFwTEhTSFc1V2d6cF9mSmRJc3ZSRjgySk1VZXdFU19tWXp0TUhMTkFLZ3hkTU9rTW1kbTAyTHFrcXY1MXE2SzhOa3dS?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-11-02"
-       data-new="1" data-offtopic="1"
+       data-new="0" data-offtopic="1"
        data-toppick="0" data-search="big 5 global 2026 to spotlight ai, supply chain resilience and sustainable construction gulf business the big 5 global 2026 event will highlight artificial intelligence, supply chain resilience, and sustainable construction practices. ">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Big 5 Global 2026 to spotlight AI, supply chain resilience and sustainable construction</span>
+        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>Big 5 Global 2026 to spotlight AI, supply chain resilience and sustainable construction</span>
         <span class="article-row-meta">Gulf Business &middot; Nov 02, 2026 &middot; General Conversation</span>
         <span class="row-summary">The Big 5 Global 2026 event will highlight artificial intelligence, supply chain resilience, and sustainable construction practices.</span>
       </span>
@@ -1154,10 +1242,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMioAFBVV95cUxPLVcxSEl6YnNDU3B5ejVPWHdqUEpBOWhXcjNrOUExdzd6ZnBEV3V2ZDd4anBFQklnVDJZeURWWHRmRFl1QWJaQUd4QXVYbDhxVndaSi1iNGx5YTZBOFBXYTVQVGEycWJSMFhCVnhnRmh3ODcyOC1YcWVmbW9IbXNBOWdGRXJ2ZUdXZE1GSUtxYlp6QldPcmtfMnNJS3AzRXJt?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-11-01"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="with rapid advances in ai, future data center load profile uncertain rto insider rapid advancements in artificial intelligence make future data center load profiles uncertain for electricity grids and energy planners. grid &amp; energy demand">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>With Rapid Advances in AI, Future Data Center Load Profile Uncertain</span>
+        <span class="article-row-title">With Rapid Advances in AI, Future Data Center Load Profile Uncertain</span>
         <span class="article-row-meta">RTO Insider &middot; Nov 01, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">Rapid advancements in artificial intelligence make future data center load profiles uncertain for electricity grids and energy planners.</span>
       </span>
@@ -2320,10 +2408,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQNk4ya21NVGpBYVZGdEdOOXp6ZndlT0dYLTEzNjREYkk4MzdwNHJmQ2VGTTI3VHhXZm4ySkoxZVNmcXdvX3lOeUpUa2VGYTF5MmtEM083YVFicDB4Mk5BSEE2THByWlJ0X0JaUHR3WlQ2MzVRc1MxYi1xOFhfclUwQQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-10-29"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="the invisible architecture of ai data centers, energy, and digital space parametric architecture the article examines the hidden spatial and energy architecture of ai data centers and their growing impact on digital infrastructure. grid &amp; energy demand">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>The Invisible Architecture of AI Data Centers, Energy, and Digital Space</span>
+        <span class="article-row-title">The Invisible Architecture of AI Data Centers, Energy, and Digital Space</span>
         <span class="article-row-meta">Parametric Architecture &middot; Oct 29, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">The article examines the hidden spatial and energy architecture of AI data centers and their growing impact on digital infrastructure.</span>
       </span>
@@ -2672,10 +2760,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBfWExDb0IzU0lzbjZxeGZ6X0MzMEVjSHJ0ODBDSTdVS2Z3WS1XZi1xc1pveE44ekZQMnRZUnBMcGxYeHQ1WWJDdjVGTlBha0JObGdkTDFlOA?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-10-28"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="anthropic filing reveals concerns over data center pushback asia insurance post anthropic&#x27;s regulatory filings highlight concerns regarding potential community, political, and infrastructure pushback against expanding data center developments. community &amp; political response">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>Anthropic filing reveals concerns over data center pushback</span>
+        <span class="article-row-title">Anthropic filing reveals concerns over data center pushback</span>
         <span class="article-row-meta">Asia Insurance Post &middot; Oct 28, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">Anthropic&#x27;s regulatory filings highlight concerns regarding potential community, political, and infrastructure pushback against expanding data center developments.</span>
       </span>
@@ -12834,17 +12922,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxOQ2RBUVQ1UVc3Z2pNbFhvTlAzVzZiUjBYVlVaTXUza01NdzdGbW1NSWVOSVoyYkQ0SnM5MVdobWZ5a2RpTFFKcXk3QVhiNVVzTGN2SUVWRVdoM2xqbGo5Zm5fajNIcDRWRzRtcldrRjJtRXF4WmJadTE5akpmZHEzM1VCWXVNQ0YtSTN0Q0VUaGxvTGlzRHZiNDMzOHhrUlBTb0pmcFhaTDFSdw?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="" data-date="2026-10-05"
-       data-new="0" data-offtopic="1"
-       data-toppick="0" data-search="ai, sustainability and new careers take centre stage at student conclave india 2026 syllad the student conclave india 2026 featured discussions on artificial intelligence, sustainability, and emerging career opportunities for students. ">
-      <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>AI, sustainability and new careers take centre stage at Student Conclave India 2026</span>
-        <span class="article-row-meta">Syllad &middot; Oct 05, 2026 &middot; General Conversation</span>
-        <span class="row-summary">The Student Conclave India 2026 featured discussions on artificial intelligence, sustainability, and emerging career opportunities for students.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMingFBVV95cUxNdldMUzNLMEFJOVRobW5ZMWxRamthdklRWWpEY25HMHlRVzlBT2o0ZWpuckpEaVhPaGdPMHZIMF85Uzl3YWxCeWJDQmRzSDY3c1I0c0ltaWFKQ2VnMzhBSHBjQkZHZ0FiVy1zUi1PVEJsbkRkRlB1dzZBR0JIVzZmQm1ZT0hTcGpoeEVmXzdadlRLYUZYS00tLS1ja1BXQQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-10-05"
        data-new="0" data-offtopic="1"
@@ -12856,39 +12933,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://www.datacenterdynamics.com/en/marketwatch/slow-data-center-evolution-will-turn-into-massive-ai-inspired-transformation-in-next-25-years/" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-05"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="sponsored: data center evolution has reached a tipping point data center dynamics the data center industry is facing a transformative tipping point driven by surging ai energy demand and a transition toward renewable power sources. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">Sponsored: Data center evolution has reached a tipping point</span>
-        <span class="article-row-meta">Data Center Dynamics &middot; Oct 05, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">The data center industry is facing a transformative tipping point driven by surging AI energy demand and a transition toward renewable power sources.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMilAFBVV95cUxOSGRyUEluWG96NkFhSjBtanFSUW9tOHhaOVExbUlyZXlsakdyaTBqeFFYWDZZblNUYVZ2eEFONG4wYkhVcGNsWUhHTGJQbWZVT1kyaE03dUZMMUFqWjlzNHJaaWthRTFETlJkdE5ELVlhOVdyQTVwVlJhcFllcWQ5aFdncFJsQjNnODJJQTF0YllXOVFR?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-05"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="sliit advances smart energy management with ai hiru news sliit is advancing smart energy management systems using artificial intelligence to optimize power usage. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">SLIIT advances smart energy management with AI</span>
-        <span class="article-row-meta">Hiru News &middot; Oct 05, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">SLIIT is advancing smart energy management systems using artificial intelligence to optimize power usage.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMi3gFBVV95cUxPQU5Id3FYeTdmdW5MaGprNUg0OWtlTmdSbWt1dWJBQVctVVkzT08zRGh5YmRVcEl3OTJyOWx1eXpYX18wM29MZFI1LTd6eWtyVlhrYlF3UVQzNklDZVZodnNGbFg5VGtXWVpLQ1YwNDJZbkVJZXIyYUZDdnZHYzZOWDduY1FLN0xRS0lBZVM4YjhJcUJES2ZZUkdTWG9sdzZDa3U2NGl1SmVjU0RaQ21reXZTaWtfZ2Fwd19rajVjU1NWNWpROENWZHlGT2xhVGZvR3h1a00yR29vRW9yUnfSAeMBQVVfeXFMUG1GTWxmbVZTN0U4TGRyNkFnM0Q0enJXNDF6S0hOZnpMaHl1eEdZMEVySWhnTFowT0lVWHVLVnZnQ2pwSjhFRUdteTJ3ekR0RWJlenp4RDZ4b01DQ2VvejBxaGx5ZGtENjRhemNJVnBJbzdsUTkwMWNoZU1rRk9vbzVFQXNQQjVHTHNNaFducGZjU21rRDdDX0pjUHhqeHVEenNFTG1YelhzZk5RZXcxTFRpWEU3RExkWVB1QmVxOGpHZU1DXzQwQjhCZ1kyYXRhSS1JZnRYNjBvSXZkU1d0TDRicEU?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-04"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="the environmental risk behind ai: could climate, water and energy constraints rewrite consumer pricing cnbctv18.com the headline examines whether surging climate, water, and energy constraints tied to artificial intelligence could eventually rewrite consumer pricing. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">The environmental risk behind AI: Could climate, water and energy constraints rewrite consumer pricing</span>
-        <span class="article-row-meta">cnbctv18.com &middot; Oct 04, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">The headline examines whether surging climate, water, and energy constraints tied to artificial intelligence could eventually rewrite consumer pricing.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMirAFBVV95cUxPNi1PWmp4Si1TT2JDVDBwZEhNcEdJTk9HSFVsZVlMNkh2eG1UVHR1X3RLN1RfZlBacVFmSzFPdGEzQ2c4TlQyX042LVp0b29RRE4wT2hOejdFaEYxNlNoWGZRRk11cWs5OGNvaVhEX0k3bWJPaUJRT1lrTjVMNzdyck9Kbzk3WTBEeGtFd1NjVnRjTjMxNUlWRDRBc1VtU2h0eklIZ1dPZE5TQXo3?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-10-04"
        data-new="0" data-offtopic="0"
@@ -12897,17 +12941,6 @@
         <span class="article-row-title">Data centres: who owns, who decides?</span>
         <span class="article-row-meta">Workers&#x27; Liberty &middot; Oct 04, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">An analysis from Workers&#x27; Liberty examines the ownership structures and decision-making processes surrounding data centres.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxQclgzT2VRVlo4dUVmRlpQSW1uZTN6SHFOQXBwbmpJVkl3R3VjLUlMLWYzb2lZZE12ZlRPdEgwSGdMV3JDSWxYZ00yMHMwX3B0WTE1dkU0Ym9SZ3VzN1FOS0JmajZuLXl4VUplcG5abzVPMVVEcjhkdG5yeWQ2SmNmRWtPZ25lQnF5S0NBeTV2cUJuMmdST2M2ZWhnaXg5Wnl6UHNlZ0daZHVyZw?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="corporate_strategy" data-date="2026-10-04"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="sustainability takes center stage in data center development pei-privaterealestate.com sustainability has become a central focus in the development of data centers. corporate strategy &amp; reporting">
-      <span class="article-row-body">
-        <span class="article-row-title">Sustainability takes center stage in data center development</span>
-        <span class="article-row-meta">pei-privaterealestate.com &middot; Oct 04, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
-        <span class="row-summary">Sustainability has become a central focus in the development of data centers.</span>
       </span>
     </a>
     
