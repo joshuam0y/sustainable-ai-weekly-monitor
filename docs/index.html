@@ -190,7 +190,7 @@
     <div>
       <h1 class="brand">Sustainable AI Weekly Monitor</h1>
       <p class="tagline">AI &amp; sustainability news, Scope 3 audits, and cloud carbon reporting &mdash; updated hourly.</p>
-      <div class="header-meta">Last updated November 9, 2026 at 1:23 AM UTC</div>
+      <div class="header-meta">Last updated November 9, 2026 at 9:00 AM UTC</div>
     </div>
     <button type="button" class="theme-toggle" id="themeToggle">Switch to dark</button>
   </header>
@@ -204,21 +204,21 @@
       <h2>Filter by date</h2>
       <select id="dateFilter" class="side-select">
         <option value="">All time</option>
-        <option value="2026-11-08">Today</option>
-        <option value="2026-11-05">Last 3 days</option>
-        <option value="2026-11-01">Last 7 days</option>
+        <option value="2026-11-09">Today</option>
+        <option value="2026-11-06">Last 3 days</option>
+        <option value="2026-11-02">Last 7 days</option>
       </select>
       
         <h2>Unusual this week</h2>
-        <div class="spike-box"><span class="spike-chip"><span class="spike-badge">17.5x</span> OpenAI &middot; 16</span><span class="spike-chip"><span class="spike-badge">2.5x</span> Anthropic &middot; 3</span><div class="spike-hint">Mentioned meaningfully more than each org's own recent baseline, not just whoever's talked about most.</div></div>
+        <div class="spike-box"><span class="spike-chip"><span class="spike-badge">12.3x</span> OpenAI &middot; 15</span><span class="spike-chip"><span class="spike-badge">2.5x</span> Anthropic &middot; 3</span><div class="spike-hint">Mentioned meaningfully more than each org's own recent baseline, not just whoever's talked about most.</div></div>
         
       
         <h2>At a glance</h2>
-        <div class="stat-line"><span>Articles tracked</span><b>1091</b></div>
-        <div class="stat-line"><span>Sources</span><b>526</b></div>
+        <div class="stat-line"><span>Articles tracked</span><b>1087</b></div>
+        <div class="stat-line"><span>Sources</span><b>524</b></div>
         <div class="stat-line"><span>Days covered</span><b>29</b></div>
-        <div class="stat-line"><span>New since last check</span><b>8</b></div>
-        <div class="stat-line"><span>Flagged off-topic</span><b>280</b></div>
+        <div class="stat-line"><span>New since last check</span><b>12</b></div>
+        <div class="stat-line"><span>Flagged off-topic</span><b>278</b></div>
       <div class="sidebar-footer">
         Sources: Google News, Data Center Dynamics, Northeastern Global News. Gemini re-checks each
         article's actual content to place it in the right category and score its relevance, not just
@@ -235,10 +235,65 @@
   <span class="how-to-item"><span class="how-to-num">3</span>Sidebar: search, date, top picks, off-topic reveal</span>
 </div>
 
-      <div class="type-tabs"><button type="button" class="type-tab on" data-category="all">All<span class="count">811</span></button><button type="button" class="type-tab" data-category="northeastern">Northeastern Mentions<span class="count">6</span></button><button type="button" class="type-tab" data-category="scope3_ai_audit">Scope 3 AI Audits<span class="count">5</span></button><button type="button" class="type-tab" data-category="scope3_cloud">Scope 3 Cloud Emissions<span class="count">37</span></button><button type="button" class="type-tab" data-category="conversation">General Conversation<span class="count">763</span></button></div>
-      <div class="topic-pills"><button type="button" class="topic-pill on" data-topictag="all">All topics</button><button type="button" class="topic-pill" data-topictag="grid_energy">Grid &amp; Energy Demand<span class="count">268</span></button><button type="button" class="topic-pill" data-topictag="emissions_disclosure">Emissions Disclosure &amp; Audit<span class="count">13</span></button><button type="button" class="topic-pill" data-topictag="renewable_policy">Renewable Sourcing &amp; Policy<span class="count">33</span></button><button type="button" class="topic-pill" data-topictag="water_cooling">Water &amp; Cooling<span class="count">64</span></button><button type="button" class="topic-pill" data-topictag="hardware_efficiency">Hardware &amp; Efficiency<span class="count">109</span></button><button type="button" class="topic-pill" data-topictag="community_political">Community &amp; Political Response<span class="count">194</span></button><button type="button" class="topic-pill" data-topictag="corporate_strategy">Corporate Strategy &amp; Reporting<span class="count">128</span></button></div>
+      <div class="type-tabs"><button type="button" class="type-tab on" data-category="all">All<span class="count">809</span></button><button type="button" class="type-tab" data-category="northeastern">Northeastern Mentions<span class="count">6</span></button><button type="button" class="type-tab" data-category="scope3_ai_audit">Scope 3 AI Audits<span class="count">5</span></button><button type="button" class="type-tab" data-category="scope3_cloud">Scope 3 Cloud Emissions<span class="count">37</span></button><button type="button" class="type-tab" data-category="conversation">General Conversation<span class="count">761</span></button></div>
+      <div class="topic-pills"><button type="button" class="topic-pill on" data-topictag="all">All topics</button><button type="button" class="topic-pill" data-topictag="grid_energy">Grid &amp; Energy Demand<span class="count">267</span></button><button type="button" class="topic-pill" data-topictag="emissions_disclosure">Emissions Disclosure &amp; Audit<span class="count">13</span></button><button type="button" class="topic-pill" data-topictag="renewable_policy">Renewable Sourcing &amp; Policy<span class="count">33</span></button><button type="button" class="topic-pill" data-topictag="water_cooling">Water &amp; Cooling<span class="count">62</span></button><button type="button" class="topic-pill" data-topictag="hardware_efficiency">Hardware &amp; Efficiency<span class="count">110</span></button><button type="button" class="topic-pill" data-topictag="community_political">Community &amp; Political Response<span class="count">193</span></button><button type="button" class="topic-pill" data-topictag="corporate_strategy">Corporate Strategy &amp; Reporting<span class="count">129</span></button></div>
       <div id="resultCount"></div>
       <div class="article-list">
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMi1AFBVV95cUxOc2JuSHBIMDVxQVpCZ0ZIdWJTcFE5SFlfc3djQzU3cjlUdFZZUHVERzltZGZvbXBJeHlBeXFSa0xtZ0RlTzZzX0FvcjVTejZNUmZjLXF6SjNBLWkyWVQ1ZTNTT0FTR0l5SjZLM2d0b21DazNmanFuUEpZSE9fM3V1RXNzaWFxeUhydS13ajJXbkliNkxJM0NwRHItc2V3TlRSSmFULXgtY18tWE1YUGVLa05KZ0RiOXN0bzZreFpyc3dST2F2Zlk2TlRyTHFrSHB3OURHUg?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-09"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="zawya: the hidden environmental cost of artificial intelligence tradingview the article discusses the hidden environmental costs and resource demands associated with the rapid growth of artificial intelligence. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>ZAWYA: The hidden environmental cost of Artificial Intelligence</span>
+        <span class="article-row-meta">TradingView &middot; Nov 09, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">The article discusses the hidden environmental costs and resource demands associated with the rapid growth of artificial intelligence.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMihgFBVV95cUxQS3dMY1Z5Y3Rval8xWHd2b0E5VVVUdkdVc1A3cXhwNERsZ0licWxIaVp5T2ZRdjNOeVo5VUduUkNuV2lnZzFiMERWU0N5aXlzY2laMmp1YkdkMzJNSzR5d0ZPbnhtaERDZ3VBeDZwdF9hYnUzY3FKNDRsa3NlakFMX3VQdWhGdw?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-09"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="ai models burn more energy processing non-english text bioengineer.org ai models consume significantly more energy and compute resources when processing non-english text compared to english. hardware &amp; efficiency">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>AI Models Burn More Energy Processing Non-English Text</span>
+        <span class="article-row-meta">Bioengineer.org &middot; Nov 09, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
+        <span class="row-summary">AI models consume significantly more energy and compute resources when processing non-English text compared to English.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMitwFBVV95cUxQZmlqejBhcjFFeVhlekwyWms1eVc2M3NaUjRnbDVMcjhMWFhaYVRuRnJtblIxTnhET2NjaVJPcGxvUFk5MG9wSXFhd2RQSjBoeHpzeFpId2NwMXJqUy14cEI4R3pXSl8wLUtuUDVOWDRUUVNXbUVTS3lEVGVQSnRwRmJGNUQzV3VLcUoxUjlpZDVtbUxMdmUwMjk5SDk2UkxjeHlMdXFnSEd3SnI4TXBBdl90eld3Y2_SAbwBQVVfeXFMUHBTeFJ1VnlzdWUxdGV0VVF5aktHVF9aWmc0NFUxS0ktbUwzVGFHMXVMS3h2Wk95elVSczJJMG5MeHdBR1U4aWJfY2c0bl91ek41VUtibUZaemViaUJfWGxhclZvMFR3aklaYW5saXhhR201TVVIZ0c2SDBXcTFtcmZyUy1UUkRZY2pGS0JXV0NfS0VIYTVTYU5SS3QwVFNNdFJ3VC1xSVVjNFhTT2c2SUh5MkpIMFNockpZM04?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-09"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="manufacturers charged to deploy ai, energy-efficient technologies to cut costs vanguard news manufacturers are urged to adopt artificial intelligence and energy-efficient technologies to reduce operational costs. hardware &amp; efficiency">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Manufacturers charged to deploy AI, energy-efficient technologies to cut costs</span>
+        <span class="article-row-meta">Vanguard News &middot; Nov 09, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
+        <span class="row-summary">Manufacturers are urged to adopt artificial intelligence and energy-efficient technologies to reduce operational costs.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMimAFBVV95cUxOTExNSFVsNENpVlJGdy1OVlRwWGYyZHdpUmRMQnhScDZhRDctQVo2UkxxLTNYZy0xQkE1M2tmdnBnYVFBLTFENlc2VU5FLWtGek85cnVPT3diZ0hwR3hQV3Y3WG5xbkZ0bUd4cDNhVmF0YU1sZnZtLUNhSkVTZjFKN004dzVhdEl0VUJFMUFPVlRtczgzRm5rYw?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-09"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="cop31 is underway: ai&#x27;s thirst for electricity and the green energy challenge. vietnam.vn the article discusses ai&#x27;s heavy thirst for electricity and the associated green energy challenges during the cop31 conference. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>COP31 is underway: AI&#x27;s thirst for electricity and the green energy challenge.</span>
+        <span class="article-row-meta">Vietnam.vn &middot; Nov 09, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">The article discusses AI&#x27;s heavy thirst for electricity and the associated green energy challenges during the COP31 conference.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMikAFBVV95cUxORUhTUUhrZEgweS0tWTBzNnk1eGJIOEdON19BWlVqV3N2cjNKOGRjV21Ea25QWlp4bUQzeXcxOWVYU2ZKTG12VjZHNlgtZDZNWGpfMDUtQnpia3NkTnlES0U5UFg5TWxNX2ljZ3dVb3oxS3cySUUzczRDdXBvbFpOcDR1SnRES0RBaVUwX3JDXy0?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-08"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="environmental groups use ai to fight climate change operativ məlumat mərkəzi environmental groups are increasingly adopting artificial intelligence tools to support their climate change mitigation efforts. corporate strategy &amp; reporting">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Environmental groups use AI to fight climate change</span>
+        <span class="article-row-meta">Operativ Məlumat Mərkəzi &middot; Nov 08, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
+        <span class="row-summary">Environmental groups are increasingly adopting artificial intelligence tools to support their climate change mitigation efforts.</span>
+      </span>
+    </a>
+    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiogFBVV95cUxPNGxGVGZnMk1pY0xvNU9rLTVGQkxBNEM0MHg1ZUdwMTc5ck1aUnFMUTMzeDRQclgwMXEzazFFU2ctRGFONThzQmNBNFhENFV5T2I0V00xOXVRd0ptel84U0d3X3BOWmlZWGhNelF2MVZsUEUzejExcG1QX2d1Q0huMGd3Nk5aemtKYlRpOXdINm5xNVhDZlZ5NXRRclQ2OExDZFE?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-11-08"
        data-new="1" data-offtopic="0"
@@ -318,10 +373,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNUnNnbmJ6NGJrZExWQWoxSVpGSlhBUUg0SW8zU2xpQ3UySXAyTGY1bThvZE1hOTlFcTBzVXVITmJkUEpaTTA4TDN2NFRMdFRVaWFnTnZfUlNuWU02OEVNbWpMNk5qZXhVX3BjYmlCTTRObEZ0cWxxLXVlLWx2ZDMweWlEUS1mLVJVOGs5U1M0TVhSbnZ1Y3g4?oc=5" target="_blank" rel="noopener"
        data-category="scope3_ai_audit" data-topictag="emissions_disclosure" data-date="2026-11-07"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="1" data-search="opinion: u of t should disclose its water footprint from ai varsity an opinion piece argues that the university of toronto should disclose its water footprint related to artificial intelligence usage. emissions disclosure &amp; audit">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-toppick">Top pick</span><span class="tag tag-new">New</span>Opinion: U of T should disclose its water footprint from AI</span>
+        <span class="article-row-title"><span class="tag tag-toppick">Top pick</span>Opinion: U of T should disclose its water footprint from AI</span>
         <span class="article-row-meta">Varsity &middot; Nov 07, 2026 &middot; Scope 3 AI Audits<span class="topic-chip">Emissions Disclosure &amp; Audit</span></span>
         <span class="row-summary">An opinion piece argues that the University of Toronto should disclose its water footprint related to artificial intelligence usage.</span>
       </span>
@@ -395,10 +450,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMihwFBVV95cUxQeXhHLWc5UURVRjEwQlhmM0NwNDROWEY0cGdkU3RYd2lkMFBRVmdHWnV5bWQyemFvcEdZdXdXbUNUWUFTZUJMY2hSTl9jd1k4b3RXVmdCemZHenNiREY1cVZOVks5X29hWXh6aHdIc1pzMVJOMGswbl9ENG9YcGVVTWZYWEd2U00?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-11-07"
-       data-new="1" data-offtopic="1"
+       data-new="0" data-offtopic="1"
        data-toppick="0" data-search="can ai really save you money on your heating bill? i spent two years testing to find out | energy bills the guardian a two-year test evaluates whether artificial intelligence can successfully reduce home heating bills. ">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Can AI really save you money on your heating bill? I spent two years testing to find out | Energy bills</span>
+        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>Can AI really save you money on your heating bill? I spent two years testing to find out | Energy bills</span>
         <span class="article-row-meta">The Guardian &middot; Nov 07, 2026 &middot; General Conversation</span>
         <span class="row-summary">A two-year test evaluates whether artificial intelligence can successfully reduce home heating bills.</span>
       </span>
@@ -11998,17 +12053,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://www.datacenterdynamics.com/en/product-news/w%C3%A4rtsil%C3%A4-schneider-electric-and-stanley-consultants-launch-coordinated-approach-for-faster-us-data-center-power-delivery/" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-10"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="sponsored: wärtsilä, schneider electric, and stanley consultants launch coordinated approach for faster us data center power delivery data center dynamics wärtsilä, schneider electric, and stanley consultants launched a coordinated generator-to-chip approach to deliver faster power to us data centers. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">Sponsored: Wärtsilä, Schneider Electric, and Stanley Consultants launch coordinated approach for faster US data center power delivery</span>
-        <span class="article-row-meta">Data Center Dynamics &middot; Oct 10, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">Wärtsilä, Schneider Electric, and Stanley Consultants launched a coordinated generator-to-chip approach to deliver faster power to US data centers.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMivgFBVV95cUxOb0k1d1N3RGVmYXZyOThaNnBjNUpxZXlSOTM3U2xvYjg2dDQyUWo0b21abTdLRFIwbU55LTM3V1ZhLXpxTER1WUtOVWo5V09SMHlKVlRGV3AydFU0T2Q0V2ZZRnByV3I3RTNUYTU3dEM0ZEdqd2M4MkI5UVdhS1ZSVDRaVVRBdWpZaGhBazFFT2pCOEt5b3BER0NXaUU0QlRUbk1qVnQ3cWVlcmtqUGozVW5NTUhxcUhsblJya2N3?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-10-10"
        data-new="0" data-offtopic="1"
@@ -12020,28 +12064,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMia0FVX3lxTE15Y2R6dTNXajVGbW9SMVhQNllmdDhXbm14ZEo3Z3NJUjZsajg3X2J0OFA4SnotVWg2M3R4TUNQM2pwUmFMdkVFa2hEUVlqWkZ0bEdzamxreU51enJFek1LdG51TWhIcVVYcU00?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-10"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="ai and gcc energy data utilities middle east the article examines the intersection of artificial intelligence and energy data within the gulf cooperation council region. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">AI and GCC energy data</span>
-        <span class="article-row-meta">Utilities Middle East &middot; Oct 10, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">The article examines the intersection of artificial intelligence and energy data within the Gulf Cooperation Council region.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxOSzViS244QlBwVlpWcUNZT0cycWRCNDJ5WVpwa1VRTzhhb0pJMWtxVld6Qy1rSU9zR0VPUlhkdHExUzgtcHZ3TjAyRExONUxTb2wtZkU3UXJCdmMzZS1WVHlIRkZOUFdJZTlrRmhmQXF1Vk1iMU9qQm5va3BXNmEyMWhnb01mQklaODNzOFNpTDhjd2ZnVjZ6X0JieWtpYm5qblJhdVg1aWZpN29iZWFwd1JuM294anZyN2c0?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-09"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="people need decentralized, distributed data centres, not hyperscale centralized ones countercurrents.org the article argues that society needs decentralized, distributed data centers rather than hyperscale centralized ones to address sustainability and infrastructure challenges. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">People Need Decentralized, Distributed Data Centres, Not Hyperscale Centralized Ones</span>
-        <span class="article-row-meta">Countercurrents.org &middot; Oct 09, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">The article argues that society needs decentralized, distributed data centers rather than hyperscale centralized ones to address sustainability and infrastructure challenges.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMikwFBVV95cUxPOWRtZEFLTGpjNEU3THg1REhhSUQtUDhnRU9KcmZ6WG9wZWpYWm8tNTJEeHJKX1lPR0VsTWRON2xsdk5rM29HdFVPUUh5N3NWVExhWUk5M2h5SWdad0tfWkVPUS1uTzUyU3owVV9rRzVHdE9rRUx3cG9iNXR5clJzSHFzUHdhaTVIdmlsV0hsSE9fM1E?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-10-09"
        data-new="0" data-offtopic="0"
@@ -12050,28 +12072,6 @@
         <span class="article-row-title">Batteries Now Cheaper Than Gas Turbines for Data Centers</span>
         <span class="article-row-meta">The Tech Buzz &middot; Oct 09, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">Batteries have become cheaper than gas turbines for powering data centers, shifting energy sourcing strategies in the tech industry.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiggJBVV95cUxPMnhWQWRoUDl3Rlhiazd1WWNpZDhuQnBTR05zU1VHa19MS2VIRG8yZDJxRHlxZXhEcWRRQmF0YWZCT01nend4YWsySkg3SXF6Z0xHVnZwTFNsdWZMblJJZ3h6VlcxUWJ0RmFaaEtQeU9kMzczeHZnWF9sTmFLXzF5MUZrOWwtbkh0VU9tbVdqTkstLXQwaHdHM3k2NG1SNGxpQWdGZFlES3h4TEJpTGlwcmVPM1VyVVRvMUczbm93Y1ZhdGJzeWtzekZGSWlYSkR5cFJoa1BGekhjcTczUlVsVFpQX19IV0Jzb3Q4TGEzR3h3VkZuZ1djSjhqWkdqd1Fyb1E?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-10-09"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="assessing data usefulness, energy consumption and practical benefits is essential amid ai’s growth: prof. k. k. aggarwal entrepreneur india prof. k.k. aggarwal emphasizes that evaluating data utility, energy consumption, and practical benefits is crucial during rapid ai growth. hardware &amp; efficiency">
-      <span class="article-row-body">
-        <span class="article-row-title">Assessing Data Usefulness, Energy Consumption and Practical Benefits Is Essential Amid AI’s Growth: Prof. K. K. Aggarwal</span>
-        <span class="article-row-meta">Entrepreneur India &middot; Oct 09, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
-        <span class="row-summary">Prof. K.K. Aggarwal emphasizes that evaluating data utility, energy consumption, and practical benefits is crucial during rapid AI growth.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiygFBVV95cUxQUmZSc09IeS14QVRxbm5LeGtZNlgycXI0cEM5QWc3WkZHb09XdzVrRG5EeDIxdnJtNnRYajV4NklObjlpSno3UkFXcFdrT1VDb2ZCUHBfclBibHdXS2RIYWcwSjM0WGMyb3REZVoxU1pPT3kzX1dmZXZsQnVzYTlTaHgtVG5NWW5CS1JrVm0tdTk4Y0hHUy0tdWc2czc5N25zLXE2SzR3c05ORGNjT2s3TVZwaHltR0RDUDh6ZzlldUw1RVBMNmh5aGV3?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="community_political" data-date="2026-10-09"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="amazon invokes &#x27;national security&#x27; to counter local community resistance to its massive ai data centers gadget review amazon invokes national security to counter local community resistance against the expansion of its massive ai data centers. community &amp; political response">
-      <span class="article-row-body">
-        <span class="article-row-title">Amazon Invokes &#x27;National Security&#x27; To Counter Local Community Resistance To Its Massive AI Data Centers</span>
-        <span class="article-row-meta">Gadget Review &middot; Oct 09, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
-        <span class="row-summary">Amazon invokes national security to counter local community resistance against the expansion of its massive AI data centers.</span>
       </span>
     </a>
     
@@ -12108,17 +12108,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMingFBVV95cUxOaUcyUzgwTDRzOUo4QVRCcWM1TnNDRlNYcVVRWUJ6NF9Iak82YjY3SUJ6Yk9PNmpINk1tbVJKTnppb3RKcFZ5b0FWM1JYQVBlU281Mk9VNnZuWFEyTlI3dnEyMWhZNURETFgybXVKM2tOTEJMR0RHeHN5T0NSN0dxdE53S1pyY3g2UVBjX3ExbHZJNVhCenBSYTVBQVR5Zw?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="water_cooling" data-date="2026-10-09"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="what is a gpu-optimized liquid cooled data center? nasscom explains how gpu-optimized liquid-cooled data centers address the massive heat and energy demands of modern artificial intelligence workloads. water &amp; cooling">
-      <span class="article-row-body">
-        <span class="article-row-title">What Is a GPU-Optimized Liquid Cooled Data Center?</span>
-        <span class="article-row-meta">Nasscom &middot; Oct 09, 2026 &middot; General Conversation<span class="topic-chip">Water &amp; Cooling</span></span>
-        <span class="row-summary">Explains how GPU-optimized liquid-cooled data centers address the massive heat and energy demands of modern artificial intelligence workloads.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMikgFBVV95cUxPME9QTjIzRW1MbXYyYWxQaE9rRG9yODFhQzdWaDJ1b3A2XzNaQUREQlhUZjN3N2VYUlNtQXFwREptQzJZMENxUlFkVElnWXctQ2lfUlhQaWYxQmNtR1dCemtnaVlKbE5kUE9RclVMbzNpeHFjQ2tlZjM2M3htUFRfZ3FQY0Z3a2lXR043UFk2RHJqZw?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="corporate_strategy" data-date="2026-10-09"
        data-new="0" data-offtopic="0"
@@ -12138,17 +12127,6 @@
         <span class="article-row-title">Data centre raises noise and wildlife impact fears</span>
         <span class="article-row-meta">BBC &middot; Oct 09, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">A proposed data centre has raised local concerns regarding potential noise pollution and negative impacts on surrounding wildlife.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMihgFBVV95cUxQNUxlcnA2LS1acHBsVjdwUEl0S3Jjc3luTjBPV2tFVHhDaHhwTGExc0pUVWc0Rk9UXzJkeVpINlQwUFZ5Q2pUS3JOMG9tbkstdms0U0lCdDVWQi1hT1FLbzA2UkVrbTYxQ1pZVm5wSUhqWWo2VVBpeHpqSFFGRFdjRW5CVXk4dw?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="water_cooling" data-date="2026-10-09"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="why do ai data centers need so much water? britannica the article explains the reasons behind the massive water consumption required to operate artificial intelligence data centers. water &amp; cooling">
-      <span class="article-row-body">
-        <span class="article-row-title">Why do AI data centers need so much water?</span>
-        <span class="article-row-meta">Britannica &middot; Oct 09, 2026 &middot; General Conversation<span class="topic-chip">Water &amp; Cooling</span></span>
-        <span class="row-summary">The article explains the reasons behind the massive water consumption required to operate artificial intelligence data centers.</span>
       </span>
     </a>
     
@@ -12207,17 +12185,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiswJBVV95cUxQNzJ1U05TOUpSNElacEcxZDZoRzA1RGNTS3BjMWp2STh4ZDg1SG9KR2djSXRUN2tLWUV0Mkd5S0FFOTJ5QjdOTXNabktNbWcxZTVSSW5hNWpvTEVGZ0VVTGdwcmJHYjJocGwxZkF5d0hJSzBkUXowSWN2bkFpUmpvaGdRXzhGbHU5LVpTMHM2dDB5c1dvTEpaU0N2ZjZVRThFRmNzTTA2UG5vYWpyaUlyX3dLTDhseXROU200X1lpYUF6Mi1Qb1VXVGVxRUh0bklHSjZrRzRKRWNfczFNd1E3TWxZT1lSbEFLNk1UODQ1ZDV2NE1FVzVNNnY4bTc2NG1mXzREUEtTTWtySjBoNzVIeFlCeENzWWdKUWdycXc3STdCSDhuSXkwLUktWUxGMFhNWUlV?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="" data-date="2026-10-05"
-       data-new="0" data-offtopic="1"
-       data-toppick="0" data-search="‘i cannot really see any level of biomimicry investment that makes a gas plant a desirable neighbor’: critics claim google and microsoft are degrading the environment in the quest for ai gains techradar pre-filtered: matches the environmental+ai keyword gate, but reads as investor/market framing with no emissions-specific term in the headline. ">
-      <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>‘I cannot really see any level of biomimicry investment that makes a gas plant a desirable neighbor’: Critics claim Google and Microsoft are degrading the environment in the quest for AI gains</span>
-        <span class="article-row-meta">TechRadar &middot; Oct 05, 2026 &middot; General Conversation</span>
-        <span class="row-summary">Pre-filtered: matches the environmental+AI keyword gate, but reads as investor/market framing with no emissions-specific term in the headline.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxNM1liZWNFeTloTG1nU1Z3dmEwclRYOXM1OHRvby1aSERLR05BdXc2Ry13UHdXczBWUDNvQUgyT3lfV1paTGlXaXNQOFRIZzZjSUJGSkF5cjRoUGxFdGVCNXF1TFVjZVVWa0pUaVVYV3R4Zk11UVhWb3ZXNUUwR0J1UGlJTHFaY2ViRnBqQmJlMTktV0RuVENUNU9DbVJqeFJNSllBa053N29rUFQyc1NtVFN6WkFhWWtXOXh2TmVBcWg?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-10-05"
        data-new="0" data-offtopic="0"
@@ -12226,17 +12193,6 @@
         <span class="article-row-title">Data centers become a new political battleground in Tennessee</span>
         <span class="article-row-meta">The Tennessean &middot; Oct 05, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">Data centers are emerging as a new political battleground in Tennessee.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMicEFVX3lxTE42N2pUMXptaDh4UTUtNGJVSmRVUUR4SDR6Z0dZWEE5Y0lsbWtQLXhaQ2RkVmF0UkpIZHY3OVpGMGpxNnd1c2NIem5zRzJTNU5ITHJMTnpnSzhvRUx3d3V4VU1rYjdadDBTaDBSMlZWczQ?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="" data-date="2026-10-04"
-       data-new="0" data-offtopic="1"
-       data-toppick="0" data-search="empowering student-led climate solutions: the role of ai in steam education frontiers an article discusses the role of artificial intelligence in steam education to empower student-led climate solutions. ">
-      <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>Empowering student-led climate solutions: the role of AI in STEAM education</span>
-        <span class="article-row-meta">Frontiers &middot; Oct 04, 2026 &middot; General Conversation</span>
-        <span class="row-summary">An article discusses the role of artificial intelligence in STEAM education to empower student-led climate solutions.</span>
       </span>
     </a>
     </div>
