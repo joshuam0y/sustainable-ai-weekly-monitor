@@ -190,7 +190,7 @@
     <div>
       <h1 class="brand">Sustainable AI Weekly Monitor</h1>
       <p class="tagline">AI &amp; sustainability news, Scope 3 audits, and cloud carbon reporting &mdash; updated hourly.</p>
-      <div class="header-meta">Last updated November 26, 2026 at 4:40 AM UTC</div>
+      <div class="header-meta">Last updated November 26, 2026 at 2:40 PM UTC</div>
     </div>
     <button type="button" class="theme-toggle" id="themeToggle">Switch to dark</button>
   </header>
@@ -204,21 +204,21 @@
       <h2>Filter by date</h2>
       <select id="dateFilter" class="side-select">
         <option value="">All time</option>
-        <option value="2026-11-25">Today</option>
-        <option value="2026-11-22">Last 3 days</option>
-        <option value="2026-11-18">Last 7 days</option>
+        <option value="2026-11-26">Today</option>
+        <option value="2026-11-23">Last 3 days</option>
+        <option value="2026-11-19">Last 7 days</option>
       </select>
       
         <h2>Unusual this week</h2>
-        <div class="spike-box"><span class="spike-chip"><span class="spike-badge">16.4x</span> Meta &middot; 25</span><div class="spike-hint">Mentioned meaningfully more than each org's own recent baseline, not just whoever's talked about most.</div></div>
+        <div class="spike-box"><span class="spike-chip"><span class="spike-badge">16.4x</span> Meta &middot; 25</span><span class="spike-chip"><span class="spike-badge">6.6x</span> Vertiv &middot; 2</span><span class="spike-chip"><span class="spike-badge">2.0x</span> Anthropic &middot; 3</span><div class="spike-hint">Mentioned meaningfully more than each org's own recent baseline, not just whoever's talked about most.</div></div>
         
       
         <h2>At a glance</h2>
-        <div class="stat-line"><span>Articles tracked</span><b>1170</b></div>
-        <div class="stat-line"><span>Sources</span><b>559</b></div>
+        <div class="stat-line"><span>Articles tracked</span><b>1177</b></div>
+        <div class="stat-line"><span>Sources</span><b>558</b></div>
         <div class="stat-line"><span>Days covered</span><b>29</b></div>
-        <div class="stat-line"><span>New since last check</span><b>59</b></div>
-        <div class="stat-line"><span>Flagged off-topic</span><b>269</b></div>
+        <div class="stat-line"><span>New since last check</span><b>65</b></div>
+        <div class="stat-line"><span>Flagged off-topic</span><b>275</b></div>
       <div class="sidebar-footer">
         Sources: Google News, Data Center Dynamics, Northeastern Global News. Gemini re-checks each
         article's actual content to place it in the right category and score its relevance, not just
@@ -235,10 +235,208 @@
   <span class="how-to-item"><span class="how-to-num">3</span>Sidebar: search, date, top picks, off-topic reveal</span>
 </div>
 
-      <div class="type-tabs"><button type="button" class="type-tab on" data-category="all">All<span class="count">901</span></button><button type="button" class="type-tab" data-category="northeastern">Northeastern Mentions<span class="count">5</span></button><button type="button" class="type-tab" data-category="scope3_ai_audit">Scope 3 AI Audits<span class="count">6</span></button><button type="button" class="type-tab" data-category="scope3_cloud">Scope 3 Cloud Emissions<span class="count">50</span></button><button type="button" class="type-tab" data-category="conversation">General Conversation<span class="count">840</span></button></div>
-      <div class="topic-pills"><button type="button" class="topic-pill on" data-topictag="all">All topics</button><button type="button" class="topic-pill" data-topictag="grid_energy">Grid &amp; Energy Demand<span class="count">301</span></button><button type="button" class="topic-pill" data-topictag="emissions_disclosure">Emissions Disclosure &amp; Audit<span class="count">29</span></button><button type="button" class="topic-pill" data-topictag="renewable_policy">Renewable Sourcing &amp; Policy<span class="count">31</span></button><button type="button" class="topic-pill" data-topictag="water_cooling">Water &amp; Cooling<span class="count">58</span></button><button type="button" class="topic-pill" data-topictag="hardware_efficiency">Hardware &amp; Efficiency<span class="count">97</span></button><button type="button" class="topic-pill" data-topictag="community_political">Community &amp; Political Response<span class="count">193</span></button><button type="button" class="topic-pill" data-topictag="corporate_strategy">Corporate Strategy &amp; Reporting<span class="count">191</span></button></div>
+      <div class="type-tabs"><button type="button" class="type-tab on" data-category="all">All<span class="count">902</span></button><button type="button" class="type-tab" data-category="northeastern">Northeastern Mentions<span class="count">5</span></button><button type="button" class="type-tab" data-category="scope3_ai_audit">Scope 3 AI Audits<span class="count">6</span></button><button type="button" class="type-tab" data-category="scope3_cloud">Scope 3 Cloud Emissions<span class="count">49</span></button><button type="button" class="type-tab" data-category="conversation">General Conversation<span class="count">842</span></button></div>
+      <div class="topic-pills"><button type="button" class="topic-pill on" data-topictag="all">All topics</button><button type="button" class="topic-pill" data-topictag="grid_energy">Grid &amp; Energy Demand<span class="count">303</span></button><button type="button" class="topic-pill" data-topictag="emissions_disclosure">Emissions Disclosure &amp; Audit<span class="count">29</span></button><button type="button" class="topic-pill" data-topictag="renewable_policy">Renewable Sourcing &amp; Policy<span class="count">30</span></button><button type="button" class="topic-pill" data-topictag="water_cooling">Water &amp; Cooling<span class="count">60</span></button><button type="button" class="topic-pill" data-topictag="hardware_efficiency">Hardware &amp; Efficiency<span class="count">100</span></button><button type="button" class="topic-pill" data-topictag="community_political">Community &amp; Political Response<span class="count">190</span></button><button type="button" class="topic-pill" data-topictag="corporate_strategy">Corporate Strategy &amp; Reporting<span class="count">189</span></button></div>
       <div id="resultCount"></div>
       <div class="article-list">
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/prologis-sells-industrial-facility-to-fluidstack-for-data-center-in-pennsylvania/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-26"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="prologis sells industrial facility to fluidstack for data center in pennsylvania data center dynamics prologis sold an industrial facility in pennsylvania to fluidstack for $162.9 million to be converted into a data center. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Prologis sells industrial facility to Fluidstack for data center in Pennsylvania</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation</span>
+        <span class="row-summary">Prologis sold an industrial facility in Pennsylvania to Fluidstack for $162.9 million to be converted into a data center.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMirwFBVV95cUxNSzBvdVBiRk1sbWpzbVRTV0g3RXQ5TFg2WVVwem5VNmdFWjZsTHg0YVYtdkxXY1ZqdDJaU3FQcjdWX0dhNjNhcDRrZkU0amVibkx4QUYxZ2RhcUl5RkctSzhpZXotSlJEbDlDdWZHUTdvcDhGT3g0b1dzSzFLMUVuUFdvcXRLdUJkVU05NzZUN1p5ZlFkX093SFZqOFBOMk9SNjNNMG5WUlVQenRvX0dJ?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="ai electricity consumption projected to grow fifty percent annually, editorial reports bioengineer.org an editorial reports that artificial intelligence electricity consumption is projected to grow by fifty percent annually. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>AI Electricity Consumption Projected to Grow Fifty Percent Annually, Editorial Reports</span>
+        <span class="article-row-meta">Bioengineer.org &middot; Nov 26, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">An editorial reports that artificial intelligence electricity consumption is projected to grow by fifty percent annually.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/etix-launches-23mw-data-center-in-bangkok-thailand/" target="_blank" rel="noopener"
+       data-category="scope3_cloud" data-topictag="water_cooling" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="etix launches 23mw data center in bangkok, thailand data center dynamics etix launched its second bangkok data center, a 23mw facility featuring waterless cooling systems supporting air and liquid cooling. water &amp; cooling">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Etix launches 23MW data center in Bangkok, Thailand</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; Scope 3 Cloud Emissions<span class="topic-chip">Water &amp; Cooling</span></span>
+        <span class="row-summary">Etix launched its second Bangkok data center, a 23MW facility featuring waterless cooling systems supporting air and liquid cooling.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/tecto-announces-trec1-its-first-data-center-in-recife-and-connects-pernambuco-to-its-operations-in-fortaleza/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-26"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="tecto announces trec1, its first data center in recife, brazil data center dynamics tecto data centers announced trec1, its first data center in recife, brazil, with an initial capacity of 1mw scalable to 6mw. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Tecto announces TREC1, its first data center in Recife, Brazil</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation</span>
+        <span class="row-summary">Tecto Data Centers announced TREC1, its first data center in Recife, Brazil, with an initial capacity of 1MW scalable to 6MW.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/indias-state-owned-natural-gas-company-seeks-investment-partner-for-data-center-project/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-26"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="india&#x27;s state-owned natural gas company seeks investment partner for data center project data center dynamics state-owned natural gas company gail is seeking a joint venture partner to develop data centers at its gas plants in india. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>India&#x27;s state-owned natural gas company seeks investment partner for data center project</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation</span>
+        <span class="row-summary">State-owned natural gas company GAIL is seeking a joint venture partner to develop data centers at its gas plants in India.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/iqm-to-deliver-radiance-r3-quantum-computer-to-qai-data-center-in-south-korea/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-26"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="iqm to deliver radiance r3 quantum computer to qai data center in south korea data center dynamics iqm quantum computers has agreed to deliver a 54-qubit system to qai&#x27;s data center in seoul by the end of 2027. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>IQM to deliver Radiance R3 quantum computer to QAI data center in South Korea</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation</span>
+        <span class="row-summary">IQM Quantum Computers has agreed to deliver a 54-qubit system to QAI&#x27;s data center in Seoul by the end of 2027.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/vertiv-expands-800vdc-power-portfolio-for-ai-data-center-market/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="vertiv expands 800vdc power portfolio for ai data center market data center dynamics vertiv expanded its 800vdc power portfolio with new solid-state transformers and dc-dc converters to support energy infrastructure in ai data centers. hardware &amp; efficiency">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Vertiv expands 800VDC power portfolio for AI data center market</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
+        <span class="row-summary">Vertiv expanded its 800VDC power portfolio with new solid-state transformers and DC-DC converters to support energy infrastructure in AI data centers.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/fortitude-capital-plans-a-202-mw-ai-campus-in-sines/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-26"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="fortitude capital plans 202mw ai data center campus in sines, portugal data center dynamics fortitude capital is developing a 202mw data center campus in sines, portugal, designed for high-density ai and high-performance computing workloads. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Fortitude Capital plans 202MW AI data center campus in Sines, Portugal</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation</span>
+        <span class="row-summary">Fortitude Capital is developing a 202MW data center campus in Sines, Portugal, designed for high-density AI and high-performance computing workloads.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMinAFBVV95cUxNa19YaHlUdWgxdllPMWluZ3p3LWtoMzZBdjN3ZDJvSk15YllJd2lad3pQMVdqZWE4c2VKWmJHdE44blZmWEZ4cXlkOXNNTWxuak9QbUVFRmw5cDFEalNUVzl4TDJSRzRvSXZHRW5INTdPSXJob08zTGMtQ1RMSW4wa3dMWE1YZ040dDZ1RElZNzBFeWU4ZFRQTEpFZnY?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-26"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="data center carbon management market trends and forecast: usd 7.67 billion by 2035, 17.6% cagr openpr.com a market research report forecasts that the data center carbon management market will reach usd 7.67 billion by 2035. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Data Center Carbon Management Market Trends and Forecast: USD 7.67 Billion by 2035, 17.6% CAGR</span>
+        <span class="article-row-meta">openPR.com &middot; Nov 26, 2026 &middot; General Conversation</span>
+        <span class="row-summary">A market research report forecasts that the data center carbon management market will reach USD 7.67 billion by 2035.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxOV2tRSmI0alFrczVaSHFnU3ByS3A4clR5VmZ1WlQtSDBIVURkZ2d3YkNOY3lzZENPUFkzaFBrU2d6eGUwUVo5YUVINUk1Q0JKcm9SMWRLdkNxNWlmQTU3QXh0cW91Z3JFNURQWi0tcFhTNWZHdVhKSUlUVjZtcDRWeW53eVN5a0dLZGZEcXIyWE5rakVoRzlXc1pNVkpha05UVGNYQkhOdEhIdWRTUkZxckFob05kWVZFZDB6T0NZaENRdnJmc2VFeXpUZE9yeWVaMjN1V2w3V2RkZw?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-26"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="us ai data centre expansion business news this week this article reports on the expansion of artificial intelligence data centers across the united states. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>US AI Data Centre Expansion</span>
+        <span class="article-row-meta">Business News This Week &middot; Nov 26, 2026 &middot; General Conversation</span>
+        <span class="row-summary">This article reports on the expansion of artificial intelligence data centers across the United States.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/cheyenne-light-applies-to-build-transmission-infrastructure-for-three-microsoft-data-centers-in-wyoming/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="cheyenne light applies to build transmission infrastructure for three microsoft data centers in wyoming data center dynamics cheyenne light applied to ferc to build infrastructure for three planned microsoft data centers, with microsoft funding the costs. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Cheyenne Light applies to build transmission infrastructure for three Microsoft data centers in Wyoming</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">Cheyenne Light applied to FERC to build infrastructure for three planned Microsoft data centers, with Microsoft funding the costs.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/bharti-airtel-to-develop-three-data-centers-in-assam-india/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="" data-date="2026-11-26"
+       data-new="1" data-offtopic="1"
+       data-toppick="0" data-search="bharti airtel to develop three data centers in assam, india data center dynamics bharti airtel plans to invest rs 1,200 crore to develop three new data centers in assam by 2028. ">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Bharti Airtel to develop three data centers in Assam, India</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation</span>
+        <span class="row-summary">Bharti Airtel plans to invest Rs 1,200 crore to develop three new data centers in Assam by 2028.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/man-dies-after-suffering-burns-in-fire-at-bitcoin-mining-data-center-in-georgia/" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="man dies after suffering burns in fire at bitcoin mining data center in georgia data center dynamics a contractor died following a fire at a bitcoin mining and ai computing data center in georgia, which originated in an electrical system. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Man dies after suffering burns in fire at Bitcoin mining data center in Georgia</span>
+        <span class="article-row-meta">Data Center Dynamics &middot; Nov 26, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">A contractor died following a fire at a Bitcoin mining and AI computing data center in Georgia, which originated in an electrical system.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMi3gFBVV95cUxQek04NlZtYUxZM2x3cnhWRHdwR2RWaGp6X1RPckhsU2tNX19yeDBsVzhkT3pNTzk1OS13WlNPUlMwanllR1NKNGg0NXZZa1hlNFdLQ2oyWG9Pd1JmczctbTROdzJ6M0M5S09OaFVNbVFCRVpScC0zbjNYTUE2QVVydmlWLXRkdEVHS2lKY2dSR09ISVMyX0dvaVhMeWJNUDlQNWpOTmV4RktpcWxubVZkREJXY2NKQUVXQk9ObWhOSV9aNUJfVXJGbVczdWk1ZFBCMFQ5aWRrSHRoR3Y1enfSAeMBQVVfeXFMTVlqbGFpSGlqQ3d2OXlZN0p5WjNxSV9mTEFzQkpaUVl5bWpYdGh0OFFNLUF1NXdMbHhFY3JUUkh2V1Jld3lwWFR2VFk0dmRpbDRIS21JWVVEZldNU2czUUJsS3JHa1g4V2ZDOC1UaWFZU0xTZXRxbXdJbzlZdVZKVG9UM0RlSUgzdGJJUm5nVU94YjYyX0J6dnFXRm0xMlJiNFFMMGxKb3YwTzF6bEgxR2ZnbGtXVnRyTVF3QjU5NkE1Z0E2azJRemt6NE52clA3b0N4Wk1kNHpRZEJfM21fMXducFk?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="india data centre design rethinks ai, energy demands et datacenters indian data center designs are evolving to address the unique energy demands and efficiency challenges of artificial intelligence infrastructure. hardware &amp; efficiency">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>India data centre design rethinks AI, energy demands</span>
+        <span class="article-row-meta">ET Datacenters &middot; Nov 26, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
+        <span class="row-summary">Indian data center designs are evolving to address the unique energy demands and efficiency challenges of artificial intelligence infrastructure.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMilwFBVV95cUxNWU9BWVM0Uk91NV9EdGltcXk2YTRKUzhZblFydzlndFJuTmhfLVp3bGVzcEJqY1haMWFTRWMxdFE1SmF5VmdaMUh2cW5qSkV4OTFyOXdIZnoyQzB6RGVTQTZub0dwZXdiYTdWM3lwTGpXTk1HTzJBTWdkRDk5MkpIb0l5STM2N2F2VWhqVzhJdjhpSEpaNjBJ?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="water_cooling" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="watersense raises €5.75m in pre-seed and grants for ai water monitoring unite.ai watersense raised €5.75 million in pre-seed funding and grants to develop ai-powered water monitoring technology. water &amp; cooling">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>WaterSense Raises €5.75M in Pre-Seed and Grants for AI Water Monitoring</span>
+        <span class="article-row-meta">Unite.AI &middot; Nov 26, 2026 &middot; General Conversation<span class="topic-chip">Water &amp; Cooling</span></span>
+        <span class="row-summary">WaterSense raised €5.75 million in pre-seed funding and grants to develop AI-powered water monitoring technology.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxNWDJNNEJySjllZHJFeWdDTGllTmx3Qm9ScmhWaDR1QkY2WGYxc0k1YTAyOGN0ZGMwQ0gwcUliRkpCOG5yTEFDVFFXSEdoZVNSa005eThJeFhJU1BaeXRjdmlrd2NRc1ptaU5DMEkyczJCbmtJSVJkV01YREJQeHpiVlM5RUN5OTB1dU9Kd044cUxYaEVOWGcwTXZlZ1pqcWlwbExVdHYwNjltYWdmWV9maFdSNmVoSlpzMTVZ0gG7AUFVX3lxTE1YMk00QnJKOWVkckV5Z0NMaWVObHdCb1JyaFZoNHVCRjZYZjFzSTVhMDI4Y3RkYzBDSDBxSWJGSkI4bnJMQUNUUVdIR2hlU1JrTTl5OEl4WElTUFp5dGN2aWt3Y1FzWm1pTkMwSTJzMkJua0lJUmRXTVhEQlB4emJWUzlFQ3k5MHV1T0p3TjhxTFhoRU5YZzBNdmVnWmpxaXBsTFV0djA2OW1hZ2ZZX2ZoV1I2ZWhKWnMxNVk?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="cop31: ai&#x27;s energy demand collides with global climate ambitions| the new times the new times the soaring energy demand of artificial intelligence threatens global climate ambitions as nations prepare for cop31. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>COP31: AI&#x27;s energy demand collides with global climate ambitions| The New Times</span>
+        <span class="article-row-meta">The New Times &middot; Nov 26, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">The soaring energy demand of artificial intelligence threatens global climate ambitions as nations prepare for COP31.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMihgFBVV95cUxOa296U2xGdllqSk9HMnBSMUQ1ajRreGgySFVTRGlJN2hnNEF6azRPMl9QY2JwVGs5SUxZMlFmallYQmNSbHl3a0QySWFmdDZfS0RwaGdBTVZHbTkwLTVoT04ySVF5dU9jVWtWOGlSd0Jabnp5NU5IRnJDZXlETm9uYTR4VnRSUQ?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-26"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="why more megawatts won&#x27;t save ai data centres datacenternews asia pacific the article discusses why simply adding more power generation capacity will not resolve the surging energy demands of ai data centers. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Why More Megawatts Won&#x27;t Save AI Data Centres</span>
+        <span class="article-row-meta">DataCenterNews Asia Pacific &middot; Nov 26, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">The article discusses why simply adding more power generation capacity will not resolve the surging energy demands of AI data centers.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMi8AFBVV95cUxNeVBQc093YVZLWUtMTUFKcUNTLUdGRTZtQ2llVW9oekQtamo0M3pHc2Y0OWlBQ3VwRWZaWVZ5NmFtcUtYOThqTUFBNERxLS15TkRiVWQ0NHIxZUNTbmdFaHFZOFk3U1JOdFM5eWZVRjFPbThfM0hXQlZ1SzhHLThYTUVqd2N0ZXZTTnFlbUxFZU1pWXplWDVLVk9MX1p4cHdZSWE1QTJnQURLVkszblkzQld2ZlFraUY2V3ctUHB1VHBlN21VSWJWSHhmMDlad0c4dWhPRFZHNnl3ZDJTRXdfeW1BSnFibUZfTGl5Wk12bGQ?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-25"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="[research contribution] environmental protection in ai development: international experiences and policy implications for vietnam đại học kinh tế tp. hồ chí minh an article from the university of economics ho chi minh city examines international experiences in environmental protection during ai development and policy implications for vietnam. corporate strategy &amp; reporting">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>[Research Contribution] Environmental protection in AI development: International experiences and policy implications for Vietnam</span>
+        <span class="article-row-meta">Đại học Kinh tế TP. Hồ Chí Minh &middot; Nov 25, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
+        <span class="row-summary">An article from the University of Economics Ho Chi Minh City examines international experiences in environmental protection during AI development and policy implications for Vietnam.</span>
+      </span>
+    </a>
+    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMipwFBVV95cUxPSHZUSmFUOEoxb1llZmpHNkt0TlJYOFRVbmw2bG9MajNORW83aUZSMmd0Y0tPZXFuSzFNc2dmVW9XUkk2bWI2R1lJUEJHS2xTdmpOek1jdDVXLVhSTUVVMkttdHBuTkphQ1VkQWFyT3dHYnNtQ21YUG1QMXA5V3owRXphWWtscFZWc2RBTDIwQ0pMOEpEQmpvbEdGcjRIeURGb01UUEtGWQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-11-25"
        data-new="1" data-offtopic="1"
@@ -767,6 +965,17 @@
       </span>
     </a>
     
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMixwFBVV95cUxPdVZsMUZoVmxFdUdvUlZNMUFXVVc3Z1UwYTkyNG5lUTVuWWdCcllnODJnc09OMU9zN25hNXAxdklsX2k0WnVvc0xzNjNVQjRidnVOVHZyR3o0YktMOVNtZktmQ3BkZkxINzZjVHo1ZnR3Q1QwZUkxVkNwOURraHFrTXFXejlHcGI2TVVtdmtmSUtsSkI3Wm5hV2pjd0Z2VkcxUmhUQUFDMTFYelR5c3FCUGhfTW1lOFNiamV5aEZjczlTMkk2dEp3?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-24"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="14th ranshofen light metals conference highlights sustainability, ai and advanced manufacturing foundry-planet.com the 14th ranshofen light metals conference highlighted the integration of sustainability, artificial intelligence, and advanced manufacturing technologies. hardware &amp; efficiency">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>14th Ranshofen Light Metals Conference Highlights Sustainability, AI and Advanced Manufacturing</span>
+        <span class="article-row-meta">foundry-planet.com &middot; Nov 24, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
+        <span class="row-summary">The 14th Ranshofen Light Metals Conference highlighted the integration of sustainability, artificial intelligence, and advanced manufacturing technologies.</span>
+      </span>
+    </a>
+    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxQRjRidEkyaEdyVlZIM004VjFNby0tSnRIZV85YXJhVi1rdDUxWm1iNWgzNzZGeHZjQWlwRnpLQVpoUWdZNE9TaTZPNjVnQUIwMVV2a0lHWmJBSHhVRGdUTi0yaHR5UExSN3Q4NUdJSWNxMkRBMEZYRUp5dVFnUGdmRTZqaV91MzlFSE1TTTJHM1Y4RVY4OG9POFZaYWNpVDh2R0VQRDVENy1Xckg5MzlxREZ3Z0xxUzQzVkszWVZxOFhtLXFPQXd5Ug?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-11-24"
        data-new="1" data-offtopic="1"
@@ -780,10 +989,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMimAFBVV95cUxOYVVzdjZoM3FmYTFKNkdQVzV0UFdfdzd4a2l0YU1KdE9QNUw0WEFTZ3drNi1jTkRzWThaYXllZG5Ea25USlhYaDIyWVN1aU5JblNTQ0ZBNVBQZEtkMUp5WkhacGJobnF0UldoTFREdnRjMldvbXlHWlkwNXBLb1Z5TGo5VnIzZEZMc1NOUUM0ZkpNNWNyYkhtTg?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="water_cooling" data-date="2026-11-24"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="1" data-search="são paulo ai data centers consume 16.1 million cubic meters of water bioengineer.org ai data centers in são paulo consumed 16.1 million cubic meters of water, highlighting significant water use concerns. water &amp; cooling">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-toppick">Top pick</span><span class="tag tag-new">New</span>São Paulo AI Data Centers Consume 16.1 Million Cubic Meters of Water</span>
+        <span class="article-row-title"><span class="tag tag-toppick">Top pick</span>São Paulo AI Data Centers Consume 16.1 Million Cubic Meters of Water</span>
         <span class="article-row-meta">Bioengineer.org &middot; Nov 24, 2026 &middot; General Conversation<span class="topic-chip">Water &amp; Cooling</span></span>
         <span class="row-summary">AI data centers in São Paulo consumed 16.1 million cubic meters of water, highlighting significant water use concerns.</span>
       </span>
@@ -791,10 +1000,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxPNzlkX19vaFVPLThSM2RORlNRX0ltbmF6cmFhbzVWMlFGc1RVNEI3UW51X01sVi1PU1ZPTUhEcWxiMU1xc3BieTFPNDNIRVl1bEpvdkZzeDBOQmxScF9PWXc5c05FeUdNYzd3RWJabnM3ZkZqdlpiQV9SVk5BZGNTU1RJYmFVTURBMmF5NWZFcnZyTFRTYndTX2J3VWtrVThVU2RFVW91MWYzZ9IBtgFBVV95cUxNTmU1dGNXcURmemY1Q1JhcXZmR3pTYlIwOFJjbkh5ajdLU01fd3FHMnBwRVRHUURrR2ZkWjBNUXpYb1Y4V1Bxa2FOTlB5eEJOaXRwMFJlQmtqR1B4R091SjNzU2czMmZ5a2Z1NzlDX0RQNTQ1aUpKYVgyVm5UQXAxWk8tSFRuZGhOMXFFSnB1NjdYalgyQXUzSjR4eXV4RlZpMGJocWVkN1VRRmZJX3FGR0VrVDdRUQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-11-24"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="welsh commissioner calls for halt on new ai data centres over environmental concerns edie a welsh commissioner calls for a halt on new ai data centres due to growing environmental and resource concerns. community &amp; political response">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>Welsh Commissioner calls for halt on new AI data centres over environmental concerns</span>
+        <span class="article-row-title">Welsh Commissioner calls for halt on new AI data centres over environmental concerns</span>
         <span class="article-row-meta">edie &middot; Nov 24, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">A Welsh Commissioner calls for a halt on new AI data centres due to growing environmental and resource concerns.</span>
       </span>
@@ -813,10 +1022,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiygFBVV95cUxOYUZ3M0ZoR1hCU1pfTHY1eGZUdlZFX05tTmNCanJSd2RXNVZFblBrcWhUeXNYakw0Ukt3YjBibmE3cTdvQ0E1Q0tzOVNOZmZTZjVielYtX1h2NG9HYzg0cmZCWENWNHVVdXBQbWxSVk1KcUV4c2xCbXdocVI2SWZ2TFNKQk1jbVJRcmhPT0pPeV9va2ZGNzZyancycldVRS0ybjJ1UVhqY1luNUxqZVJMYjZCVjJIMHpBRWNLYnNDMXNCb2c4a0R3M3JR?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="water_cooling" data-date="2026-11-24"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="most of ai&#x27;s water footprint comes from the power plant, not the data center, enverus says world oil enverus reports that the majority of artificial intelligence&#x27;s water footprint originates at power plants rather than inside data centers. water &amp; cooling">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>Most of AI&#x27;s water footprint comes from the power plant, not the data center, Enverus says</span>
+        <span class="article-row-title">Most of AI&#x27;s water footprint comes from the power plant, not the data center, Enverus says</span>
         <span class="article-row-meta">World Oil &middot; Nov 24, 2026 &middot; General Conversation<span class="topic-chip">Water &amp; Cooling</span></span>
         <span class="row-summary">Enverus reports that the majority of artificial intelligence&#x27;s water footprint originates at power plants rather than inside data centers.</span>
       </span>
@@ -824,10 +1033,10 @@
     
     <a class="article-row" href="https://heatmap.news/climate-tech/space-data-centers" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-11-24"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="the people who want data centers … in space! heatmap news startups are pursuing space- and ocean-based data centers as local political opposition and anti-data center sentiment grow on earth. community &amp; political response">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>The People Who Want Data Centers … in Space!</span>
+        <span class="article-row-title">The People Who Want Data Centers … in Space!</span>
         <span class="article-row-meta">Heatmap News &middot; Nov 24, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">Startups are pursuing space- and ocean-based data centers as local political opposition and anti-data center sentiment grow on Earth.</span>
       </span>
@@ -835,10 +1044,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMic0FVX3lxTE9fU3RPRF9jaWxpRGVic21hZTlRTFFsV2lRR3haX3g3UU5PQmJXMV9tTjRTNW8yYU1uMEJzajYyZnJzLTJNN3lGa2xGQ25aZnN6aWE3NWdPVEhCNTY5MF8yOS1vZjA2dXAwczFZUi1udVJmRGs?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="corporate_strategy" data-date="2026-11-24"
-       data-new="1" data-offtopic="1"
+       data-new="0" data-offtopic="1"
        data-toppick="0" data-search="aar&#x27;s fiscal 2026 sustainability report cites four acquisitions, new mro capacity and ai governance committee avi-go aar&#x27;s sustainability report mentions acquisitions, mro capacity, and an ai governance committee, but lacks substantive environmental data. corporate strategy &amp; reporting">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>AAR&#x27;s Fiscal 2026 Sustainability Report Cites Four Acquisitions, New MRO Capacity and AI Governance Committee</span>
+        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>AAR&#x27;s Fiscal 2026 Sustainability Report Cites Four Acquisitions, New MRO Capacity and AI Governance Committee</span>
         <span class="article-row-meta">Avi-Go &middot; Nov 24, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
         <span class="row-summary">AAR&#x27;s sustainability report mentions acquisitions, MRO capacity, and an AI governance committee, but lacks substantive environmental data.</span>
       </span>
@@ -866,6 +1075,17 @@
       </span>
     </a>
     
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxQUlJMWGItVE94dHZmejlXem84bjdla2VCN0h5SVpPbkVrSHJXYmlOeHdQVnFGQzN4NEtpVF81UUJvQnVNaEo1Yjh3azFnTElRaExHblhWWUpuTC0tcU9WazdoSjQtMUxjWlFWWk9GU294aEUwYm5DbDliLXZQbFBlU1NobDRrYWR1?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-24"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="ai data centers rely on fossil fuels, and by 2028, anthropic estimates that 87% of the electricity used in the united states will come from gas and 11% from coal. gigazine anthropic estimates that by 2028, u.s. ai data centers will rely on 87% gas and 11% coal for their electricity. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>AI data centers rely on fossil fuels, and by 2028, Anthropic estimates that 87% of the electricity used in the United States will come from gas and 11% from coal.</span>
+        <span class="article-row-meta">GIGAZINE &middot; Nov 24, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">Anthropic estimates that by 2028, U.S. AI data centers will rely on 87% gas and 11% coal for their electricity.</span>
+      </span>
+    </a>
+    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMisgFBVV95cUxNOVgyU2FManFoVGFjUlNxNUxNM2JJWmZIT2NqOHRhNUU5Um54WGV5QkJMOG5YZW1teWFXcTZ0WmNQZkIzZ0Y0NUUyU3Z1RDcyampEQ1YtZ29YM1hJZVFFSXZMUE51aDRqb2t0NC00b1V3bHhqeFRpRUt6UWRVUWtMMzExSV8wOTY4N3BWeDlrV2s3RDFaRi01OXdkZF96RnRtMmJWZUxiNkI5Tk9vZ0RDWWh3?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="hardware_efficiency" data-date="2026-11-24"
        data-new="1" data-offtopic="0"
@@ -879,10 +1099,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxObDFRWGpWRDhjWW9xT3JpaFUyZU9oUWZHQm8tU2NGWlFsZndiSHRnSEZOMHNqZDhmdkljOTVHc0JndjJJeXJuWjhpNmJ4OTFHS21yTllGX0ZsSU1JMG5HdWQ1eGszbGFmeFNGa05tc1BFRWNLVnFkb1BUY0diOU5kVkxYZzNfaGFGbGJmVWgzc3BTTDdsbGJCNndvcmdxN2ZrSDRiRDZLOXFkdFRGckhNMTF3TW4wZ2NSMF9NZzA3M3dnXzdzWmlCMWVGcnVXbGtDS1k4bk1PcUJ5a2ZzVWJB?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-11-24"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="the real economics of ai infrastructure: power, cooling and the price of growth data center frontier the article examines the economic challenges and resource demands associated with powering and cooling expanding artificial intelligence infrastructure. grid &amp; energy demand">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>The Real Economics of AI Infrastructure: Power, Cooling and the Price of Growth</span>
+        <span class="article-row-title">The Real Economics of AI Infrastructure: Power, Cooling and the Price of Growth</span>
         <span class="article-row-meta">Data Center Frontier &middot; Nov 24, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">The article examines the economic challenges and resource demands associated with powering and cooling expanding artificial intelligence infrastructure.</span>
       </span>
@@ -890,10 +1110,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiW0FVX3lxTE9tU05qcXJBNEFraUpUUjh2S3kxdk9PTUhvTF9oYVFXZmRjMUtKaDBwRDRRV082YlRjLTFNUEpqZGdRanh6R3VfdVVscThYc3FrZ1Z3UzJQT1BSSlE?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-11-24"
-       data-new="1" data-offtopic="1"
+       data-new="0" data-offtopic="1"
        data-toppick="0" data-search="investors challenge long term sustainability of massive ai data center spending fox business investors are questioning the long-term financial sustainability of massive spending on ai data centers. ">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Investors challenge long term sustainability of massive AI data center spending</span>
+        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>Investors challenge long term sustainability of massive AI data center spending</span>
         <span class="article-row-meta">Fox Business &middot; Nov 24, 2026 &middot; General Conversation</span>
         <span class="row-summary">Investors are questioning the long-term financial sustainability of massive spending on AI data centers.</span>
       </span>
@@ -1198,10 +1418,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMi4AFBVV95cUxQUlc4ZWtJRGU1SGlaSXNMZFFQck5scE1LS1NpdkE4R0xXTVBhRzlEV1ZJYlptOUNJSnJZTWZNNndmYjNUUjhLSkM2djBuZzA4SmV1MFRNQndWdDZmNkxyVm55M3dYcXd0Q2NfUGZmeDUwVU9XYXlqc3pCajg0RXN0WGJCdVh4czBraWJvNWRISExodm9Bd0pkbVZXYzlvWENGVE9oXzhYcE5BY3BrMXZVaGQ0YVoxd3h1dkNwVzV3Q1djd1ctQjd6Y25yQy1vWm52bElPNk5qeEVkNEl2VjlMSw?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-11-23"
-       data-new="1" data-offtopic="1"
+       data-new="0" data-offtopic="1"
        data-toppick="0" data-search="navigating ai headwinds: what us data centre backlash and nvidia fallout mean for south-east asia the straits times the straits times analyzes how us data center backlash and nvidia fallout impact ai developments in south-east asia. ">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Navigating AI headwinds: What US data centre backlash and Nvidia fallout mean for South-east Asia</span>
+        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>Navigating AI headwinds: What US data centre backlash and Nvidia fallout mean for South-east Asia</span>
         <span class="article-row-meta">The Straits Times &middot; Nov 23, 2026 &middot; General Conversation</span>
         <span class="row-summary">The Straits Times analyzes how US data center backlash and Nvidia fallout impact AI developments in South-east Asia.</span>
       </span>
@@ -1583,10 +1803,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMivgFBVV95cUxNMVVQVm0zcC1hVWtaeC1oeGh6d01sY19tdVVwR2tJVmpha0RmOTBXTDlXemhYVGJMUEZRZE05cElxZGgtS1Jjd3ZlazNuM3BRWEp5alBSbGRVMFJBa0RwYk9hRDdweDVCc2NaNWFpZEZ0VGdTTmx0Q3g4TVhtMUFITjA4dDVscVZPQXN6Q2lWT3hxQ1AxSkFRVE9GU3lhMzlKakstaUJNeDNCQVVWYU42QURidGktSEh3TFVSZ1R3?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-11-23"
-       data-new="1" data-offtopic="1"
+       data-new="0" data-offtopic="1"
        data-toppick="0" data-search="techknowgreen sees data centres and sewage audits driving growth multibagg ai techknowgreen anticipates data centers and sewage audits will drive its business growth. ">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span><span class="tag tag-offtopic">Off-topic?</span>Techknowgreen Sees Data Centres and Sewage Audits Driving Growth</span>
+        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>Techknowgreen Sees Data Centres and Sewage Audits Driving Growth</span>
         <span class="article-row-meta">Multibagg AI &middot; Nov 23, 2026 &middot; General Conversation</span>
         <span class="row-summary">Techknowgreen anticipates data centers and sewage audits will drive its business growth.</span>
       </span>
@@ -1765,6 +1985,17 @@
         <span class="article-row-title">Why the next phase of the data center buildout runs on light</span>
         <span class="article-row-meta">Data Center Dynamics &middot; Nov 22, 2026 &middot; General Conversation<span class="topic-chip">Hardware &amp; Efficiency</span></span>
         <span class="row-summary">Silicon photonics uses light instead of copper to overcome physical limits and reduce power consumption in AI data centers.</span>
+      </span>
+    </a>
+    
+    <a class="article-row" href="https://news.google.com/rss/articles/CBMimAFBVV95cUxOdEJWdU1MVFlycTZhTS0yYUFpUFUyT0xWSW1NTnN4eTZ2Yl9GNURrMTRaZHV0VV9VTVdHd01LSnI2dkZ3aU9ab29oQklwcUtBcFI5aHBscFp4ME5WTjg5eTlkSHg1T29zY0ZoREdENklENUYtQllKQVY3MjVKSTFjVFg2M18xUGRRaTE0aE9aZVJUanl4OFhDRg?oc=5" target="_blank" rel="noopener"
+       data-category="conversation" data-topictag="grid_energy" data-date="2026-11-22"
+       data-new="1" data-offtopic="0"
+       data-toppick="0" data-search="putting one million spacex data centers in space would be an environmental catastrophe, scientists warn futurism scientists warn that placing one million spacex data centers in space would cause an environmental catastrophe. grid &amp; energy demand">
+      <span class="article-row-body">
+        <span class="article-row-title"><span class="tag tag-new">New</span>Putting One Million SpaceX Data Centers in Space Would Be an Environmental Catastrophe, Scientists Warn</span>
+        <span class="article-row-meta">Futurism &middot; Nov 22, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
+        <span class="row-summary">Scientists warn that placing one million SpaceX data centers in space would cause an environmental catastrophe.</span>
       </span>
     </a>
     
@@ -2012,10 +2243,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMi5gFBVV95cUxOSVJJdVBWYkJJNkhoZVY3TkY1WEdXeUh3dW1wMlVtc1BTVDUyTXlZYi0wcURRbGRHNzFienBsWnhpYjBpcG9jTnduYy1vbVduRU1XWFNCcFNIRjdjNEttNzI0V1l3SWhwUV9IeEx4a3hOWWE2SjlHV0dFYnpVOUw0MkVjcURiVE92T2ZUZE5OUDlQQ3VNME5TMVVDWk1JQ05YSFpWNTFpMy1tLW1mREE0elM1OFZhYm5BbGdtbGNQNjZnNE10d1BpZHJkTmNMaktKUl9kSGdhVzV3QnNYUXZwbzRPQVdNUQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="emissions_disclosure" data-date="2026-11-20"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="206 construction ai studies show far more work on emissions than on extreme weather marketscale a review of 206 construction ai studies reveals that significantly more research focuses on emissions than on extreme weather. emissions disclosure &amp; audit">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>206 construction AI studies show far more work on emissions than on extreme weather</span>
+        <span class="article-row-title">206 construction AI studies show far more work on emissions than on extreme weather</span>
         <span class="article-row-meta">MarketScale &middot; Nov 20, 2026 &middot; General Conversation<span class="topic-chip">Emissions Disclosure &amp; Audit</span></span>
         <span class="row-summary">A review of 206 construction AI studies reveals that significantly more research focuses on emissions than on extreme weather.</span>
       </span>
@@ -3244,10 +3475,10 @@
     
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiV0FVX3lxTE9Qa3NLdG1lLThCdWw4MHp1RlVMaHBpYzY4M1hjbmpyN3VjM1dpZVU1Z0t2TWUxeVd4VEhTRTRFMlJVYmdJWmdKTHhMZGNna1Yzanp5bWtYWQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-11-19"
-       data-new="1" data-offtopic="0"
+       data-new="0" data-offtopic="0"
        data-toppick="0" data-search="ai data centres in australia pose major environmental risks, prompting calls for regulation and moratoriums oecd ai policy observatory australian ai data centers pose major environmental risks, prompting calls for stricter regulation and moratoriums. community &amp; political response">
       <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-new">New</span>AI Data Centres in Australia Pose Major Environmental Risks, Prompting Calls for Regulation and Moratoriums</span>
+        <span class="article-row-title">AI Data Centres in Australia Pose Major Environmental Risks, Prompting Calls for Regulation and Moratoriums</span>
         <span class="article-row-meta">OECD AI Policy Observatory &middot; Nov 19, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">Australian AI data centers pose major environmental risks, prompting calls for stricter regulation and moratoriums.</span>
       </span>
@@ -3630,9 +3861,9 @@
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNT19FUXNHQUVGelRjc25lNGtiajIzQ1J4SHRDVzhhY25PU0ZOeGN0cEplQ2V1OHRaVlU4TEV6QVRMdFcxb00yNzhBU2VkeG5RRER5ajY5cVV6NUxMNFF4dzZuUGlXTHh4YXU1MUtvTjBIUHhnZFRFcGtta3kzRnF3QjA5YmVXUVFWMU0xOEkzNm1lOFBVeHhOb3JNVlFRSzA0by10TTZNS3NtNWJROTN3ZEdoOTVPU25G?oc=5" target="_blank" rel="noopener"
        data-category="scope3_cloud" data-topictag="grid_energy" data-date="2026-11-18"
        data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="more than half the electricity feeding america&#x27;s largest data centers comes from gas and coal the decoder more than half of the electricity powering america&#x27;s largest data centers is derived from fossil fuels like gas and coal. grid &amp; energy demand">
+       data-toppick="1" data-search="more than half the electricity feeding america&#x27;s largest data centers comes from gas and coal the decoder more than half of the electricity powering america&#x27;s largest data centers is derived from fossil fuels like gas and coal. grid &amp; energy demand">
       <span class="article-row-body">
-        <span class="article-row-title">More than half the electricity feeding America&#x27;s largest data centers comes from gas and coal</span>
+        <span class="article-row-title"><span class="tag tag-toppick">Top pick</span>More than half the electricity feeding America&#x27;s largest data centers comes from gas and coal</span>
         <span class="article-row-meta">The Decoder &middot; Nov 18, 2026 &middot; Scope 3 Cloud Emissions<span class="topic-chip">Grid &amp; Energy Demand</span></span>
         <span class="row-summary">More than half of the electricity powering America&#x27;s largest data centers is derived from fossil fuels like gas and coal.</span>
       </span>
@@ -12746,28 +12977,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/spain-revises-data-center-renewable-mandate/" target="_blank" rel="noopener"
-       data-category="scope3_cloud" data-topictag="renewable_policy" data-date="2026-10-27"
-       data-new="0" data-offtopic="0"
-       data-toppick="1" data-search="spain revises data center renewable mandate data center dynamics spain revised its data center regulations, raising the renewable power mandate threshold from 1mw to over 10mw and extending compliance timelines. renewable sourcing &amp; policy">
-      <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-toppick">Top pick</span>Spain revises data center renewable mandate</span>
-        <span class="article-row-meta">Data Center Dynamics &middot; Oct 27, 2026 &middot; Scope 3 Cloud Emissions<span class="topic-chip">Renewable Sourcing &amp; Policy</span></span>
-        <span class="row-summary">Spain revised its data center regulations, raising the renewable power mandate threshold from 1MW to over 10MW and extending compliance timelines.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://www.datacenterdynamics.com/en/news/openai-applies-for-federal-permit-to-build-portion-of-effingham-county-texas-data-center-on-wetlands-report/" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="community_political" data-date="2026-10-27"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="openai applies for federal permit to build portion of effingham county, texas, data center on wetlands - report data center dynamics openai applied for a federal permit to build a portion of its effingham county data center on 72 acres of wetlands, raising flooding concerns from environmental groups. community &amp; political response">
-      <span class="article-row-body">
-        <span class="article-row-title">OpenAI applies for federal permit to build portion of Effingham County, Texas, data center on wetlands - report</span>
-        <span class="article-row-meta">Data Center Dynamics &middot; Oct 27, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
-        <span class="row-summary">OpenAI applied for a federal permit to build a portion of its Effingham County data center on 72 acres of wetlands, raising flooding concerns from environmental groups.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMiygFBVV95cUxNdnZzWkdDNlRyT2ZHRVVQN0hBYkRiLVNVdzBzdVRFci1sYTh4RWxFcnFvdWdKVFNGekNPVVBvRndxT2VKRHcyNnBWRTR5V1JILWszQkdoVUdMSkg0aE1QSS0yRWswbXFrQVJoeEl4YV9waXNIVHZnOG9YZXNJZ2hwY3VKSVUxUTJoc1hNaUlQT0ZyN1djYlZMRnhxalNGaUYyX0JzdW9zWnVlclREbHd2VzFQaEdFVlphNVplSFllMi14eXAyWTJUa3Vn?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="" data-date="2026-10-27"
        data-new="0" data-offtopic="1"
@@ -12779,17 +12988,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiwwFBVV95cUxQX3UwWEJaZzBsdWhkYmRqcy1WVVcwY2JzX3RSTEd3dXRjRVpYOWdPMlVyTnU5dHdnY1htYkk3MEtmMmpVY1ZWSlBxU3dSWXZBTUE3Mlk5cUF5YnZXVklPMzQ5cENLXzRET0VNYk9CbUtfRXRJMnBiM2NCU3lFcmFMWF9hX2kxc1lVLWhVazRJQWFKX2J4aEdQVzBOMWhhVWt1eDNIWVlSX3dkTlNZR1J4TUcxNlJvR1BuUTFtODBCd3pPYkk?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="" data-date="2026-10-27"
-       data-new="0" data-offtopic="1"
-       data-toppick="0" data-search="syd3 data centre expansion: $2.98 billion green loan advances western sydney construction construction review a data center expansion in western sydney receives a $2.98 billion green loan to advance construction. ">
-      <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>SYD3 Data Centre Expansion: $2.98 Billion Green Loan Advances Western Sydney Construction</span>
-        <span class="article-row-meta">Construction Review &middot; Oct 27, 2026 &middot; General Conversation</span>
-        <span class="row-summary">A data center expansion in Western Sydney receives a $2.98 billion green loan to advance construction.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMie0FVX3lxTFA0dDA5TkR0dmxMVkduUDFEdWFFQ3hrQ0RYN3ltMm9qNUxlOHZwY2l3aVI1aUJpdnpOcGlJbG15MUhrNlNkM1k2QUVkWVE5dHRFRXZvVUhQT0hSUGhjU1NiNmNhWWpJZDRfRWdSMmdFRnRLLS0xWVdIZ2FUQQ?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-10-27"
        data-new="0" data-offtopic="0"
@@ -12798,17 +12996,6 @@
         <span class="article-row-title">The environmental risks from attacks on data centres</span>
         <span class="article-row-meta">The Conflict and Environment Observatory &middot; Oct 27, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">The Conflict and Environment Observatory examines the environmental risks and impacts resulting from military or physical attacks on data centres.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMi0AFBVV95cUxPYV80NjgzNXZHcDZYRnd4dERmamZwOUFnSVFVN19YQ0lWcXVMTjZrZnpSODdaaXgxZXJodE9JTXljZ1FtUTVIN2JFcEFXNWlLX0JiYVE4SVMwQXZoOXRmRkQ2OVFlcm5LMDNsUW4yR2wtZEpZbFVCZF9mSlNmYjJ6WGhMeDY2M0JNdlVmYk90ZHdkYThCZVdDazI4U19VRHhEX1lvbEdISVlKSmNsZnlmRTY0ODg0OVVTdENoQXZZelgtel96NldTczExOU9oZFQw?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-27"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="ai-driven energy storage will shape india’s smart energy future: abhilash borana, ceo, sigenergy india solarquarter sigenergy india ceo abhilash borana discusses how ai-driven energy storage will shape india&#x27;s smart energy future. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">AI-Driven Energy Storage Will Shape India’s Smart Energy Future: Abhilash Borana, CEO, Sigenergy India</span>
-        <span class="article-row-meta">SolarQuarter &middot; Oct 27, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">Sigenergy India CEO Abhilash Borana discusses how AI-driven energy storage will shape India&#x27;s smart energy future.</span>
       </span>
     </a>
     
@@ -12856,50 +13043,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxNbXRzcmNlbmdvYnRtbDF0SGZqVUgwUmZJM24tNy1FV21MMEJnX1BGYXVsLUJFMHpma3czdGp4aklCWDlyTTVDNV9HTEVaTUsxLUdPX182cjItMWhuVTJEUWd1QWVET3BzSDRTZ3g5VVRWZEg1Mm0xdTRheWktWEtBQUw1Z05FUDBUb1ZoOTR2dTQ0aHJ6WVRkNnJ6N2VwVEZUMlF0YXZJVHFHdw?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-27"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="the power supercycle extends beyond ai! morgan stanley: the “three a” forces are driving global electricity shortages beyond expectations, with roughly half of market demand yet to be priced in. 富途牛牛 morgan stanley reports that the &quot;three a&quot; forces are driving global electricity shortages beyond expectations, with half of market demand unpriced. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">The power supercycle extends beyond AI! Morgan Stanley: The “Three A” forces are driving global electricity shortages beyond expectations, with roughly half of market demand yet to be priced in.</span>
-        <span class="article-row-meta">富途牛牛 &middot; Oct 27, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">Morgan Stanley reports that the &quot;Three A&quot; forces are driving global electricity shortages beyond expectations, with half of market demand unpriced.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMidkFVX3lxTE85My1LUUt5cnZnbE1nOUZSZGRJZy1QR3k0WDRMYlVmNHRTZXVQeWZ2aC0yZXJiLTc2TjNwQ01RcmlzdkIxY08tNVNwTkoxNmxzVlNGRmQ4bzBYUy02Y1NmWWE4Tms5dDZyb1JZTmRDMDdXUTVIeHc?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="corporate_strategy" data-date="2026-10-27"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="how companies are using ai to support sustainability goals trellis group companies are utilizing artificial intelligence tools to track, manage, and support their internal sustainability initiatives. corporate strategy &amp; reporting">
-      <span class="article-row-body">
-        <span class="article-row-title">How companies are using AI to support sustainability goals</span>
-        <span class="article-row-meta">Trellis Group &middot; Oct 27, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
-        <span class="row-summary">Companies are utilizing artificial intelligence tools to track, manage, and support their internal sustainability initiatives.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMimAJBVV95cUxNWS05dk9Yczd6YWtKYVlfZ0h4bkViU3F2WWJqUHBWN3NXV0Q3blkyUUJnU2t6Uk1UU19hbDdHSld4M2RNZkFfZHVoSmtfcTVadm1PUWtOakpsUy1tbFFRbEVsYnk2V0dyellIWnk5OHdVdUx6NDNKN0RQejQ3UWlPaVF0M3Z1a0pRZUlnNnhmU2pOeUpRUFBZYzNNbFJJYk5yeHhPY29VdnNJalpUc3ZDNm5WcHRpTW9yeVpyeTBucE5FTXk1LWw2OENSQ1ExWk4xSmtMSGtoV3p6c2p2VGl1NzJaTkhUWlo5aktYSlZzYVN0THZDei1peHJSaEh1UjhwTDVfa3p4ZEQzaVY3T0hQVmdzbmllSGct0gHgAUFVX3lxTFBJbDRJdXlsOXNEZkl5T21qS2l5NTNpYUEyY2pOQVB2Mjk3MnRMY2FVd0E0WTRhWXNubTUybnY0T2R3NnV5R3Jpb1ZhSXZVOFRBZFhyNkMtSVdzY2gyS0xEbEQtSl9ibS1BaU5XZXk1QS1iMlFtZTE5TkU5SzFMYk1wRFp4akxxajBPcE9zYmJ5R1VJd1lxWEw1YWVleVpoU3N2dFBpclJFM3NLR1RUOE96Z3V6b1FJR3JIdFpfN2NXSFlsdmNSV2F1RVc5MW5Fb1FkSF95ZG5HOTlNX1NlQzFT?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="" data-date="2026-10-27"
-       data-new="0" data-offtopic="1"
-       data-toppick="0" data-search="anthropic ipo filing warns of ai data center risks et datacenters pre-filtered: matches the environmental+ai keyword gate, but reads as investor/market framing with no emissions-specific term in the headline. ">
-      <span class="article-row-body">
-        <span class="article-row-title"><span class="tag tag-offtopic">Off-topic?</span>Anthropic IPO filing warns of AI data center risks</span>
-        <span class="article-row-meta">ET Datacenters &middot; Oct 27, 2026 &middot; General Conversation</span>
-        <span class="row-summary">Pre-filtered: matches the environmental+AI keyword gate, but reads as investor/market framing with no emissions-specific term in the headline.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMilAJBVV95cUxPelFKYlR4cmtKLUFYa1hfQ0hBdTFNSjcyaUlNMHhQQ2VHMGpmQ3JPTUlFWE1vZXN0UzBHX0NxWC0tQ0dheVpIRUxDdzYza1g2N1E4OWkxaXg2a3ppeHlUWXNUeWdPdlMtM1dWR201ZnFvTTZWSUZWX3NBMVJRRFo0WEI3Ump3b1JSOWNDVnpqcEF0Q0V1VnhoTjJOdTBaU1FBMnpmX3RBLXJVdW1YZno1TjFiZEpxdmp6aUMxRkduRnZqQ1NyOFlaMHc0T0Q4MEM3QmZNU2RMMnJKZFRrSy1tOFlqcTFfajQ0bGFlLW5WcnZpY2ppWmRCLWdPMnZJLUo3SjJSckQ4SGMtYnpjOENaWDUwbFPSAdwBQVVfeXFMUFZ1NGY2UFlmWkhWdUQ1a2pfQ2VjLUM0WFdxb3NXSDJYZ3lDSm9FTkJJa2NhV1R0bUJ6RVcxamFEcEFXRnRFQkVtZll1d1RGMjc5RExqcTdhRXVyMDZBSEY5OFJLUV9sUHE0bVJhd09sWUdBckFaaDZXUFBoNkFYcGpOdWl0TmxhdWU4eFdyNEtVZFlSRXZvX1phSm8zRVRweTVCRXd1cm5CSG1YLTdnbUFoTVRJNkNvQjluS2xJZTdiNE4zZTJ0eUNqY2tyR3lCZGNadGJtYS1DbTNhYw?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-27"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="mtn group to build 150 mw ai-enabled data centers in africa et datacenters mtn group is planning to build 150 megawatts of ai-enabled data center capacity across africa. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">MTN Group to build 150 MW AI-enabled data centers in Africa</span>
-        <span class="article-row-meta">ET Datacenters &middot; Oct 27, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">MTN Group is planning to build 150 megawatts of AI-enabled data center capacity across Africa.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMivgFBVV95cUxQTEdBMUg5eWVSRC1CYTgyVXVOYjBUR1VBMGJ6N1AtTEtWb1l4RGFRTzVSTkg1Sm9NekhpWHQ2Sjh6Uk1ZT1ZUXzRINWpnRFpXQzk4NXdncHFqODN2RDVLLVZmeXlQZ2VXajJwYUI5bTgxaDlWdDRLcWJtZk41OVNQdXE1clhTV0hoWGEzVkN2UEJvMzRFVkR5MGlaZU1aQVhhSlhFYW5ucmEyM09tcXJOUzNYVDlENHYwMnVpdmxn?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="grid_energy" data-date="2026-10-26"
        data-new="0" data-offtopic="0"
@@ -12911,39 +13054,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxPLW9ab0F4TzhWRUlkVlFFbFM1c3NBZWtwZTREdk0yaGc1NnZzV2loNEhTVFpTdkxLLWJoM3VPSllXaGt0OEt5RGhVUktwbGRDcV9tQzVtMWc3VEoyOXZUaExNUDdxZUZuemRpeFUxdEpuLXM3M0lFV09pUGpGc25Db3dYYTVRYWJr?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-26"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="global green growth week tackles ai-driven electricity, water demand 조선일보 global green growth week addressed the growing electricity and water demands driven by the rapid expansion of artificial intelligence. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">Global Green Growth Week Tackles AI-Driven Electricity, Water Demand</span>
-        <span class="article-row-meta">조선일보 &middot; Oct 26, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">Global Green Growth Week addressed the growing electricity and water demands driven by the rapid expansion of artificial intelligence.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxOOHpZdUxidGwxblVYbDZtTzVIRnhMQTJ4TnpGanlHbWZRQjNEazZ1RTJHTk03SDNwUURSU3JzT3pMSWR2VTZDMUdDUldVLXZsRHVQcmwyc1RzVC1feHpsejJoZFBoZ2Z2TVZGUEQwczI3djEtSUF5enlWcXRNb1hqTGRpT292TnhzN2lN?oc=5" target="_blank" rel="noopener"
-       data-category="scope3_cloud" data-topictag="corporate_strategy" data-date="2026-10-26"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="airtrunk secures au$4.25bn green loan for sydney data centre campus w.media airtrunk has secured an au$4.25 billion green loan to fund its sydney data centre campus. corporate strategy &amp; reporting">
-      <span class="article-row-body">
-        <span class="article-row-title">AirTrunk secures AU$4.25bn green loan for Sydney data centre campus</span>
-        <span class="article-row-meta">W.Media &middot; Oct 26, 2026 &middot; Scope 3 Cloud Emissions<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
-        <span class="row-summary">AirTrunk has secured an AU$4.25 billion green loan to fund its Sydney data centre campus.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiogFBVV95cUxPT0s2ZUVjNUdjXzBBaEU1d191RDdiSmlmZjRuTzRBYU92UE4ycVVmSUllZDdNdTRpNlVyWHRlUTVYZ2NsRkd4X1ZoSHNNOFNRYUVCam44cXZ5YndhQjcxY0MxRkFzT3VVMkdHYW1aMkMwTkdUY2FwbFhkOVJDamZIa2JaNEVUMDFlSDdDSS1lcDhscFNjMkhTWmM1UVhwSnRhbGc?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="community_political" data-date="2026-10-26"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="google under fire for clearing 250,000 trees to build ai data centres channelnews.com.au google faces criticism after clearing 250,000 trees to build new ai data centers. community &amp; political response">
-      <span class="article-row-body">
-        <span class="article-row-title">Google Under Fire For Clearing 250,000 Trees To Build AI Data Centres</span>
-        <span class="article-row-meta">ChannelNews.com.au &middot; Oct 26, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
-        <span class="row-summary">Google faces criticism after clearing 250,000 trees to build new AI data centers.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMihAFBVV95cUxOS3VGLWhGZVI1VVQteWhtVGFRV1VNdGxIV1k4SFhrSTlYaDd6Yi1WT2FoaU4wRjM3d0NvOEI0MVc3cnRXcWZ3NllET2ZybzE5SzgzLVdhQ1NuU3g3RUszWGtHUjI1NjFVZ0FMZTdkbGVhM1BwRl9pdVd5VlBmSWRTUUtQLVg?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="water_cooling" data-date="2026-10-26"
        data-new="0" data-offtopic="0"
@@ -12952,17 +13062,6 @@
         <span class="article-row-title">China’s synthetic diamond sector eyes higher-margin AI cooling applications</span>
         <span class="article-row-meta">The Japan Times &middot; Oct 26, 2026 &middot; General Conversation<span class="topic-chip">Water &amp; Cooling</span></span>
         <span class="row-summary">China&#x27;s synthetic diamond industry is pivoting toward higher-margin AI cooling applications to boost profitability.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxNN0lnRXM1WU1mVXhGclZ0NHJuQ25sY2hUNnJJODhCSmR4azQ0LVJMRE9kZFBvSXNPUUFGcFREcjVpTHZaY3hKZWN0QnRrUm9xY3N4OFIwaC1wTUdUNy1VbVpnMXllakZkdGU5Ymw3Rkp3V3FDdEpmQW1BdkhpOHBoU19JRmJBbm1fVEg3aEhQeHllS24yb2YyazVSRnlrTWNYTDlmSjlYd3g?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="corporate_strategy" data-date="2026-10-26"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="google expands gemini earth ai for climate insights environment+energy leader google is expanding its gemini earth ai initiative to provide climate and environmental insights. corporate strategy &amp; reporting">
-      <span class="article-row-body">
-        <span class="article-row-title">Google Expands Gemini Earth AI for Climate Insights</span>
-        <span class="article-row-meta">Environment+Energy Leader &middot; Oct 26, 2026 &middot; General Conversation<span class="topic-chip">Corporate Strategy &amp; Reporting</span></span>
-        <span class="row-summary">Google is expanding its Gemini Earth AI initiative to provide climate and environmental insights.</span>
       </span>
     </a>
     
@@ -13043,17 +13142,6 @@
       </span>
     </a>
     
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMiXkFVX3lxTFBBY3NNaFBOOGt0d0NuaUxqVmdLNElPbWxkSkZBclhwbmNhcmE1UWoyY3IwZTlzb3BhX2VITzc4T0JKUklLbnlSTnR5cGVReVRGLWpfcVhBSktjY19yQUE?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="community_political" data-date="2026-10-25"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="data centre backlash grows ahead of us midterms - here&#x27;s what you need to know bbc public backlash against data centers is growing as a political issue ahead of the us midterms. community &amp; political response">
-      <span class="article-row-body">
-        <span class="article-row-title">Data centre backlash grows ahead of US midterms - here&#x27;s what you need to know</span>
-        <span class="article-row-meta">BBC &middot; Oct 25, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
-        <span class="row-summary">Public backlash against data centers is growing as a political issue ahead of the US midterms.</span>
-      </span>
-    </a>
-    
     <a class="article-row" href="https://news.google.com/rss/articles/CBMifEFVX3lxTE5LX3dlS01KeGhmd2ZjQUh1UVU2ZzlvYzMzVks1ZUVINnFUU05GdlkwR3hhTklZRDI4QXE3UWo3Uld2TXlVeUdBT01PTEVzTE9Ud1MtYmJPb3FwVml6aHk4dnZQR0xYVXljT1pGTGtBd05oNXRXU2J6X1RxcUM?oc=5" target="_blank" rel="noopener"
        data-category="conversation" data-topictag="community_political" data-date="2026-10-25"
        data-new="0" data-offtopic="0"
@@ -13095,17 +13183,6 @@
         <span class="article-row-title">‘Pure arrogance’: anger in Finland as Google illegally fells 250,000 trees for datacentre</span>
         <span class="article-row-meta">The Guardian &middot; Oct 22, 2026 &middot; General Conversation<span class="topic-chip">Community &amp; Political Response</span></span>
         <span class="row-summary">Google illegally felled 250,000 trees in Finland for a datacenter, sparking widespread public anger and accusations of pure arrogance.</span>
-      </span>
-    </a>
-    
-    <a class="article-row" href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQTnJ4ZW5LdGctRHl2d3Y3dXNwdERIQWxWVktFTjNnakdKZWcwbzVsZnF6UFNrUXF1d0N6MllTMnUwNktONm1nSVNhWlZ6Y2xOVjIxZGh3LWJNRlN0YzJCNVluT2s1US1sd1RNWHUwTHU0SUdJeTZlcjgxQzZuUFB2eE4yam4yaVA1OE9IWWlTeEE5VkJkcFVtNUJidw?oc=5" target="_blank" rel="noopener"
-       data-category="conversation" data-topictag="grid_energy" data-date="2026-10-21"
-       data-new="0" data-offtopic="0"
-       data-toppick="0" data-search="data centers could erase decades of air quality gains the verge the rapid growth of data centers threatens to reverse decades of progress in improving air quality due to increased energy demands. grid &amp; energy demand">
-      <span class="article-row-body">
-        <span class="article-row-title">Data centers could erase decades of air quality gains</span>
-        <span class="article-row-meta">The Verge &middot; Oct 21, 2026 &middot; General Conversation<span class="topic-chip">Grid &amp; Energy Demand</span></span>
-        <span class="row-summary">The rapid growth of data centers threatens to reverse decades of progress in improving air quality due to increased energy demands.</span>
       </span>
     </a>
     </div>
